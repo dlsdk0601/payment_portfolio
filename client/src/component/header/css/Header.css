@@ -1,0 +1,18 @@
+.header {
+  width: 100%;
+  height: 100px;
+  background-color: #eee;
+}
+
+.menu-box {
+  width: 60%;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu {
+  font-size: 16px;
+}

@@ -1,0 +1,4 @@
+{
+  "ignore": ["node_modules", "client"],
+  "exec": "babel-node app.js"
+}
