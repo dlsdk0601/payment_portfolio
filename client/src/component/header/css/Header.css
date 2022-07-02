@@ -15,4 +15,41 @@
 
 .menu {
   font-size: 16px;
+  position: relative;
+}
+
+.menu::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20px;
+  width: 0%;
+  height: 2px;
+  background-color: black;
+  transition: 0.3s;
+  transform-origin: left center;
+}
+
+.menu:hover::after {
+  width: 100%;
+}
+
+.menu.active::after {
+  width: 100%;
+}
+
+/* tablet */
+@media screen and (max-width: 1024px) {
+}
+
+/* mobile */
+@media screen and (max-width: 480px) {
+  .wrapper {
+    width: 50%;
+    margin: 50px auto;
+  }
+
+  .title {
+    margin-bottom: 50px;
+  }
 }

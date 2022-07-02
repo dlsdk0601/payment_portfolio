@@ -11,20 +11,20 @@ import KakaoPayPage from "./page/KakaoPayPage";
 
 // css
 import "./App.css";
+import Wrapper from "./component/common/Wrapper";
 
 function App() {
-  const navi = navigator.userAgent;
-  console.log("navi===");
-  console.log(navi);
   return (
     <BrowserRouter>
       <Header />
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/inicis-onetime" element={<InicisOnTimePage />} />
-        <Route path="/inicis-regular" element={<InicisRegularPage />} />
-        <Route path="/kakaopay" element={<KakaoPayPage />} />
-      </Routes>
+      <Wrapper>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/inicis-onetime" element={<InicisOnTimePage />} />
+          <Route path="/inicis-regular" element={<InicisRegularPage />} />
+          <Route path="/kakaopay" element={<KakaoPayPage />} />
+        </Routes>
+      </Wrapper>
     </BrowserRouter>
   );
 }
