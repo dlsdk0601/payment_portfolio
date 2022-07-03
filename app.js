@@ -4,6 +4,7 @@ import path from "path";
 // exporess
 const app = express();
 
+const __dirname = path.resolve();
 const port = process.env.PORT || 5000;
 
 // 미들웨어 함수를 특정 경로에 등록
@@ -20,4 +21,4 @@ app.get("*", (req, res) => {
 });
 
 console.log("start good");
-console.log("deploy test7");
+console.log("deploy test8");
