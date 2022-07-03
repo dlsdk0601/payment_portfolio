@@ -13,11 +13,11 @@ app.use("/test", function (req, res) {
 
 app.listen(port);
 
-app.use(express.static(path.join(__dirname, "client/build")));
+app.use(express.static(path.join(__dirname, "/client/build")));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 
 console.log("start good");
-console.log("deploy test4");
+console.log("deploy test5");
