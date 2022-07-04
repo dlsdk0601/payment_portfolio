@@ -1,5 +1,5 @@
 import express from "express";
-import inicisOneTime from "./inicisOneTime";
+import inicisOneTime from "./inicisOneTime/index.js";
 
 const api = express.Router();
 
