@@ -7,11 +7,16 @@ import "./css/InicisOneTimeSectionStyle.css";
 
 // component
 import randomStringFunc from "../common/RandomString";
+import Axios from "../../server/Axios";
 
 export default function InicisOneTimeSection() {
   const device = navigator.userAgent;
   const aaa = useRef(null);
   const isMobile = device.toLowerCase().indexOf("mobile") !== -1;
+
+  const {
+    location: { origin },
+  } = window;
 
   const [buyername, setBuyername] = useState("");
   const [buyertel, setBuyertel] = useState("");
@@ -37,7 +42,9 @@ export default function InicisOneTimeSection() {
     }
   };
 
-  const paymentStart = (e: React.FormEvent<HTMLFormElement>): void => {
+  const paymentStart = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<any> => {
     e.preventDefault();
     console.log("payment start");
 
@@ -67,11 +74,18 @@ export default function InicisOneTimeSection() {
     setTimeStamp(timeStamp);
     setOid(oid);
 
-    console.log("timeStamp====");
-    console.log(timeStamp);
-    console.log("oid===");
-    console.log(oid);
-    console.log(aaa.current);
+    const paymentData = {
+      buyername,
+      buyertel,
+      buyeremail,
+      goodCount,
+      gopaymethod,
+      timeStamp,
+      oid,
+    };
+
+    const aaa = await Axios.post("/inicis/ready", paymentData);
+    console.log(aaa);
 
     if (!isMobile) {
       const script = document.createElement("script");
