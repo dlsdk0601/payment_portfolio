@@ -13,18 +13,10 @@ app.use(cors());
 
 app.use("/api", api);
 
-app.listen(port);
+app.listen(port, () => console.log("success"));
 
 app.use(express.static(path.join(__dirname, "/client/build")));
 
-app.get("*", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
-});
-
-app.get("/api/test", (req, res) => {
-  console.log(res);
-  return json({
-    result: true,
-    msg: "goood",
-  });
 });
