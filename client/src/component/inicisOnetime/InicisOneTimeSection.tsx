@@ -213,8 +213,8 @@ export default function InicisOneTimeSection() {
         name="returnUrl"
         value={
           window.location.href.indexOf("www") == -1
-            ? `https://paymentportfolio.herokuapp.com/api/inicis-onetime`
-            : `https://www.paymentportfolio.herokuapp.com/api/inicis-onetime`
+            ? `https://paymentportfolio.herokuapp.com/api/inicis/onetime-result`
+            : `https://www.paymentportfolio.herokuapp.com/api/inicis/onetime-result`
         }
       />
       {/* 결제창을 닫기 위해서 CloseInicis라는 페이지를 새로만드로 외부 js를 호출한다.   */}

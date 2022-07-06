@@ -2,7 +2,7 @@ import express from "express";
 
 const inicisOneTime = express.Router();
 
-inicisOneTime.get("/onetime-result", (req, res) => {
+inicisOneTime.post("/onetime-result", (req, res) => {
   console.log(res);
 });
 

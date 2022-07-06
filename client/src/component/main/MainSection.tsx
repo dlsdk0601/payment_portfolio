@@ -1,4 +1,5 @@
 // lib
+import Axios from "../../server/Axios";
 import React from "react";
 
 // css
@@ -6,6 +7,13 @@ import "./css/MainSectionStyle.css";
 
 export default function MainSection() {
   const navi = navigator.userAgent;
+
+  const testFetch = async () => {
+    const test = await Axios.get("/api/test");
+
+    console.log("test===");
+    console.log(test);
+  };
 
   return (
     <>
@@ -15,6 +23,7 @@ export default function MainSection() {
         {navi.toLowerCase().indexOf("mobile") === -1 ? "PC" : "mobile"}
         입니다
       </p>
+      <div onClick={testFetch}>click</div>
     </>
   );
 }
