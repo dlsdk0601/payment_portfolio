@@ -21,10 +21,6 @@ export default function InicisOneTimeSection() {
   const [timeStamp, setTimeStamp] = useState(0);
   const [oid, setOid] = useState("");
 
-  // console.log(crypto.SHA256("dddasdf"));
-  // console.log(crypto.SHA256("dddasdf").toString(crypto.enc.Hex));
-  // console.log(SHA256);
-
   const countHanlder = (
     e: React.FormEvent<HTMLButtonElement>,
     isIncrease: boolean
@@ -76,6 +72,19 @@ export default function InicisOneTimeSection() {
     console.log("oid===");
     console.log(oid);
     console.log(aaa.current);
+
+    if (!isMobile) {
+      const script = document.createElement("script");
+      script.src = "https:///stdpay.inicis.com/stdjs/INIStdPay.js";
+      document.head.appendChild(script);
+      script.onload = (e: any) => {
+        e.srcElement.ownerDocument.defaultView.INIStdPay.pay("SendPayForm_id");
+      };
+    } else {
+      // mobilePurchaseRef.current.action = "https://mobile.inicis.com/smart/payment/";
+      // mobilePurchaseRef.current.target = "_self";
+      // mobilePurchaseRef.current.submit();
+    }
   };
 
   return (
@@ -204,8 +213,8 @@ export default function InicisOneTimeSection() {
         name="returnUrl"
         value={
           window.location.href.indexOf("www") == -1
-            ? `returnURL`
-            : `www.returnURL`
+            ? `https://paymentportfolio.herokuapp.com/api/inicis-onetime`
+            : `https://www.paymentportfolio.herokuapp.com/api/inicis-onetime`
         }
       />
       {/* 결제창을 닫기 위해서 CloseInicis라는 페이지를 새로만드로 외부 js를 호출한다.   */}
@@ -214,8 +223,8 @@ export default function InicisOneTimeSection() {
         name="closeUrl"
         value={
           window.location.href.indexOf("www") == -1
-            ? `closeURL`
-            : `www.closeURL`
+            ? `https://paymentportfolio.herokuapp.com/close-inicis`
+            : `https://www.paymentportfolio.herokuapp.com/close-inicis`
         }
       />
       <button type="submit">결제 하기</button>

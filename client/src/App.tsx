@@ -12,6 +12,7 @@ import KakaoPayPage from "./page/KakaoPayPage";
 // css
 import "./App.css";
 import Wrapper from "./component/common/Wrapper";
+import CloseInicis from "./component/close/CloseInicis";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/inicis-onetime" element={<InicisOnTimePage />} />
           <Route path="/inicis-regular" element={<InicisRegularPage />} />
           <Route path="/kakaopay" element={<KakaoPayPage />} />
+          <Route path="/close-inicis" element={<CloseInicis />} />
         </Routes>
       </Wrapper>
     </BrowserRouter>
