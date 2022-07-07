@@ -90,12 +90,12 @@ export default function InicisOneTimeSection() {
     console.log(aaa);
 
     if (!isMobile) {
-      // const script = document.createElement("script");
-      // script.src = "https:///stdpay.inicis.com/stdjs/INIStdPay.js";
-      // document.head.appendChild(script);
-      // script.onload = (e: any) => {
-      //   e.srcElement.ownerDocument.defaultView.INIStdPay.pay("SendPayForm_id");
-      // };
+      const script = document.createElement("script");
+      script.src = "https:///stdpay.inicis.com/stdjs/INIStdPay.js";
+      document.head.appendChild(script);
+      script.onload = (e: any) => {
+        e.srcElement.ownerDocument.defaultView.INIStdPay.pay("SendPayForm_id");
+      };
     } else {
       // mobilePurchaseRef.current.action = "https://mobile.inicis.com/smart/payment/";
       // mobilePurchaseRef.current.target = "_self";
