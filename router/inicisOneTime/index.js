@@ -2,7 +2,6 @@ import express from "express";
 import path from "path";
 
 const inicisOneTime = express.Router();
-const __dirname = path.resolve();
 
 // inicisOneTime.all("*", (req, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "*");

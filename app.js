@@ -14,7 +14,7 @@ const app = express();
 const server = express();
 
 const __dirname = path.resolve();
-console.log(__dirname);
+
 // api setting
 server.use(
   cors({

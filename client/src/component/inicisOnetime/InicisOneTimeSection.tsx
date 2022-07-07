@@ -86,8 +86,8 @@ export default function InicisOneTimeSection() {
       totalPrice,
     };
     console.log(paymentData);
-    const aaa = await Axios.post("api/inicis/ready", paymentData);
-    console.log(aaa);
+    // const aaa = await Axios.post("api/inicis/ready", paymentData);
+    // console.log(aaa);
 
     if (!isMobile) {
       const script = document.createElement("script");
