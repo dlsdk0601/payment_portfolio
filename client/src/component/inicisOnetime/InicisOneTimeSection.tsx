@@ -18,11 +18,11 @@ export default function InicisOneTimeSection() {
     location: { origin },
   } = window;
 
-  const [buyername, setBuyername] = useState("");
-  const [buyertel, setBuyertel] = useState("");
-  const [buyeremail, setBuyeremail] = useState("");
+  const [buyername, setBuyername] = useState("asd");
+  const [buyertel, setBuyertel] = useState("01012345678");
+  const [buyeremail, setBuyeremail] = useState("asdffds@asdf.cd");
   const [goodCount, setGoodCount] = useState(1);
-  const [gopaymethod, setGopaymethod] = useState(-1);
+  const [gopaymethod, setGopaymethod] = useState(1);
   const [timeStamp, setTimeStamp] = useState(0);
   const [oid, setOid] = useState("");
 
@@ -73,6 +73,7 @@ export default function InicisOneTimeSection() {
     // state setting for Form
     setTimeStamp(timeStamp);
     setOid(oid);
+    const totalPrice = goodCount * 1000;
 
     const paymentData = {
       buyername,
@@ -82,18 +83,19 @@ export default function InicisOneTimeSection() {
       gopaymethod,
       timeStamp,
       oid,
+      totalPrice,
     };
-
-    const aaa = await Axios.post("/inicis/ready", paymentData);
+    console.log(paymentData);
+    const aaa = await Axios.post("api/inicis/ready", paymentData);
     console.log(aaa);
 
     if (!isMobile) {
-      const script = document.createElement("script");
-      script.src = "https:///stdpay.inicis.com/stdjs/INIStdPay.js";
-      document.head.appendChild(script);
-      script.onload = (e: any) => {
-        e.srcElement.ownerDocument.defaultView.INIStdPay.pay("SendPayForm_id");
-      };
+      // const script = document.createElement("script");
+      // script.src = "https:///stdpay.inicis.com/stdjs/INIStdPay.js";
+      // document.head.appendChild(script);
+      // script.onload = (e: any) => {
+      //   e.srcElement.ownerDocument.defaultView.INIStdPay.pay("SendPayForm_id");
+      // };
     } else {
       // mobilePurchaseRef.current.action = "https://mobile.inicis.com/smart/payment/";
       // mobilePurchaseRef.current.target = "_self";

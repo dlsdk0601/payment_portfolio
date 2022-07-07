@@ -4,7 +4,6 @@ import "./css/Header.css";
 
 export default function Header() {
   const { pathname } = useLocation();
-  console.log(pathname);
 
   return (
     <header className="header">
