@@ -4,9 +4,9 @@ import path from "path";
 const __dirname = path.resolve();
 
 if (process.env.NODE_ENV === "development") {
-  dotenv.config({ path: path.join(__dirname, "./config/.env.development") });
+  dotenv.config({ path: path.join(__dirname, "./.env.development") });
 } else {
-  dotenv.config({ path: path.join(__dirname, "./config/.env.production") });
+  dotenv.config({ path: path.join(__dirname, "./.env.production") });
 }
 
 export default {

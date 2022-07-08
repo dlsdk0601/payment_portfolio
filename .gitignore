@@ -1,4 +1,4 @@
 /node_modules
-config/.env.production
-config/.env.development
+.env.production
+.env.development
 .vscode
