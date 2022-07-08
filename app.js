@@ -24,6 +24,14 @@ server.use(
   })
 );
 
+app.use(
+  cors({
+    // origin: "http://localhost:3000",
+    origin: `https://paymentportfolio.herokuapp.com:${process.env.NODE_SERVERPORTNUMBER}`,
+    credentials: true,
+  })
+);
+
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 server.use("/api", api);
@@ -36,8 +44,10 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 
-// listen
+// react build listen
 app.listen(process.env.PORT || 5000, () => console.log("client success"));
+
+// API listen
 server.listen(process.env.NODE_SERVERPORTNUMBER, () =>
   console.log("server success")
 );
