@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
     "dev": "concurrently \"npm run dev:server \" \"npm run dev:client\"",
-    "dev:server": "nodemon",
+    "dev:server": "cross-env NODE_ENV=development nodemon",
     "build": "cd client && npm run build",
     "dev:client": "cd client && npm start",
     "heroku-postbuild": "cd client && npm install && npm run build"
@@ -29,6 +29,7 @@
     "body-parser": "^1.20.0",
     "concurrently": "^7.2.2",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",

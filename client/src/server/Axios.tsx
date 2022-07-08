@@ -1,8 +1,10 @@
 import axios, { AxiosResponse } from "axios";
 
+const baseURL = process.env.REACT_APP_BASEURL;
+console.log("baseURL==");
+console.log(baseURL);
 const Axios = axios.create({
-  baseURL: `https://paymentportfolio.herokuapp.com:8080`,
-  // baseURL: `http://localhost:${process.env.REACT_APP_PORT}`,
+  baseURL,
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",

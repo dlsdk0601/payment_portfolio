@@ -3,23 +3,23 @@ import path from "path";
 import api from "./router/index.js";
 import cors from "cors";
 import bodyParser from "body-parser";
-import dotenv from "dotenv";
-
-dotenv.config();
+import API_URL from "./config/env.js";
 
 // react build express
 const app = express();
 
 // api express
-const server = express.createServer();
+const server = express();
 
 const __dirname = path.resolve();
+
+// env 환경변수
+const { baseurl, port, apiPort } = API_URL;
 
 // api setting
 server.use(
   cors({
-    // origin: "http://localhost:3000",
-    origin: "https://paymentportfolio.herokuapp.com/",
+    origin: baseurl,
     credentials: true,
   })
 );
@@ -37,9 +37,7 @@ app.get("*", (req, res) => {
 });
 
 // react build listen
-app.listen(process.env.PORT || 5000, () => console.log("client success"));
+app.listen(port || 5000, () => console.log("client success"));
 
 // API listen
-server.listen(process.env.NODE_SERVERPORTNUMBER, () =>
-  console.log("server success")
-);
+server.listen(apiPort, () => console.log("server success"));
