@@ -5,8 +5,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 
-dotenv.config();
-
 // react build express
 const app = express();
 
@@ -15,7 +13,7 @@ const server = express();
 
 const __dirname = path.resolve();
 
-// env 환경변수
+dotenv.config();
 
 // api setting
 server.use(
@@ -25,6 +23,8 @@ server.use(
       "https://paymentportfolio.herokuapp.com:443",
       "https://paymentportfolio.herokuapp.com",
       "http://localhost:5000",
+      "http://localhost:3000",
+      "http://localhost:443",
     ],
     credentials: true,
   })
