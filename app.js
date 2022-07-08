@@ -11,7 +11,7 @@ dotenv.config();
 const app = express();
 
 // api express
-const server = express();
+const server = express.createServer();
 
 const __dirname = path.resolve();
 
@@ -20,14 +20,6 @@ server.use(
   cors({
     // origin: "http://localhost:3000",
     origin: "https://paymentportfolio.herokuapp.com/",
-    credentials: true,
-  })
-);
-
-app.use(
-  cors({
-    // origin: "http://localhost:3000",
-    origin: `https://paymentportfolio.herokuapp.com:${process.env.NODE_SERVERPORTNUMBER}`,
     credentials: true,
   })
 );
