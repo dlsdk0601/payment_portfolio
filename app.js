@@ -4,10 +4,8 @@ import api from "./router/index.js";
 import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
-import envConfig from "./config/env.js";
 
-// dotenv.config();
-console.log(envConfig);
+dotenv.config();
 
 // react build express
 const app = express();
@@ -18,15 +16,15 @@ const server = express();
 const __dirname = path.resolve();
 
 // env 환경변수
-const { host, serverPort, port, baseURL } = envConfig;
-console.log(`${baseURL || "http://localhost"}:${port || 5000}`);
 
 // api setting
 server.use(
   cors({
     origin: [
-      `${baseURL || "http://localhost"}:${port || 5000}`,
-      `${baseURL || "http://localhost:3000"}`,
+      "https://paymentportfolio.herokuapp.com/",
+      "https://paymentportfolio.herokuapp.com:443",
+      "https://paymentportfolio.herokuapp.com",
+      "http://localhost:5000",
     ],
     credentials: true,
   })
@@ -45,7 +43,7 @@ app.get("*", (req, res) => {
 });
 
 // react build listen
-app.listen(port || 5000, () => console.log("client success"));
+app.listen(process.env.NODE_PORT || 5000, () => console.log("client success"));
 
 // API listen
-server.listen(serverPort || 8080, () => console.log("server success"));
+server.listen(8080, () => console.log("server success"));
