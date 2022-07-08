@@ -2,8 +2,12 @@ import express from "express";
 import path from "path";
 import api from "./router/index.js";
 import cors from "cors";
+import dotenv from "dotenv";
 import bodyParser from "body-parser";
-import API_URL from "./config/env.js";
+import envConfig from "./config/env.js";
+
+// dotenv.config();
+console.log(envConfig);
 
 // react build express
 const app = express();
@@ -14,12 +18,16 @@ const server = express();
 const __dirname = path.resolve();
 
 // env 환경변수
-const { baseurl, port, apiPort } = API_URL;
+const { host, serverPort, port, baseURL } = envConfig;
+console.log(`${baseURL || "http://localhost"}:${port || 5000}`);
 
 // api setting
 server.use(
   cors({
-    origin: baseurl,
+    origin: [
+      `${baseURL || "http://localhost"}:${port || 5000}`,
+      `${baseURL || "http://localhost:3000"}`,
+    ],
     credentials: true,
   })
 );
@@ -40,4 +48,4 @@ app.get("*", (req, res) => {
 app.listen(port || 5000, () => console.log("client success"));
 
 // API listen
-server.listen(apiPort, () => console.log("server success"));
+server.listen(serverPort || 8080, () => console.log("server success"));
