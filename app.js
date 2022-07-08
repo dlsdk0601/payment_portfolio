@@ -34,6 +34,9 @@ server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 server.use("/api", api);
 
+// react build listen
+app.listen(process.env.PORT || 5000, () => console.log("client success"));
+
 // react build express
 
 app.use(express.static(path.join(__dirname, "/client/build")));
@@ -41,9 +44,6 @@ app.use(express.static(path.join(__dirname, "/client/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
-
-// react build listen
-app.listen(process.env.NODE_PORT || 5000, () => console.log("client success"));
 
 // API listen
 server.listen(8080, () => console.log("server success"));
