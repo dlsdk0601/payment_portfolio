@@ -226,8 +226,14 @@ export default function InicisOneTimeSection() {
         name="returnUrl"
         value={
           window.location.href.indexOf("www") == -1
-            ? `${process.env.REACT_APP_RETURNURL}`
-            : `${process.env.REACT_APP_WWWRETURNURL}`
+            ? `${
+                process.env.REACT_APP_RETURNURL ||
+                "https://paymentportfolio.herokuapp.com/api/inicis/onetime"
+              }`
+            : `${
+                process.env.REACT_APP_WWWRETURNURL ||
+                "https://paymentportfolio.herokuapp.com/api/inicis/onetime"
+              }`
         }
       />
       {/* 결제창을 닫기 위해서 CloseInicis라는 페이지를 새로만드로 외부 js를 호출한다.   */}
@@ -236,8 +242,14 @@ export default function InicisOneTimeSection() {
         name="closeUrl"
         value={
           window.location.href.indexOf("www") == -1
-            ? `${process.env.REACT_APP_CLOSEURL}`
-            : `${process.env.REACT_APP_WWWCLOSEURL}`
+            ? `${
+                process.env.REACT_APP_CLOSEURL ||
+                "https://paymentportfolio.herokuapp.com/close-inicis"
+              }`
+            : `${
+                process.env.REACT_APP_WWWCLOSEURL ||
+                "https://www.paymentportfolio.herokuapp.com/close-inicis"
+              }`
         }
       />
       <button type="submit">결제 하기</button>
