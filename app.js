@@ -9,14 +9,14 @@ import bodyParser from "body-parser";
 const app = express();
 
 // api express
-const server = express();
+// const server = express();
 
 const __dirname = path.resolve();
 
 dotenv.config();
 
 // api setting
-server.use(
+app.use(
   cors({
     origin: [
       "https://paymentportfolio.herokuapp.com/",
