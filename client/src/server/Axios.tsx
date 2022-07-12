@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-const baseURL = "https://paymentportfolio.herokuapp.com/api";
+const baseURL = process.env.REACT_APP_BASEURL;
 
 const Axios = axios.create({
   baseURL,
@@ -14,8 +14,7 @@ const Axios = axios.create({
 });
 
 Axios.interceptors.response.use(function (response: AxiosResponse) {
-  const { data, status } = response;
-
+  const { data } = response;
   return data;
 });
 

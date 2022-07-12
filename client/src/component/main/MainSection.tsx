@@ -9,7 +9,7 @@ export default function MainSection() {
   const navi = navigator.userAgent;
 
   const testFetch = async () => {
-    const test = await Axios.get("/api/test");
+    const test = await Axios.get("/test");
 
     console.log("test===");
     console.log(test);

@@ -3,45 +3,24 @@ import path from "path";
 
 const inicisOneTime = express.Router();
 
-// inicisOneTime.all("*", (req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "X-Requested-With");
-//   res.header("Access-Control-Allow-Headers", "Content-Type");
-//   next();
-// });
+inicisOneTime.post("/onetime", (req, res) => {
+  console.log(req.body);
 
-inicisOneTime.get("/onetime", (req, res) => {
-  console.log(res);
-
-  // return res.redirect(`https://paymentportfolio.herokuapp.com/`);
-  return res.json({
-    result: true,
-    msg: "success",
-  });
+  return res.redirect(`http://localhost:5000/`);
 });
 
 inicisOneTime.post("/ready", (req, res) => {
   res.header({ "Access-Control-Allow-Origin": "*" });
   const {
-    body: {
-      buyername,
-      buyertel,
-      buyeremail,
-      goodCount,
-      gopaymethod,
-      timeStamp,
-      oid,
-      totalPrice,
-    },
+    body: { goodCount, totalPrice },
   } = req;
   // console.log(oid);
-  // if (totalPrice === 1000 * goodCount) {
-  //   console.log("go there");
-  //   // window.location.href = `http://localhost:3000/kakaopay`;
-  //   res.writeHead(302, { Location: "http://localhost:3030" });
-  //   res.end();
-  //   return;
-  // }
+  if (totalPrice === 1000 * goodCount) {
+    return res.json({
+      result: true,
+      msg: "totalPrice success",
+    });
+  }
   return res.json({
     result: false,
     msg: "totalPrice fail",

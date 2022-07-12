@@ -22,7 +22,7 @@ export default function InicisOneTimeSection() {
   const [buyertel, setBuyertel] = useState("01012345678");
   const [buyeremail, setBuyeremail] = useState("asdffds@asdf.cd");
   const [goodCount, setGoodCount] = useState(1);
-  const [gopaymethod, setGopaymethod] = useState(1);
+  const [gopaymethod, setGopaymethod] = useState("");
   const [timeStamp, setTimeStamp] = useState(0);
   const [oid, setOid] = useState("");
 
@@ -61,7 +61,7 @@ export default function InicisOneTimeSection() {
       alert("이메일를 입력하세요");
       return;
     }
-    if (gopaymethod < 0) {
+    if (!gopaymethod) {
       alert("결제수단을 선택하세요");
       return;
     }
@@ -151,35 +151,32 @@ export default function InicisOneTimeSection() {
         <label>카드</label>
         <input
           type="radio"
-          id="0"
-          name="paymentMethod"
-          onChange={(e) => setGopaymethod(parseInt(e.target.id))}
+          id="Card"
+          onChange={(e) => setGopaymethod(e.target.id)}
           value="카드"
         />
         <label>무통장</label>
         <input
           type="radio"
-          id="1"
-          name="paymentMethod"
-          onChange={(e) => setGopaymethod(parseInt(e.target.id))}
+          id="VBank"
+          onChange={(e) => setGopaymethod(e.target.id)}
           value="무통장"
         />
         <label>핸드폰</label>
         <input
           type="radio"
-          id="2"
-          name="paymentMethod"
-          onChange={(e) => setGopaymethod(parseInt(e.target.id))}
+          id="HPP"
+          onChange={(e) => setGopaymethod(e.target.id)}
           value="핸드폰"
         />
         <label>계좌이체</label>
         <input
           type="radio"
-          id="3"
-          name="paymentMethod"
-          onChange={(e) => setGopaymethod(parseInt(e.target.id))}
+          id="DirectBank"
+          onChange={(e) => setGopaymethod(e.target.id)}
           value="계좌이체"
         />
+        <input type="hidden" name="paymentMethod" value={gopaymethod} />
       </div>
 
       {/* mid -> 실제 테스트 환경에서는 사용자 id, 테스트할 때는 INIpayTest 사용하면 된다. */}
@@ -214,12 +211,12 @@ export default function InicisOneTimeSection() {
       <input type="hidden" name="currency" value="WON" />
 
       {/* 무형 상품 HPP(2)  유형 상품 HPP(1) */}
-      {gopaymethod === 2 && (
+      {gopaymethod === "HPP" && (
         <input type="hidden" name="acceptmethod" value={"HPP(1)"} />
       )}
 
       {/* 무통장입금 현금영수증 */}
-      {gopaymethod === 1 && (
+      {gopaymethod === "VBank" && (
         <input type="hidden" name="acceptmethod" value={"va_receipt"} />
       )}
 
@@ -229,8 +226,10 @@ export default function InicisOneTimeSection() {
         name="returnUrl"
         value={
           window.location.href.indexOf("www") == -1
-            ? `https://paymentportfolio.herokuapp.com/api/inicis/onetime-result`
-            : `https://www.paymentportfolio.herokuapp.com/api/inicis/onetime-result`
+            ? // ? `https://paymentportfolio.herokuapp.com/api/inicis/onetime-result`
+              // : `https://www.paymentportfolio.herokuapp.com/api/inicis/onetime-result`
+              `http://localhost:5000/api/inicis/onetime`
+            : `http://localhost:5000/api/inicis/onetime`
         }
       />
       {/* 결제창을 닫기 위해서 CloseInicis라는 페이지를 새로만드로 외부 js를 호출한다.   */}
@@ -239,8 +238,10 @@ export default function InicisOneTimeSection() {
         name="closeUrl"
         value={
           window.location.href.indexOf("www") == -1
-            ? `https://paymentportfolio.herokuapp.com/close-inicis`
-            : `https://www.paymentportfolio.herokuapp.com/close-inicis`
+            ? // ? `https://paymentportfolio.herokuapp.com/close-inicis`
+              // : `https://www.paymentportfolio.herokuapp.com/close-inicis`
+              `http://localhost:5000/api/close-inicis`
+            : `http://localhost:5000/api/close-inicis`
         }
       />
       <button type="submit">결제 하기</button>
