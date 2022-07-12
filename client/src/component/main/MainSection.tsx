@@ -8,6 +8,8 @@ import "./css/MainSectionStyle.css";
 export default function MainSection() {
   const navi = navigator.userAgent;
 
+  console.log(process.env);
+
   const testFetch = async () => {
     const test = await Axios.get("/test");
 
