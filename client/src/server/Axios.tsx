@@ -1,9 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 
-const baseURL =
-  process.env.REACT_APP_BASEURL ||
-  "https://paymentportfolio.herokuapp.com:8080";
-  
+const baseURL = "https://paymentportfolio.herokuapp.com/api";
+
 const Axios = axios.create({
   baseURL,
   headers: {
