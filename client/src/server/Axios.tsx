@@ -1,9 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
 const baseURL = `${process.env.REACT_APP_BASEURL}/api`;
-console.log("baseURL===");
-console.log(baseURL);
-console.log(baseURL);
 
 const Axios = axios.create({
   baseURL,

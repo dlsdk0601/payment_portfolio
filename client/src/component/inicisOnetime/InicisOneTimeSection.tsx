@@ -11,16 +11,15 @@ import Axios from "../../server/Axios";
 
 export default function InicisOneTimeSection() {
   const device = navigator.userAgent;
-  const aaa = useRef(null);
   const isMobile = device.toLowerCase().indexOf("mobile") !== -1;
 
   const {
     location: { origin },
   } = window;
 
-  const [buyername, setBuyername] = useState("asd");
-  const [buyertel, setBuyertel] = useState("01012345678");
-  const [buyeremail, setBuyeremail] = useState("asdffds@asdf.cd");
+  const [buyername, setBuyername] = useState("");
+  const [buyertel, setBuyertel] = useState("");
+  const [buyeremail, setBuyeremail] = useState("");
   const [goodCount, setGoodCount] = useState(1);
   const [gopaymethod, setGopaymethod] = useState("");
   const [timeStamp, setTimeStamp] = useState(0);
@@ -104,7 +103,7 @@ export default function InicisOneTimeSection() {
   };
 
   return (
-    <form ref={aaa} onSubmit={paymentStart} id="SendPayForm_id" method="Post">
+    <form onSubmit={paymentStart} id="SendPayForm_id" method="Post">
       <div className="input__box">
         <label>주문자</label>
         <input
@@ -226,8 +225,14 @@ export default function InicisOneTimeSection() {
         name="returnUrl"
         value={
           window.location.href.indexOf("www") == -1
-            ? `${process.env.REACT_APP_RETURNURL}`
-            : `${process.env.REACT_APP_WWWRETURNURL}`
+            ? `${
+                process.env.REACT_APP_RETURNURL ||
+                "http://localhost:5000/api/inicis/onetime"
+              }`
+            : `${
+                process.env.REACT_APP_WWWRETURNURL ||
+                "https://www.localhost:5000/api/inicis/onetime"
+              }`
         }
       />
       {/* 결제창을 닫기 위해서 CloseInicis라는 페이지를 새로만드로 외부 js를 호출한다.   */}
@@ -236,8 +241,14 @@ export default function InicisOneTimeSection() {
         name="closeUrl"
         value={
           window.location.href.indexOf("www") == -1
-            ? `${process.env.REACT_APP_CLOSEURL}`
-            : `${process.env.REACT_APP_WWWCLOSEURL}`
+            ? `${
+                process.env.REACT_APP_CLOSEURL ||
+                "http://localhost:5000/close-inicis"
+              }`
+            : `${
+                process.env.REACT_APP_WWWCLOSEURL ||
+                "http://www.localhost:5000/close-inicis"
+              }`
         }
       />
       <button type="submit">결제 하기</button>

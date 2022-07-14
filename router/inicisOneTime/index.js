@@ -1,12 +1,42 @@
 import express from "express";
 import path from "path";
+import axios from "axios";
+import crypto from "crypto-js";
 
 const inicisOneTime = express.Router();
 
-inicisOneTime.post("/onetime", (req, res) => {
+inicisOneTime.post("/onetime", async (req, res) => {
   console.log(req.body);
+  const {
+    body: { resultCode: accessRequestResult, authToken, authUrl, mid, charset },
+  } = req;
 
-  return res.redirect(`http://localhost:5000/`);
+  if (accessRequestResult !== "0000") {
+    return res.redirect(`${process.env.NODE_BASEURL}/paymentfail`);
+  }
+
+  const timestamp = +new Date();
+  const reqJSON = {
+    mid,
+    authToken,
+    timestamp,
+    signature: crypto
+      .SHA256(`authToken=${authToken}&timestamp=${timestamp}`)
+      .toString(crypto.enc.Hex),
+    charset,
+    format: "JSON",
+  };
+  const inicisAccess = await axios.post(`${authUrl}`, reqJSON);
+  console.log("res===");
+  console.log(inicisAccess);
+
+  const { resultCode: accessResult } = inicisAccess;
+
+  if (accessResult === "0000") {
+    return res.redirect(`${process.env.NODE_BASEURL}/paymentsuccess`);
+  } else {
+    return res.redirect(`${process.env.NODE_BASEURL}/paymentfail`);
+  }
 });
 
 inicisOneTime.post("/ready", (req, res) => {

@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@types/crypto-js": "^4.1.1",
+    "axios": "^0.27.2",
     "body-parser": "^1.20.0",
     "concurrently": "^7.2.2",
     "cors": "^2.8.5",
