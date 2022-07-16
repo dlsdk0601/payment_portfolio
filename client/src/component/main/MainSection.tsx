@@ -11,7 +11,7 @@ export default function MainSection() {
   console.log(process.env);
 
   const testFetch = async () => {
-    const test = await Axios.get("/test");
+    const test = await Axios.get("/api/test");
 
     console.log("test===");
     console.log(test);

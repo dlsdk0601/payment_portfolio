@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import axios from "axios";
-import crypto from "crypto-js";
+import crypto from "crypto";
 
 const inicisOneTime = express.Router();
 
@@ -21,8 +21,9 @@ inicisOneTime.post("/onetime", async (req, res) => {
     authToken,
     timestamp,
     signature: crypto
-      .SHA256(`authToken=${authToken}&timestamp=${timestamp}`)
-      .toString(crypto.enc.Hex),
+      .createHash("sha256")
+      .update(`authToken=${authToken}&timestamp=${timestamp}`)
+      .digest("hex"),
     charset,
     format: "JSON",
   };

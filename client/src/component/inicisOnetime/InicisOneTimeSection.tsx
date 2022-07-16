@@ -1,6 +1,5 @@
 // lib
 import React, { useRef, useState } from "react";
-import crypto from "crypto-js";
 
 // css
 import "./css/InicisOneTimeSectionStyle.css";
@@ -8,6 +7,7 @@ import "./css/InicisOneTimeSectionStyle.css";
 // component
 import randomStringFunc from "../common/RandomString";
 import Axios from "../../server/Axios";
+import SHA256 from "../../server/TestSHA256";
 
 export default function InicisOneTimeSection() {
   const device = navigator.userAgent;
@@ -191,14 +191,12 @@ export default function InicisOneTimeSection() {
           "3a9503069192f207491d4b19bd743fc249a761ed94246c8c42fed06c3cd15a33"
         }
       />
-
-      {/* <input type="hidden"  name="signature" value={SHA256(`oid=주문번호&price=${1000*goodCount}&timestamp=${timeStamp}`)} />  */}
       <input
         type="hidden"
         name="signature"
-        value={crypto
-          .SHA256(`oid=${oid}&price=${1000 * goodCount}&timestamp=${timeStamp}`)
-          .toString(crypto.enc.Hex)}
+        value={SHA256(
+          `oid=${oid}&price=${1000 * goodCount}&timestamp=${timeStamp}`
+        )}
       />
 
       <input type="hidden" name="oid" value={oid} />
