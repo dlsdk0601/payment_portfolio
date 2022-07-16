@@ -3,19 +3,28 @@ import path from "path";
 import axios from "axios";
 import crypto from "crypto";
 
+const fakeDB = [];
+
 const inicisOneTime = express.Router();
 
 inicisOneTime.post("/onetime", async (req, res) => {
   console.log(req.body);
   const {
-    body: { resultCode: accessRequestResult, authToken, authUrl, mid, charset },
+    body: {
+      resultCode: accessRequestResult,
+      authToken,
+      authUrl,
+      mid,
+      charset,
+      orderNumber,
+    },
   } = req;
 
   if (accessRequestResult !== "0000") {
     return res.redirect(`${process.env.NODE_BASEURL}/paymentfail`);
   }
 
-  const timestamp = +new Date();
+  const timestamp = Date.now();
   const reqJSON = {
     mid,
     authToken,
@@ -27,16 +36,25 @@ inicisOneTime.post("/onetime", async (req, res) => {
     charset,
     format: "JSON",
   };
+
   const inicisAccess = await axios.post(`${authUrl}`, reqJSON);
   console.log("res===");
-  console.log(inicisAccess);
+  console.log(inicisAccess.data);
 
   const { resultCode: accessResult } = inicisAccess;
 
   if (accessResult === "0000") {
-    return res.redirect(`${process.env.NODE_BASEURL}/paymentsuccess`);
+    reqJSON.result = true;
+    fakeDB.push(reqJSON);
+    return res.redirect(
+      `${process.env.NODE_BASEURL}/paymentsuccess?oid=${orderNumber}`
+    );
   } else {
-    return res.redirect(`${process.env.NODE_BASEURL}/paymentfail`);
+    reqJSON.result = false;
+    fakeDB.push(reqJSON);
+    return res.redirect(
+      `${process.env.NODE_BASEURL}/paymentfail?oid=${orderNumber}`
+    );
   }
 });
 
@@ -57,5 +75,7 @@ inicisOneTime.post("/ready", (req, res) => {
     msg: "totalPrice fail",
   });
 });
+
+inicisOneTime.get("/select-result", (req, res) => {});
 
 export default inicisOneTime;
