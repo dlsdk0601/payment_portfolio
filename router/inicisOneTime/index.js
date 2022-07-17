@@ -78,18 +78,25 @@ inicisOneTime.post("/ready", (req, res) => {
 });
 
 inicisOneTime.get("/select-result", (req, res) => {
-  console.log(req.query.oid);
   const {
     query: { oid },
   } = req;
 
-  console.log(fakeDB);
-
-  if (!oid || fakeDB.length === 0) {
+  if (!oid) {
     return res.json({
       result: false,
       msg: null,
       data: null,
+      code: 101,
+    });
+  }
+
+  if (fakeDB.length === 0) {
+    return res.json({
+      result: false,
+      msg: null,
+      data: null,
+      code: 103,
     });
   }
 
@@ -100,12 +107,14 @@ inicisOneTime.get("/select-result", (req, res) => {
       result: true,
       msg: null,
       data: selectPayment,
+      code: 200,
     });
   } else {
     return res.json({
       result: false,
       msg: null,
       data: false,
+      code: 102,
     });
   }
 });
