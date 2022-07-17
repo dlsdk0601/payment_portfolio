@@ -1,24 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Axios from "../server/Axios";
-
-interface ISelectData {
-  mid: string;
-  authToken: string;
-  timestamp: number;
-  signature: string;
-  charset: string;
-  format: string;
-  result: boolean;
-  oid: string;
-}
-
-interface ISelectResult {
-  result: boolean;
-  msg: string | null;
-  data: ISelectData | null;
-  code: number;
-}
+import { ISelectResult } from "../Interface";
 
 export default function PayFailPage() {
   const { search } = useLocation();
@@ -33,6 +16,10 @@ export default function PayFailPage() {
   ];
 
   const selectResultFetch = async () => {
+    if (!keyword) {
+      return;
+    }
+
     const res: ISelectResult = await Axios.get(
       `/inicis/select-result?oid=${keyword}`
     );
@@ -47,14 +34,12 @@ export default function PayFailPage() {
     if (errMsg) {
       setErrorText(errMsg.msg);
     } else {
-      setErrorText(`에러코드가 존재하지 않습니다. 에러코드: ${code}`);
+      setErrorText(`에러코드가 존재하지 않습니다. 에러코드: ${keyword}`);
     }
   };
 
   useEffect(() => {
-    if (keyword) {
-      selectResultFetch();
-    }
+    selectResultFetch();
   }, []);
 
   return (
