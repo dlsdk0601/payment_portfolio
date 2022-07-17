@@ -43,6 +43,7 @@ inicisOneTime.post("/onetime", async (req, res) => {
 
   const { resultCode: accessResult } = inicisAccess;
 
+  reqJSON.oid = orderNumber;
   if (accessResult === "0000") {
     reqJSON.result = true;
     fakeDB.push(reqJSON);
@@ -76,6 +77,37 @@ inicisOneTime.post("/ready", (req, res) => {
   });
 });
 
-inicisOneTime.get("/select-result", (req, res) => {});
+inicisOneTime.get("/select-result", (req, res) => {
+  console.log(req.query.oid);
+  const {
+    query: { oid },
+  } = req;
+
+  console.log(fakeDB);
+
+  if (!oid || fakeDB.length === 0) {
+    return res.json({
+      result: false,
+      msg: null,
+      data: null,
+    });
+  }
+
+  const selectPayment = fakeDB.find((db) => db.oid === oid);
+
+  if (selectPayment) {
+    return res.json({
+      result: true,
+      msg: null,
+      data: selectPayment,
+    });
+  } else {
+    return res.json({
+      result: false,
+      msg: null,
+      data: false,
+    });
+  }
+});
 
 export default inicisOneTime;

@@ -14,7 +14,11 @@ dotenv.config();
 // api setting
 app.use(
   cors({
-    origin: ["https://paymentportfolio.herokuapp.com", "http://localhost:5000"],
+    origin: [
+      "https://paymentportfolio.herokuapp.com",
+      "http://localhost:5000",
+      "http://localhost:3000",
+    ],
     credentials: true,
   })
 );
