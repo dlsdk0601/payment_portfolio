@@ -34,7 +34,7 @@ export default function PayFailPage() {
     if (errMsg) {
       setErrorText(errMsg.msg);
     } else {
-      setErrorText(`에러코드가 존재하지 않습니다. 에러코드: ${keyword}`);
+      setErrorText(`에러코드가 존재하지 않습니다. 주문번호: ${keyword}`);
     }
   };
 
