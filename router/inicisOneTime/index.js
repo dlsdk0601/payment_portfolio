@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import axios from "axios";
 import crypto from "crypto";
+import rp from "request-promise";
 
 const fakeDB = [];
 
@@ -246,20 +247,21 @@ inicisOneTime.post("/onetime", async (req, res) => {
     mid,
     authToken,
     timestamp,
-    // signature: crypto
-    //   .createHash("sha256")
-    //   .update(`authToken=${authToken}&timestamp=${timestamp}`)
-    //   .digest("hex"),
-    signature: SHA256(`authToken=${authToken}&timestamp=${timestamp}`),
+    signature: crypto
+      .createHash("sha256")
+      .update(`authToken=${authToken}&timestamp=${timestamp}`)
+      .digest("hex"),
     charset,
     format: "JSON",
   };
 
-  const inicisAccess = await axios.post(authUrl, reqJSON, {
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded;",
-    },
+  const inicisAccess = await rp({
+    method: "POST",
+    uri: authUrl,
+    form: reqJSON,
+    json: true,
   });
+
   console.log("res===");
   console.log(inicisAccess);
 
@@ -267,7 +269,7 @@ inicisOneTime.post("/onetime", async (req, res) => {
 
   reqJSON.oid = orderNumber;
   if (accessResult === "0000") {
-    reqJSON.result = true;
+    inicisAccess.result = true;
     fakeDB.push(reqJSON);
     return res.redirect(
       `${process.env.NODE_BASEURL}/paymentsuccess?oid=${orderNumber}`
@@ -282,7 +284,6 @@ inicisOneTime.post("/onetime", async (req, res) => {
 });
 
 inicisOneTime.post("/ready", (req, res) => {
-  res.header({ "Access-Control-Allow-Origin": "*" });
   const {
     body: { goodCount, totalPrice },
   } = req;
@@ -322,7 +323,7 @@ inicisOneTime.get("/select-result", (req, res) => {
     });
   }
 
-  const selectPayment = fakeDB.find((db) => db.oid === oid);
+  const selectPayment = fakeDB.find((db) => db.MOID === oid);
 
   if (selectPayment) {
     return res.json({
@@ -342,3 +343,54 @@ inicisOneTime.get("/select-result", (req, res) => {
 });
 
 export default inicisOneTime;
+
+// 결제 성공 res 예시
+// const result = {
+//   CARD_Quota: "00",
+//   CARD_ClEvent: "",
+//   CARD_CorpFlag: "0",
+//   buyerTel: "01012345678",
+//   parentEmail: "",
+//   applDate: "20220718",
+//   buyerEmail: "adf@ad.cd",
+//   p_Sub: "",
+//   resultCode: "0000",
+//   mid: "INIpayTest",
+//   CARD_UsePoint: "",
+//   CARD_Num: "920092*********8",
+//   authSignature:
+//     "05670c54c51b7c674bc20636ab74c7dc0665904106b628391d8c64a99a7b421f",
+//   ISP_CardCode: "000100921005411",
+//   tid: "StdpayISP_INIpayTest20220718231307959968",
+//   EventCode: "",
+//   goodName: "컴퓨터",
+//   TotPrice: "1000",
+//   payMethod: "VCard",
+//   CARD_MemberNum: "",
+//   MOID: "1658153560591QRMRIUE",
+//   CARD_Point: "",
+//   currency: "WON",
+//   CARD_PurchaseCode: "",
+//   CARD_PrtcCode: "1",
+//   applTime: "231308",
+//   goodsName: "컴퓨터",
+//   CARD_CheckFlag: "1",
+//   FlgNotiSendChk: "",
+//   CARD_Code: "11",
+//   CARD_BankCode: "00",
+//   CARD_TerminalNum: "019058I000",
+//   ISP_RetrievalNum: "",
+//   P_FN_NM: "BC카드",
+//   buyerName: "adsf",
+//   p_SubCnt: "",
+//   applNum: "49807331",
+//   resultMsg: "정상완료",
+//   CARD_Interest: "0",
+//   CARD_SrcCode: "",
+//   CARD_ApplPrice: "1000",
+//   CARD_GWCode: "G",
+//   custEmail: "adf@ad.cd",
+//   CARD_PurchaseName: "BC카드",
+//   CARD_PRTC_CODE: "1",
+//   payDevice: "PC",
+// };
