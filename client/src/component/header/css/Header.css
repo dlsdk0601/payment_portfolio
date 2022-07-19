@@ -44,12 +44,25 @@
 
 /* mobile */
 @media screen and (max-width: 480px) {
-  .wrapper {
-    width: 50%;
-    margin: 50px auto;
+  .header {
+    height: 70px;
   }
 
-  .title {
-    margin-bottom: 50px;
+  .menu-box {
+    width: 90%;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .menu {
+    font-size: 10px;
+  }
+
+  .menu::after {
+    top: 15px;
+    height: 1px;
   }
 }

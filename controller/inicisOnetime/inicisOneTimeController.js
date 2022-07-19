@@ -2,7 +2,24 @@ import rp from "request-promise";
 import crypto from "crypto";
 
 const fakeDB = [];
-async function inicisOneTimeMobile(req, res) {}
+async function inicisOneTimeMobile(req, res) {
+  const {
+    body: { P_STATUS, P_RMESG1, P_TID, P_AMT, P_REQ_URL, P_NOTI },
+  } = req;
+
+  console.log("P_STATUS===");
+  console.log(P_STATUS);
+  console.log("P_RMESG1===");
+  console.log(P_RMESG1);
+  console.log("P_TID===");
+  console.log(P_TID);
+  console.log("P_AMT===");
+  console.log(P_AMT);
+  console.log("P_REQ_URL===");
+  console.log(P_REQ_URL);
+  console.log("P_NOTI===");
+  console.log(P_NOTI);
+}
 
 async function inicisOneTimeDesktop(req, res) {
   const {
@@ -46,15 +63,23 @@ async function inicisOneTimeDesktop(req, res) {
   reqJSON.oid = orderNumber;
   if (accessResult === "0000") {
     inicisAccess.result = true;
-    fakeDB.push(reqJSON);
+    fakeDB.push(inicisAccess);
+    console.log("fakeDB===");
+    console.log(fakeDB);
     return res.redirect(
-      `${process.env.NODE_BASEURL}/paymentsuccess?oid=${orderNumber}`
+      `${
+        process.env.REACT_APP_BASEURL || "http://localhost:5000"
+      }/paymentsuccess?oid=${orderNumber}`
     );
   } else {
     reqJSON.result = false;
     fakeDB.push(reqJSON);
+    console.log("fakeDB===");
+    console.log(fakeDB);
     return res.redirect(
-      `${process.env.NODE_BASEURL}/paymentfail?oid=${orderNumber}`
+      `${
+        process.env.REACT_APP_BASEURL || "http://localhost:5000"
+      }/paymentfail?oid=${orderNumber}`
     );
   }
 }
@@ -102,6 +127,8 @@ function selectResultController(req, res) {
     });
   }
 
+  console.log("fakeDB===");
+  console.log(fakeDB);
   if (fakeDB.length === 0) {
     return res.json({
       result: false,
@@ -111,7 +138,12 @@ function selectResultController(req, res) {
     });
   }
 
+  console.log("here1");
+
   const selectPayment = fakeDB.find((db) => db.MOID === oid || db.oid === oid);
+
+  console.log("selectPayment===");
+  console.log(selectPayment);
 
   if (selectPayment) {
     return res.json({

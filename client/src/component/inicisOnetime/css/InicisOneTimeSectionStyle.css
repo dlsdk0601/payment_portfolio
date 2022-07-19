@@ -5,3 +5,36 @@
   justify-content: space-between;
   align-items: center;
 }
+
+@media screen and (max-width: 480px) {
+  form {
+    margin-bottom: 20px;
+  }
+
+  .input__box {
+    width: 100%;
+    margin: 0 auto 30px auto;
+    display: block;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  form label {
+    font-size: 10px;
+  }
+
+  form .btn {
+    margin: 0 5px;
+  }
+
+  .checkBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+}
