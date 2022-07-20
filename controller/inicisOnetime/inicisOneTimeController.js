@@ -7,18 +7,37 @@ async function inicisOneTimeMobile(req, res) {
     body: { P_STATUS, P_RMESG1, P_TID, P_AMT, P_REQ_URL, P_NOTI },
   } = req;
 
-  console.log("P_STATUS===");
-  console.log(P_STATUS);
-  console.log("P_RMESG1===");
-  console.log(P_RMESG1);
-  console.log("P_TID===");
-  console.log(P_TID);
-  console.log("P_AMT===");
-  console.log(P_AMT);
-  console.log("P_REQ_URL===");
-  console.log(P_REQ_URL);
-  console.log("P_NOTI===");
-  console.log(P_NOTI);
+  if (P_STATUS !== "00") {
+    return res.redirect(`${process.env.NODE_BASEURL}/paymentfail`);
+  }
+
+  const reqJSON = {
+    P_MID: "INIpayTest",
+    P_TID,
+  };
+
+  const inicisAccess = await rp({
+    method: "POST",
+    uri: P_REQ_URL,
+    form: reqJSON,
+    json: true,
+  });
+
+  const { P_STATUS: paymentResult } = inicisAccess;
+
+  if (paymentResult !== "00") {
+    return res.redirect(
+      `${
+        process.env.REACT_APP_BASEURL || "http://localhost:5000"
+      }/paymentfail?oid=${P_TID}`
+    );
+  }
+
+  return res.redirect(
+    `${
+      process.env.REACT_APP_BASEURL || "http://localhost:5000"
+    }/paymentfail?oid=${P_TID}`
+  );
 }
 
 async function inicisOneTimeDesktop(req, res) {

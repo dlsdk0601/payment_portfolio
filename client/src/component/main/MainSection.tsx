@@ -1,6 +1,6 @@
 // lib
 import Axios from "../../server/Axios";
-import React from "react";
+import React, { useState } from "react";
 
 // css
 import "./css/MainSectionStyle.css";
@@ -8,13 +8,16 @@ import "./css/MainSectionStyle.css";
 export default function MainSection() {
   const navi = navigator.userAgent;
 
+  const [test, setTest] = useState(false);
+
   console.log(process.env);
 
   const testFetch = async () => {
-    const test = await Axios.get("/test");
+    const test: { result: boolean; msg: string } = await Axios.get("/test");
 
     console.log("test===");
     console.log(test);
+    setTest(test.result);
   };
 
   return (
@@ -26,6 +29,7 @@ export default function MainSection() {
         입니다
       </p>
       <div onClick={testFetch}>click</div>
+      <p>{test ? "success" : "fail"}</p>
     </>
   );
 }

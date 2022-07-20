@@ -48,7 +48,6 @@ export default function InicisOneTimeSection() {
     e.preventDefault();
     console.log("payment start");
 
-    // validation
     if (!buyername) {
       alert("주문자를 입력하세요");
       return;
@@ -102,7 +101,6 @@ export default function InicisOneTimeSection() {
     }
 
     if (isMobile && payPriceCompared.result) {
-      console.log("start");
       mobilePurchaseRef.current.action =
         "https://mobile.inicis.com/smart/payment/";
       mobilePurchaseRef.current.target = "_self";
