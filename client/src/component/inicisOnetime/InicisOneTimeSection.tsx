@@ -218,11 +218,11 @@ export default function InicisOneTimeSection() {
             value={
               window.location.href.indexOf("www") == -1
                 ? `${
-                    process.env.REACT_APP_RETURNURL ||
+                    process.env.REACT_APP_RETURNURL_MOBILE ||
                     "http://localhost:5000/api/inicis/onetime-mobile"
                   }`
                 : `${
-                    process.env.REACT_APP_WWWRETURNURL ||
+                    process.env.REACT_APP_WWWRETURNURL_MOBILE ||
                     "https://www.localhost:5000/api/inicis/onetime-mobile"
                   }`
             }
