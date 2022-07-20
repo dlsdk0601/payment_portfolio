@@ -26,14 +26,17 @@ async function inicisOneTimeMobile(req, res) {
     json: true,
   });
 
-  console.log("paymentResult===");
-  console.log(inicisAccess);
+  const jsonpar = JSON.parse(inicisAccess);
+  console.log("jsonpar===");
+  console.log(jsonpar);
+  const arr = inicisAccess.split("&");
+  console.log("arr===");
+  console.log(arr);
+  const isSuccess = arr.some((item) => item === "P_STATUS=00");
+  console.log("isSuccess===");
+  console.log(isSuccess);
 
-  console.log("aaa.P_STATUS");
-  console.log(typeof inicisAccess);
-  console.log(inicisAccess.P_STATUS);
-
-  if (inicisAccess.P_STATUS === "00") {
+  if (isSuccess) {
     fakeDB.push(inicisAccess);
     return res.redirect(
       `${
