@@ -223,7 +223,7 @@ export default function InicisOneTimeSection() {
                   }`
                 : `${
                     process.env.REACT_APP_WWWRETURNURL ||
-                    "https://www.localhost:5000/api/inicis/onetime"
+                    "https://www.localhost:5000/api/inicis/onetime-mobile"
                   }`
             }
           />
