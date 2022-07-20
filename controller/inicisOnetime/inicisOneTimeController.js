@@ -30,8 +30,14 @@ async function inicisOneTimeMobile(req, res) {
   console.log("paymentResult===");
   console.log(aaa);
 
-  if (aaa.P_STATUS !== "00") {
-    aaa.result = false;
+  if (aaa.P_STATUS === "00") {
+    fakeDB.push(aaa);
+    return res.redirect(
+      `${
+        process.env.REACT_APP_BASEURL || "http://localhost:5000"
+      }/paymentsuccess?tid=${P_TID}`
+    );
+  } else {
     fakeDB.push(aaa);
     return res.redirect(
       `${
@@ -39,14 +45,6 @@ async function inicisOneTimeMobile(req, res) {
       }/paymentfail?tid=${P_TID}`
     );
   }
-
-  aaa.result = true;
-  fakeDB.push(aaa);
-  return res.redirect(
-    `${
-      process.env.REACT_APP_BASEURL || "http://localhost:5000"
-    }/paymentsuccess?tid=${P_TID}`
-  );
 }
 
 async function inicisOneTimeDesktop(req, res) {
