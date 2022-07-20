@@ -7,6 +7,9 @@ async function inicisOneTimeMobile(req, res) {
     body: { P_STATUS, P_RMESG1, P_TID, P_AMT, P_REQ_URL, P_NOTI },
   } = req;
 
+  console.log("req");
+  console.log(P_STATUS, P_RMESG1, P_TID, P_AMT, P_REQ_URL, P_NOTI);
+
   if (P_STATUS !== "00") {
     return res.redirect(`${process.env.NODE_BASEURL}/paymentfail`);
   }
@@ -24,6 +27,8 @@ async function inicisOneTimeMobile(req, res) {
   });
 
   const { P_STATUS: paymentResult } = inicisAccess;
+  console.log("paymentResult===");
+  console.log(paymentResult);
 
   if (paymentResult !== "00") {
     return res.redirect(
