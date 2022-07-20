@@ -26,9 +26,6 @@ async function inicisOneTimeMobile(req, res) {
     json: true,
   });
 
-  const jsonpar = JSON.parse(inicisAccess);
-  console.log("jsonpar===");
-  console.log(jsonpar);
   const arr = inicisAccess.split("&");
   console.log("arr===");
   console.log(arr);
