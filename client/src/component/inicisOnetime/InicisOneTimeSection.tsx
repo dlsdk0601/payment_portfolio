@@ -83,7 +83,6 @@ export default function InicisOneTimeSection() {
       timeStamp,
       oid,
       totalPrice,
-      isMobile,
     };
 
     const payPriceCompared: { result: boolean; msg: string } = await Axios.post(

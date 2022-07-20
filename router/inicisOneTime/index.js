@@ -1,13 +1,16 @@
 import express from "express";
 import {
-  inicisOntimeController,
+  inicisOneTimeDesktop,
   inicisOneTimereadyController,
   selectResultController,
+  inicisOneTimeMobile,
 } from "../../controller/inicisOnetime/inicisOneTimeController.js";
 
 const inicisOneTime = express.Router();
 
-inicisOneTime.post("/onetime", inicisOntimeController);
+inicisOneTime.post("/onetime", inicisOneTimeDesktop);
+
+inicisOneTime.post("/onetime-mobile", inicisOneTimeMobile);
 
 inicisOneTime.post("/ready", inicisOneTimereadyController);
 

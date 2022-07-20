@@ -11,7 +11,7 @@ async function inicisOneTimeMobile(req, res) {
   console.log(P_STATUS, P_RMESG1, P_TID, P_AMT, P_REQ_URL, P_NOTI);
 
   if (P_STATUS !== "00") {
-    return res.redirect(`${process.env.NODE_BASEURL}/paymentfail`);
+    return res.redirect(`${process.env.NODE_BASEURL}/paymentfail?why=1`);
   }
 
   const reqJSON = {
@@ -108,18 +108,6 @@ async function inicisOneTimeDesktop(req, res) {
   }
 }
 
-function inicisOntimeController(req, res) {
-  const {
-    body: { isMobile },
-  } = req;
-
-  if (isMobile) {
-    inicisOneTimeMobile(req, res);
-  } else {
-    inicisOneTimeDesktop(req, res);
-  }
-}
-
 function inicisOneTimereadyController(req, res) {
   const {
     body: { goodCount, totalPrice },
@@ -187,7 +175,8 @@ function selectResultController(req, res) {
 }
 
 export {
-  inicisOntimeController,
+  inicisOneTimeDesktop,
   inicisOneTimereadyController,
   selectResultController,
+  inicisOneTimeMobile,
 };
