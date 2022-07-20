@@ -30,6 +30,10 @@ async function inicisOneTimeMobile(req, res) {
   console.log("paymentResult===");
   console.log(aaa);
 
+  console.log("aaa.P_STATUS");
+  console.log(typeof aaa.P_STATUS);
+  console.log(aaa.P_STATUS);
+
   if (aaa.P_STATUS === "00") {
     fakeDB.push(aaa);
     return res.redirect(
