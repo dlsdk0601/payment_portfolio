@@ -1,14 +1,10 @@
 import rp from "request-promise";
 import crypto from "crypto";
 
-const fakeDB = [];
 async function inicisOneTimeMobile(req, res) {
   const {
     body: { P_STATUS, P_RMESG1, P_TID, P_AMT, P_REQ_URL, P_NOTI },
   } = req;
-
-  console.log("req");
-  console.log(P_STATUS, P_RMESG1, P_TID, P_AMT, P_REQ_URL, P_NOTI);
 
   if (P_STATUS !== "00") {
     return res.redirect(`${process.env.NODE_BASEURL}/paymentfail`);
@@ -27,25 +23,19 @@ async function inicisOneTimeMobile(req, res) {
   });
 
   const arr = inicisAccess.split("&");
-  console.log("arr===");
-  console.log(arr);
   const isSuccess = arr.some((item) => item === "P_STATUS=00");
-  console.log("isSuccess===");
-  console.log(isSuccess);
 
   if (isSuccess) {
-    fakeDB.push(inicisAccess);
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentsuccess?tid=${P_TID}`
+      }/paymentsuccess?${inicisAccess}`
     );
   } else {
-    fakeDB.push(inicisAccess);
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentfail?tid=${P_TID}`
+      }/paymentfail?${inicisAccess}`
     );
   }
 }
@@ -87,30 +77,26 @@ async function inicisOneTimeDesktop(req, res) {
     json: true,
   });
 
-  console.log(inicisAccess);
+  const {
+    resultCode: accessResult,
+    tid,
+    MOID,
+    buyerName,
+    goodName,
+    TotPrice,
+  } = inicisAccess;
 
-  const { resultCode: accessResult } = inicisAccess;
-
-  reqJSON.oid = orderNumber;
   if (accessResult === "0000") {
-    inicisAccess.result = true;
-    fakeDB.push(inicisAccess);
-    console.log("fakeDB===");
-    console.log(fakeDB);
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentsuccess?tid=${orderNumber}`
+      }/paymentsuccess?tid=${tid}&MOID=${MOID}&buyerName=${buyerName}$goodName=${goodName}$TotPrice=${TotPrice}`
     );
   } else {
-    reqJSON.result = false;
-    fakeDB.push(reqJSON);
-    console.log("fakeDB===");
-    console.log(fakeDB);
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentfail?tid=${orderNumber}`
+      }/paymentfail?tid=${tid}&MOID=${MOID}&buyerName=${buyerName}$goodName=${goodName}$TotPrice=${TotPrice}`
     );
   }
 }
@@ -132,58 +118,8 @@ function inicisOneTimereadyController(req, res) {
   });
 }
 
-function selectResultController(req, res) {
-  const {
-    query: { oid },
-  } = req;
-
-  if (!oid) {
-    return res.json({
-      result: false,
-      msg: null,
-      data: null,
-      code: 101,
-    });
-  }
-
-  console.log("fakeDB===");
-  console.log(fakeDB);
-  if (fakeDB.length === 0) {
-    return res.json({
-      result: false,
-      msg: null,
-      data: null,
-      code: 103,
-    });
-  }
-
-  console.log("here1");
-
-  const selectPayment = fakeDB.find((db) => db.MOID === oid || db.oid === oid);
-
-  console.log("selectPayment===");
-  console.log(selectPayment);
-
-  if (selectPayment) {
-    return res.json({
-      result: true,
-      msg: null,
-      data: selectPayment,
-      code: 200,
-    });
-  } else {
-    return res.json({
-      result: false,
-      msg: null,
-      data: false,
-      code: 102,
-    });
-  }
-}
-
 export {
   inicisOneTimeDesktop,
   inicisOneTimereadyController,
-  selectResultController,
   inicisOneTimeMobile,
 };
