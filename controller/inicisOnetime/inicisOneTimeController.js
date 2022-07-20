@@ -26,23 +26,22 @@ async function inicisOneTimeMobile(req, res) {
     json: true,
   });
 
-  const aaa = inicisAccess;
   console.log("paymentResult===");
-  console.log(aaa);
+  console.log(inicisAccess);
 
   console.log("aaa.P_STATUS");
-  console.log(typeof aaa.P_STATUS);
-  console.log(aaa.P_STATUS);
+  console.log(typeof inicisAccess);
+  console.log(inicisAccess.P_STATUS);
 
-  if (aaa.P_STATUS === "00") {
-    fakeDB.push(aaa);
+  if (inicisAccess.P_STATUS === "00") {
+    fakeDB.push(inicisAccess);
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
       }/paymentsuccess?tid=${P_TID}`
     );
   } else {
-    fakeDB.push(aaa);
+    fakeDB.push(inicisAccess);
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
@@ -87,6 +86,8 @@ async function inicisOneTimeDesktop(req, res) {
     form: reqJSON,
     json: true,
   });
+
+  console.log(inicisAccess);
 
   const { resultCode: accessResult } = inicisAccess;
 
