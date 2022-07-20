@@ -5,7 +5,7 @@ import Axios from "../server/Axios";
 
 export default function PaySuccessPage() {
   const { search } = useLocation();
-  const keyword = new URLSearchParams(search).get("oid");
+  const keyword = new URLSearchParams(search).get("tid");
   const [paymentResponse, setPaymentResponse] = useState<IpaymentResponse>({
     CARD_Quota: "",
     CARD_ClEvent: "",

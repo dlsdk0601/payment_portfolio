@@ -11,7 +11,7 @@ async function inicisOneTimeMobile(req, res) {
   console.log(P_STATUS, P_RMESG1, P_TID, P_AMT, P_REQ_URL, P_NOTI);
 
   if (P_STATUS !== "00") {
-    return res.redirect(`${process.env.NODE_BASEURL}/paymentfail?why=1`);
+    return res.redirect(`${process.env.NODE_BASEURL}/paymentfail`);
   }
 
   const reqJSON = {
@@ -26,22 +26,26 @@ async function inicisOneTimeMobile(req, res) {
     json: true,
   });
 
-  const { P_STATUS: paymentResult } = inicisAccess;
+  const aaa = inicisAccess;
   console.log("paymentResult===");
-  console.log(paymentResult);
+  console.log(aaa);
 
-  if (paymentResult !== "00") {
+  if (aaa.P_STATUS !== "00") {
+    aaa.result = false;
+    fakeDB.push(aaa);
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentfail?oid=${P_TID}`
+      }/paymentfail?tid=${P_TID}`
     );
   }
 
+  aaa.result = true;
+  fakeDB.push(aaa);
   return res.redirect(
     `${
       process.env.REACT_APP_BASEURL || "http://localhost:5000"
-    }/paymentfail?oid=${P_TID}`
+    }/paymentsuccess?tid=${P_TID}`
   );
 }
 
@@ -93,7 +97,7 @@ async function inicisOneTimeDesktop(req, res) {
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentsuccess?oid=${orderNumber}`
+      }/paymentsuccess?tid=${orderNumber}`
     );
   } else {
     reqJSON.result = false;
@@ -103,7 +107,7 @@ async function inicisOneTimeDesktop(req, res) {
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentfail?oid=${orderNumber}`
+      }/paymentfail?tid=${orderNumber}`
     );
   }
 }
