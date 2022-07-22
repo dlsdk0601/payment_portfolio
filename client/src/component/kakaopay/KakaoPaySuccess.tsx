@@ -1,12 +1,11 @@
 // lib
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { IKakaoOrderSelectResponse } from "../../Interface";
 import Axios from "../../server/Axios";
 
 const KakaoPaySuccess = () => {
-  const { search } = useLocation();
-  const tid = new URLSearchParams(search).get("tid");
+  const { tid } = useParams();
 
   const [oid, setOid] = useState<string>("");
   const [goodName, setGoodName] = useState<string>("");
@@ -17,7 +16,10 @@ const KakaoPaySuccess = () => {
       `kakao/select-order?tid=${tid}`
     );
 
-    if (!!selectAPI.orderData) {
+    console.log("selectAPI===");
+    console.log(selectAPI);
+
+    if (selectAPI.result) {
       const {
         partner_order_id,
         item_name,

@@ -1,5 +1,7 @@
 import rp from "request-promise";
-
+import dotenv from "dotenv";
+dotenv.config();
+console.log(process.env.NODE_KAKAO_ADMINKEY);
 const fakeReadyDB = [];
 const fakeSuccessDB = [];
 
@@ -49,7 +51,7 @@ async function kakaoPayApproveController(req, res) {
   const selectData = fakeReadyDB.find((item) => item.partner_order_id === oid);
 
   if (!selectData) {
-    return res.jsob({
+    return res.json({
       result: true,
       msg: "approve fail",
     });
@@ -72,13 +74,13 @@ async function kakaoPayApproveController(req, res) {
   });
 
   if (!!kakaoReady) {
-    fakeSuccessDB.push(kakaoReady);
-    return res.jsob({
+    fakeSuccessDB.push(JSON.parse(kakaoReady));
+    return res.json({
       result: true,
       msg: "approve success",
     });
   } else {
-    return res.jsob({
+    return res.json({
       result: true,
       msg: "approve fail",
     });
@@ -90,33 +92,29 @@ async function kakaoPaySuccessController(req, res) {
     query: { tid },
   } = req;
 
-  const isReadySuccess = fakeSuccessDB.some((item) => item.tid === tid);
+  const isReadySuccess = fakeReadyDB.some((item) => item.tid === tid);
 
   if (isReadySuccess) {
     return res.json({
       result: true,
       msg: null,
-      kakaoPayApproveUrl: `${
-        process.env.NODE_BASEURL || "http://localhost:5000"
-      }/kakaopay-success?tid=${tid}`,
+      kakaoPayApproveUrl: `/kakaopay-success/${tid}`,
     });
   } else {
     return res.json({
       result: true,
       msg: "there is not Tid",
-      kakaoPayApproveUrl: `${
-        process.env.NODE_BASEURL || "http://localhost:5000"
-      }/kakaopay-fail`,
+      kakaoPayApproveUrl: `/kakaopay-fail`,
     });
   }
 }
 
 async function kakaoPaySelectOrder(req, res) {
   const {
-    body: { tid },
+    query: { tid },
   } = req;
 
-  const isReadySuccess = fakeSuccessDB.some((item) => item.tid === tid);
+  const isReadySuccess = fakeSuccessDB.find((item) => item.tid === tid);
 
   if (!!isReadySuccess) {
     return res.json({
@@ -126,7 +124,7 @@ async function kakaoPaySelectOrder(req, res) {
     });
   } else {
     return res.json({
-      result: true,
+      result: false,
       msg: "select fail",
       orderData: null,
     });

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Axios from "../../server/Axios";
 import randomStringFunc from "../common/RandomString";
 import { IKakaoReadyResponse, ISelectKakaoPayResponse } from "../../Interface";
-import { useNavigate } from "react-router-dom";
+import { createSearchParams, useNavigate } from "react-router-dom";
 
 const KakaoPay = () => {
   const device = navigator.userAgent;
@@ -95,7 +95,7 @@ const KakaoPay = () => {
 
     if (!kakaoPayres.result) {
       alert("결제 준비 실패");
-      return undefined;
+      return;
     }
 
     const { tid, next_redirect_mobile_url, next_redirect_pc_url } = kakaoPayres;
