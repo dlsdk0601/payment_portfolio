@@ -14,9 +14,6 @@ export default function InicisOneTimeSection() {
   const isMobile = device.toLowerCase().indexOf("mobile") !== -1;
 
   const mobilePurchaseRef = useRef() as React.MutableRefObject<HTMLFormElement>;
-  const {
-    location: { origin },
-  } = window;
 
   const [buyername, setBuyername] = useState("");
   const [buyertel, setBuyertel] = useState("");

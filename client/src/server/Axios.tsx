@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
 const baseURL = `${
   process.env.REACT_APP_BASEURL || "http://localhost:5000"
@@ -18,6 +18,10 @@ const Axios = axios.create({
 Axios.interceptors.response.use(function (response: AxiosResponse) {
   const { data } = response;
   return data;
+});
+
+Axios.interceptors.request.use(function (config: AxiosRequestConfig) {
+  return config;
 });
 
 export default Axios;

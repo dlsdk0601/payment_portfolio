@@ -64,3 +64,11 @@ export interface IpaymentResponse {
   CARD_PRTC_CODE: string;
   payDevice: string;
 }
+
+export interface IKakaoReadyResponse {
+  result: boolean;
+  msg: string;
+  tid: string;
+  next_redirect_mobile_url: string;
+  next_redirect_pc_url: string;
+}
