@@ -15,6 +15,7 @@ import Wrapper from "./component/common/Wrapper";
 import CloseInicis from "./component/close/CloseInicis";
 import PaySuccessPage from "./page/PaySuccessPage";
 import PayFailPage from "./page/PayFailPage";
+import KakaoPayTokenPage from "./page/KakaoPayTokenPage";
 
 function App() {
   return (
@@ -28,6 +29,9 @@ function App() {
           <Route path="/paymentfail" element={<PayFailPage />} />
           <Route path="/inicis-regular" element={<InicisRegularPage />} />
           <Route path="/kakaopay" element={<KakaoPayPage />} />
+          <Route path="/kakaopay-success" element={<KakaoPayPage />} />
+          <Route path="/kakaopay-fail" element={<KakaoPayPage />} />
+          <Route path="/kakaopay-token/:oid" element={<KakaoPayTokenPage />} />
           <Route path="/close-inicis" element={<CloseInicis />} />
         </Routes>
       </Wrapper>

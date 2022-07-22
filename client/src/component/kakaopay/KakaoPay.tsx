@@ -2,11 +2,14 @@
 import React, { useState } from "react";
 import Axios from "../../server/Axios";
 import randomStringFunc from "../common/RandomString";
-import { IKakaoReadyResponse } from "../../Interface";
+import { IKakaoReadyResponse, ISelectKakaoPayResponse } from "../../Interface";
+import { useNavigate } from "react-router-dom";
 
 const KakaoPay = () => {
   const device = navigator.userAgent;
   const isMobile = device.toLowerCase().indexOf("mobile") !== -1;
+
+  const navigate = useNavigate();
 
   const [buyername, setBuyername] = useState("");
   const [buyertel, setBuyertel] = useState("");
@@ -29,18 +32,16 @@ const KakaoPay = () => {
     }
   };
 
-  const popupClose = (win: any, oid: string) => {
+  const popupClose = (win: any, tid: string) => {
     const set = setInterval(async () => {
       if (win.closed) {
         clearInterval(set);
-        const kakaoPayDone = await Axios.get(
-          `kakao/ready-isSuccess?oid=${oid}`
+        const selectKakaoPay: ISelectKakaoPayResponse = await Axios.get(
+          `kakao/select-success?tid=${tid}`
         );
-        console.log("kakaoPayDone==");
-        console.log(kakaoPayDone);
-        // if(!kakaoPayDone.result){
-
-        // }
+        if (selectKakaoPay.result) {
+          navigate(selectKakaoPay.kakaoPayApproveUrl);
+        }
       }
     }, 1000);
   };
@@ -76,18 +77,21 @@ const KakaoPay = () => {
       quantity: 1, //상품 수량
       total_amount: 1000, //결제금액
       tax_free_amount: 0, //비과세
-      approval_url: `http://localhost:3000/kakaoPaySuccess/${partner_order_id}`,
-      cancel_url: "http://localhost:3000/paymentfail",
-      fail_url: "http://localhost:3000/paymentfail",
+      approval_url: `${
+        process.env.REACT_APP_BASEURL || "http://localhost:5000"
+      }/kakaopay-token/${partner_order_id}`,
+      cancel_url: `${
+        process.env.REACT_APP_BASEURL || "http://localhost:5000"
+      }/paymentfail`,
+      fail_url: `${
+        process.env.REACT_APP_BASEURL || "http://localhost:3000"
+      }/paymentfail`,
     };
 
     const kakaoPayres: IKakaoReadyResponse = await Axios.post(
       "/kakao/ready",
       req
     );
-
-    console.log("res===");
-    console.log(kakaoPayres);
 
     if (!kakaoPayres.result) {
       alert("결제 준비 실패");
@@ -97,28 +101,15 @@ const KakaoPay = () => {
     const { tid, next_redirect_mobile_url, next_redirect_pc_url } = kakaoPayres;
 
     if (isMobile) {
-      //   const win = window.open(
-      //     next_redirect_pc_url,
-      //     "kakaopay",
-      //     "top=50px, left=200px, height=500px, width=500px"
-      //   );
-      //   popupClose(win, partner_order_id);
-    } else {
       window.location.href = next_redirect_mobile_url;
+    } else {
+      const win = window.open(
+        next_redirect_pc_url,
+        "kakaopay",
+        "top=50px, left=200px, height=500px, width=500px"
+      );
+      popupClose(win, tid);
     }
-
-    // // state setting for Form
-    // const totalPrice = goodCount * 1000;
-
-    // const paymentData = {
-    //   buyername,
-    //   buyertel,
-    //   buyeremail,
-    //   goodCount,
-    //   timeStamp,
-    //   oid,
-    //   totalPrice,
-    // };
   };
   return (
     <>

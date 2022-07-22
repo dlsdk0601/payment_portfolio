@@ -1,4 +1,9 @@
-interface ISelectData {
+export interface IDefaultResponse {
+  result: boolean;
+  msg: string | null;
+}
+
+export interface ISelectData {
   mid: string;
   authToken: string;
   timestamp: number;
@@ -9,9 +14,7 @@ interface ISelectData {
   oid: string;
 }
 
-export interface ISelectResult {
-  result: boolean;
-  msg: string | null;
+export interface ISelectResult extends IDefaultResponse {
   data: ISelectData | null;
   code: number;
 }
@@ -65,10 +68,12 @@ export interface IpaymentResponse {
   payDevice: string;
 }
 
-export interface IKakaoReadyResponse {
-  result: boolean;
-  msg: string;
+export interface IKakaoReadyResponse extends IDefaultResponse {
   tid: string;
   next_redirect_mobile_url: string;
   next_redirect_pc_url: string;
+}
+
+export interface ISelectKakaoPayResponse extends IDefaultResponse {
+  kakaoPayApproveUrl: string;
 }

@@ -1,12 +1,14 @@
 import express from "express";
 import {
   kakaoPayReadyController,
-  kakaoPayReadySuccess,
+  kakaoPaySuccessController,
+  kakaoPayApproveController,
 } from "../../controller/kakaoPay/kakaoPayController.js";
 
 const kakaoPay = express.Router();
 
 kakaoPay.post("/ready", kakaoPayReadyController);
-kakaoPay.get("/ready-isSuccess", kakaoPayReadySuccess);
+kakaoPay.post("/approve", kakaoPayApproveController);
+kakaoPay.get("/select-success", kakaoPaySuccessController);
 
 export default kakaoPay;

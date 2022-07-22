@@ -1,11 +1,9 @@
 import rp from "request-promise";
 
-const fakeDB = [];
+const fakeReadyDB = [];
+const fakeSuccessDB = [];
 async function kakaoPayReadyController(req, res) {
   const { body } = req;
-
-  console.log("body==");
-  console.log(body);
 
   const { quantity, total_amount } = body;
   if (quantity * 1000 !== total_amount) {
@@ -19,7 +17,7 @@ async function kakaoPayReadyController(req, res) {
       ...body,
     },
     headers: {
-      Authorization: `KakaoAK 1b6727d70facf0228e4ef6de74b08f3f`,
+      Authorization: `KakaoAK ${process.env.NODE_KAKAO_ADMINKEY}`,
       "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
     },
   });
@@ -31,31 +29,89 @@ async function kakaoPayReadyController(req, res) {
     return res.json({ result: false, msg: "kakaoPay Ready API fail" });
   }
 
-  fakeDB.push(JSON.parse(kakaoReady));
+  const fakeData = { ...JSON.parse(kakaoReady), ...body };
+  fakeReadyDB.push(fakeData);
   return res.json({
     result: true,
-    msg: "goooddd",
+    msg: null,
     tid,
     next_redirect_mobile_url,
     next_redirect_pc_url,
   });
 }
 
-async function kakaoPayReadySuccess(req, res) {
+async function kakaoPayApproveController(req, res) {
   const {
-    query: { oid },
+    body: { pg_token, oid },
   } = req;
 
-  console.log("oid===");
-  console.log(oid);
+  const selectData = fakeReadyDB.find((item) => item.partner_order_id === oid);
 
-  console.log("fakeDB===");
-  console.log(fakeDB);
+  if (!selectData) {
+    return res.jsob({
+      result: true,
+      msg: "approve fail",
+    });
+  }
 
-  return res.json({
-    result: true,
-    msg: "good",
+  const kakaoReady = await rp({
+    method: "POST",
+    uri: "https://kapi.kakao.com/v1/payment/approve",
+    form: {
+      cid: "TC0ONETIME",
+      tid: selectData.tid,
+      partner_order_id: selectData.partner_order_id,
+      partner_user_id: selectData.partner_user_id,
+      pg_token,
+    },
+    headers: {
+      Authorization: `KakaoAK ${process.env.NODE_KAKAO_ADMINKEY}`,
+      "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+    },
   });
+
+  if (!!kakaoReady) {
+    fakeSuccessDB.push(kakaoReady);
+    return res.jsob({
+      result: true,
+      msg: "approve success",
+    });
+  } else {
+    return res.jsob({
+      result: true,
+      msg: "approve fail",
+    });
+  }
 }
 
-export { kakaoPayReadyController, kakaoPayReadySuccess };
+async function kakaoPaySuccessController(req, res) {
+  const {
+    query: { tid },
+  } = req;
+
+  const isReadySuccess = fakeSuccessDB.some((item) => item.tid === tid);
+
+  if (isReadySuccess) {
+    return res.json({
+      result: true,
+      msg: null,
+      kakaoPayApproveUrl: `${
+        process.env.NODE_BASEURL || "http://localhost:5000"
+      }/kakaopay-sucess`,
+    });
+  } else {
+    return res.json({
+      result: true,
+      msg: "there is not Tid",
+      kakaoPayApproveUrl: `${
+        process.env.NODE_BASEURL || "http://localhost:5000"
+      }/kakaopay-fail`,
+    });
+  }
+}
+
+export {
+  kakaoPayReadyController,
+  kakaoPayApproveController,
+  kakaoPaySuccessController,
+};
