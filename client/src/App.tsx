@@ -32,7 +32,7 @@ function App() {
           <Route path="/inicis-regular" element={<InicisRegularPage />} />
           <Route path="/kakaopay" element={<KakaoPayPage />} />
           <Route
-            path="/kakaopay-success/:tid"
+            path="/kakaopay-success/:oid"
             element={<KakaoPaySuccessPage />}
           />
           <Route path="/kakaopay-fail" element={<KakaoPayFailPage />} />

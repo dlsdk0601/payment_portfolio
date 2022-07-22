@@ -5,15 +5,15 @@ import { IKakaoOrderSelectResponse } from "../../Interface";
 import Axios from "../../server/Axios";
 
 const KakaoPaySuccess = () => {
-  const { tid } = useParams();
+  const { oid } = useParams();
 
-  const [oid, setOid] = useState<string>("");
+  const [tid, setTid] = useState<string>("");
   const [goodName, setGoodName] = useState<string>("");
   const [totPrice, setTotPrice] = useState<string>("");
 
   const selectOrder = async () => {
     const selectAPI: IKakaoOrderSelectResponse = await Axios.get(
-      `kakao/select-order?tid=${tid}`
+      `kakao/select-order?oid=${oid}`
     );
 
     console.log("selectAPI===");
@@ -21,11 +21,11 @@ const KakaoPaySuccess = () => {
 
     if (selectAPI.result) {
       const {
-        partner_order_id,
+        tid,
         item_name,
         amount: { total },
       } = selectAPI.orderData;
-      setOid(partner_order_id);
+      setTid(tid);
       setGoodName(item_name);
       setTotPrice(total);
     }

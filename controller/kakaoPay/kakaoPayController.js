@@ -111,10 +111,12 @@ async function kakaoPaySuccessController(req, res) {
 
 async function kakaoPaySelectOrder(req, res) {
   const {
-    query: { tid },
+    query: { oid },
   } = req;
 
-  const isReadySuccess = fakeSuccessDB.find((item) => item.tid === tid);
+  const isReadySuccess = fakeSuccessDB.find(
+    (item) => item.partner_order_id === oid
+  );
 
   if (!!isReadySuccess) {
     return res.json({

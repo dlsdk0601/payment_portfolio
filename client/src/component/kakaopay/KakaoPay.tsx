@@ -69,6 +69,14 @@ const KakaoPay = () => {
     const timeStamp = +new Date();
     const partner_order_id = timeStamp + randomStringFunc(7); //timeStamp + randomString
 
+    const approval_url = isMobile
+      ? `${
+          process.env.REACT_APP_BASEURL || "http://localhost:5000"
+        }/kakaopay-success/${partner_order_id}`
+      : `${
+          process.env.REACT_APP_BASEURL || "http://localhost:5000"
+        }/kakaopay-token/${partner_order_id}`;
+
     const req = {
       cid: "TC0ONETIME", // 가맹점 코드 지금은 테스트 코드
       partner_order_id, // 주문번호
@@ -77,9 +85,7 @@ const KakaoPay = () => {
       quantity: 1, //상품 수량
       total_amount: 1000, //결제금액
       tax_free_amount: 0, //비과세
-      approval_url: `${
-        process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/kakaopay-token/${partner_order_id}`,
+      approval_url,
       cancel_url: `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
       }/paymentfail`,
