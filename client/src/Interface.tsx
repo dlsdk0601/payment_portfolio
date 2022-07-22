@@ -77,3 +77,7 @@ export interface IKakaoReadyResponse extends IDefaultResponse {
 export interface ISelectKakaoPayResponse extends IDefaultResponse {
   kakaoPayApproveUrl: string;
 }
+
+export interface IKakaoOrderSelectResponse extends IDefaultResponse {
+  orderData: any | null;
+}

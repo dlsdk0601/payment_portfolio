@@ -2,6 +2,7 @@ import rp from "request-promise";
 
 const fakeReadyDB = [];
 const fakeSuccessDB = [];
+
 async function kakaoPayReadyController(req, res) {
   const { body } = req;
 
@@ -97,7 +98,7 @@ async function kakaoPaySuccessController(req, res) {
       msg: null,
       kakaoPayApproveUrl: `${
         process.env.NODE_BASEURL || "http://localhost:5000"
-      }/kakaopay-sucess`,
+      }/kakaopay-success?tid=${tid}`,
     });
   } else {
     return res.json({
@@ -110,8 +111,31 @@ async function kakaoPaySuccessController(req, res) {
   }
 }
 
+async function kakaoPaySelectOrder(req, res) {
+  const {
+    body: { tid },
+  } = req;
+
+  const isReadySuccess = fakeSuccessDB.some((item) => item.tid === tid);
+
+  if (!!isReadySuccess) {
+    return res.json({
+      result: true,
+      msg: null,
+      orderData: isReadySuccess,
+    });
+  } else {
+    return res.json({
+      result: true,
+      msg: "select fail",
+      orderData: null,
+    });
+  }
+}
+
 export {
   kakaoPayReadyController,
   kakaoPayApproveController,
   kakaoPaySuccessController,
+  kakaoPaySelectOrder,
 };

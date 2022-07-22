@@ -84,7 +84,7 @@ const KakaoPay = () => {
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
       }/paymentfail`,
       fail_url: `${
-        process.env.REACT_APP_BASEURL || "http://localhost:3000"
+        process.env.REACT_APP_BASEURL || "http://localhost:5000"
       }/paymentfail`,
     };
 
