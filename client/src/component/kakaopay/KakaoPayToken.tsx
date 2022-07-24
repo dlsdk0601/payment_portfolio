@@ -11,6 +11,11 @@ const KakaoPayToken = () => {
   const pg_token = new URLSearchParams(search).get("pg_token");
 
   const kakaoPayApproveFetch = async () => {
+    console.log("oid===");
+    console.log(oid);
+
+    console.log("pg_token====");
+    console.log(pg_token);
     if (!oid || !pg_token) {
       return;
     }
@@ -20,6 +25,9 @@ const KakaoPayToken = () => {
       "/kakao/approve",
       req
     );
+
+    console.log("kakaoPayApprove===");
+    console.log(kakaoPayApprove);
 
     if (kakaoPayApprove.result) {
       window.close();

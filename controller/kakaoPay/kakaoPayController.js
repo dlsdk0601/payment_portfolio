@@ -89,13 +89,13 @@ async function kakaoPayApproveController(req, res) {
     },
   });
 
-  console.log("fakeReadyDB==4");
-  console.log(fakeReadyDB);
-  console.log("fakeSuccessDB==4");
-  console.log(fakeSuccessDB);
-
   if (!!kakaoReady) {
     fakeSuccessDB.push(JSON.parse(kakaoReady));
+
+    console.log("fakeReadyDB==4");
+    console.log(fakeReadyDB);
+    console.log("fakeSuccessDB==4");
+    console.log(fakeSuccessDB);
     return res.json({
       result: true,
       msg: "approve success",
@@ -119,6 +119,9 @@ async function kakaoPaySuccessController(req, res) {
   console.log(fakeSuccessDB);
 
   const isReadySuccess = fakeSuccessDB.find((item) => item.tid === tid);
+
+  console.log("isReadySuccess===");
+  console.log(isReadySuccess);
 
   if (!!isReadySuccess) {
     return res.json({
