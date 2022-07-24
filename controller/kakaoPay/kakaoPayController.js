@@ -96,11 +96,13 @@ async function kakaoPayApproveController(req, res) {
     return res.json({
       result: true,
       msg: "approve success",
+      kakaoPayApproveUrl: `/kakaopay-success/${readyresponse.partner_order_id}`,
     });
   } else {
     return res.json({
       result: true,
       msg: "approve fail",
+      kakaoPayApproveUrl: `/kakaopay-fail`,
     });
   }
 }
