@@ -9,6 +9,11 @@ const fakeSuccessDB = [];
 async function kakaoPayReadyController(req, res) {
   const { body } = req;
 
+  console.log("fakeReadyDB==1");
+  console.log(fakeReadyDB);
+  console.log("fakeSuccessDB==1");
+  console.log(fakeSuccessDB);
+
   const { quantity, total_amount } = body;
   if (quantity * 1000 !== total_amount) {
     return res.json({ result: false, msg: "kakaoPay Ready API fail" });
@@ -35,6 +40,11 @@ async function kakaoPayReadyController(req, res) {
 
   const fakeData = { ...JSON.parse(kakaoReady), ...body };
   fakeReadyDB.push(fakeData);
+  console.log("fakeReadyDB==2");
+  console.log(fakeReadyDB);
+  console.log("fakeSuccessDB==2");
+  console.log(fakeSuccessDB);
+
   return res.json({
     result: true,
     msg: null,
@@ -49,10 +59,12 @@ async function kakaoPayApproveController(req, res) {
     body: { pg_token, oid },
   } = req;
 
-  const selectData = fakeReadyDB.find((item) => item.partner_order_id === oid);
+  console.log("fakeReadyDB==3");
+  console.log(fakeReadyDB);
+  console.log("fakeSuccessDB==3");
+  console.log(fakeSuccessDB);
 
-  console.log("selectData===");
-  console.log(selectData);
+  const selectData = fakeReadyDB.find((item) => item.partner_order_id === oid);
 
   if (!selectData) {
     return res.json({
@@ -77,8 +89,10 @@ async function kakaoPayApproveController(req, res) {
     },
   });
 
-  console.log("JSON.parse(kakaoReady)====");
-  console.log(JSON.parse(kakaoReady));
+  console.log("fakeReadyDB==4");
+  console.log(fakeReadyDB);
+  console.log("fakeSuccessDB==4");
+  console.log(fakeSuccessDB);
 
   if (!!kakaoReady) {
     fakeSuccessDB.push(JSON.parse(kakaoReady));
@@ -99,10 +113,12 @@ async function kakaoPaySuccessController(req, res) {
     query: { tid },
   } = req;
 
-  const isReadySuccess = fakeSuccessDB.find((item) => item.tid === tid);
+  console.log("fakeReadyDB==5");
+  console.log(fakeReadyDB);
+  console.log("fakeSuccessDB==5");
+  console.log(fakeSuccessDB);
 
-  console.log("isReadySuccess===");
-  console.log(isReadySuccess);
+  const isReadySuccess = fakeSuccessDB.find((item) => item.tid === tid);
 
   if (!!isReadySuccess) {
     return res.json({
@@ -124,9 +140,9 @@ async function kakaoPaySelectOrder(req, res) {
     query: { oid },
   } = req;
 
-  console.log("fakeReadyDB===");
+  console.log("fakeReadyDB==6");
   console.log(fakeReadyDB);
-  console.log("fakeSuccessDB==");
+  console.log("fakeSuccessDB==6");
   console.log(fakeSuccessDB);
 
   const isReadySuccess = fakeSuccessDB.find(
