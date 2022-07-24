@@ -9,6 +9,7 @@
 @media screen and (max-width: 480px) {
   form {
     margin-bottom: 20px;
+    padding: 30px 0;
   }
 
   .input__box {
