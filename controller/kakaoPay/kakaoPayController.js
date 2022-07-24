@@ -3,7 +3,18 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-let readyresponse;
+let readyresponse = {
+  cid: "",
+  partner_order_id: "",
+  partner_user_id: "",
+  item_name: "",
+  quantity: "",
+  total_amount: "",
+  tax_free_amount: 0,
+  approval_url,
+  cancel_url: "",
+  fail_url: "",
+};
 const fakeyDB = [];
 
 async function kakaoPayReadyController(req, res) {
