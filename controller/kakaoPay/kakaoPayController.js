@@ -9,11 +9,6 @@ const fakeSuccessDB = [];
 async function kakaoPayReadyController(req, res) {
   const { body } = req;
 
-  console.log("fakeReadyDB==1");
-  console.log(fakeReadyDB);
-  console.log("fakeSuccessDB==1");
-  console.log(fakeSuccessDB);
-
   const { quantity, total_amount } = body;
   if (quantity * 1000 !== total_amount) {
     return res.json({ result: false, msg: "kakaoPay Ready API fail" });
@@ -39,11 +34,6 @@ async function kakaoPayReadyController(req, res) {
   }
 
   const fakeData = { ...JSON.parse(kakaoReady), ...body };
-  fakeReadyDB.push(fakeData);
-  console.log("fakeReadyDB==2");
-  console.log(fakeReadyDB);
-  console.log("fakeSuccessDB==2");
-  console.log(fakeSuccessDB);
 
   return res.json({
     result: true,
@@ -58,11 +48,6 @@ async function kakaoPayApproveController(req, res) {
   const {
     body: { pg_token, oid },
   } = req;
-
-  console.log("fakeReadyDB==3");
-  console.log(fakeReadyDB);
-  console.log("fakeSuccessDB==3");
-  console.log(fakeSuccessDB);
 
   const selectData = fakeReadyDB.find((item) => item.partner_order_id === oid);
 
@@ -92,10 +77,6 @@ async function kakaoPayApproveController(req, res) {
   if (!!kakaoReady) {
     fakeSuccessDB.push(JSON.parse(kakaoReady));
 
-    console.log("fakeReadyDB==4");
-    console.log(fakeReadyDB);
-    console.log("fakeSuccessDB==4");
-    console.log(fakeSuccessDB);
     return res.json({
       result: true,
       msg: "approve success",
@@ -113,15 +94,7 @@ async function kakaoPaySuccessController(req, res) {
     query: { tid },
   } = req;
 
-  console.log("fakeReadyDB==5");
-  console.log(fakeReadyDB);
-  console.log("fakeSuccessDB==5");
-  console.log(fakeSuccessDB);
-
   const isReadySuccess = fakeSuccessDB.find((item) => item.tid === tid);
-
-  console.log("isReadySuccess===");
-  console.log(isReadySuccess);
 
   if (!!isReadySuccess) {
     return res.json({
@@ -142,11 +115,6 @@ async function kakaoPaySelectOrder(req, res) {
   const {
     query: { oid },
   } = req;
-
-  console.log("fakeReadyDB==6");
-  console.log(fakeReadyDB);
-  console.log("fakeSuccessDB==6");
-  console.log(fakeSuccessDB);
 
   const isReadySuccess = fakeSuccessDB.find(
     (item) => item.partner_order_id === oid

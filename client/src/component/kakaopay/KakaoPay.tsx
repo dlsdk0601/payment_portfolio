@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Axios from "../../server/Axios";
 import randomStringFunc from "../common/RandomString";
 import { IKakaoReadyResponse, ISelectKakaoPayResponse } from "../../Interface";
-import { createSearchParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const KakaoPay = () => {
   const device = navigator.userAgent;
@@ -11,10 +11,8 @@ const KakaoPay = () => {
 
   const navigate = useNavigate();
 
-  const [buyername, setBuyername] = useState("");
-  const [buyertel, setBuyertel] = useState("");
-  const [buyeremail, setBuyeremail] = useState("");
-  const [goodCount, setGoodCount] = useState(1);
+  const item_name = "컴퓨터";
+  const [quantity, setQuantity] = useState(1);
 
   const countHanlder = (
     e: React.FormEvent<HTMLButtonElement>,
@@ -22,12 +20,12 @@ const KakaoPay = () => {
   ): void => {
     e.preventDefault();
     if (isIncrease) {
-      setGoodCount((prev) => prev + 1);
+      setQuantity((prev) => prev + 1);
       return;
     }
 
-    if (!isIncrease && goodCount > 0) {
-      setGoodCount((prev) => prev - 1);
+    if (!isIncrease && quantity > 0) {
+      setQuantity((prev) => prev - 1);
       return;
     }
   };
@@ -52,19 +50,6 @@ const KakaoPay = () => {
     e.preventDefault();
     console.log("payment start");
 
-    // if (!buyername) {
-    //   alert("주문자를 입력하세요");
-    //   return;
-    // }
-    // if (!buyertel) {
-    //   alert("전화번호를 입력하세요");
-    //   return;
-    // }
-    // if (!buyeremail) {
-    //   alert("이메일를 입력하세요");
-    //   return;
-    // }
-
     // create oid and timeStamp
     const timeStamp = +new Date();
     const partner_order_id = timeStamp + randomStringFunc(7); //timeStamp + randomString
@@ -81,8 +66,8 @@ const KakaoPay = () => {
       cid: "TC0ONETIME", // 가맹점 코드 지금은 테스트 코드
       partner_order_id, // 주문번호
       partner_user_id: "partner_user_id", // 가맹점 회원 id
-      item_name: "초코파이", //상품명
-      quantity: 1, //상품 수량
+      item_name: "컴퓨터", //상품명
+      quantity, //상품 수량
       total_amount: 1000, //결제금액
       tax_free_amount: 0, //비과세
       approval_url,
@@ -121,36 +106,8 @@ const KakaoPay = () => {
     <>
       <form onSubmit={paymentStart}>
         <div className="input__box">
-          <label>주문자</label>
-          <input
-            type="text"
-            name="buyername"
-            value={buyername}
-            onChange={(e) => setBuyername(e.target.value)}
-          />
-        </div>
-        <div className="input__box">
-          <label>주문자 전화번호</label>
-          <input
-            type="text"
-            name="buyertel"
-            placeholder="-없이 입력"
-            value={buyertel}
-            onChange={(e) => setBuyertel(e.target.value)}
-          />
-        </div>
-        <div className="input__box">
-          <label>주문자 이메일</label>
-          <input
-            type="text"
-            name="buyeremail"
-            value={buyeremail}
-            onChange={(e) => setBuyeremail(e.target.value)}
-          />
-        </div>
-        <div className="input__box">
           <label>상품</label>
-          <input type="text" name="goodname" value="컴퓨터" />
+          <input type="text" value={item_name} />
         </div>
         <div className="input__box">
           <label>수량</label>
@@ -160,11 +117,11 @@ const KakaoPay = () => {
           <button className="btn" onClick={(e) => countHanlder(e, false)}>
             -
           </button>
-          <input type="text" value={goodCount} />
+          <input type="text" value={quantity} />
         </div>
         <div className="input__box">
           <label>가격</label>
-          <input type="text" name="price" value={goodCount * 1000} />
+          <input type="text" value={quantity * 1000} />
         </div>
         <button type="submit">결제 하기</button>
       </form>
