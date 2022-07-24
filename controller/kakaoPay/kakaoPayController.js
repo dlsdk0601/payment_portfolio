@@ -92,7 +92,7 @@ async function kakaoPayApproveController(req, res) {
   if (!!kakaoReady) {
     const savedData = { ...JSON.parse(kakaoReady), ...selectData };
     fakeyDB.push(savedData);
-    readyresponse = { ...savedData };
+    readyresponse = { ...readyresponse, ...JSON.parse(kakaoReady) };
     return res.json({
       result: true,
       msg: "approve success",
