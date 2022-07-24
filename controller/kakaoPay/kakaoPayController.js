@@ -130,11 +130,11 @@ async function kakaoPaySelectOrder(req, res) {
   const isReadySuccess = fakeyDB.find((item) => item.partner_order_id === oid);
 
   // if (!!isReadySuccess) {
-  if (savedData.partner_order_id === oid) {
+  if (readyresponse.partner_order_id === oid) {
     return res.json({
       result: true,
       msg: null,
-      orderData: savedData,
+      orderData: readyresponse,
     });
   } else {
     return res.json({
