@@ -3,8 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const fakeReadyDB = [];
-const fakeSuccessDB = [];
+const fakeyDB = [];
 
 async function kakaoPayReadyController(req, res) {
   const { body } = req;
@@ -34,7 +33,7 @@ async function kakaoPayReadyController(req, res) {
   }
 
   const fakeData = { ...JSON.parse(kakaoReady), ...body };
-  fakeReadyDB.push(fakeData);
+  fakeyDB.push(fakeData);
   return res.json({
     result: true,
     msg: null,
@@ -49,7 +48,7 @@ async function kakaoPayApproveController(req, res) {
     body: { pg_token, oid },
   } = req;
 
-  const selectData = fakeReadyDB.find((item) => item.partner_order_id === oid);
+  const selectData = fakeyDB.find((item) => item.partner_order_id === oid);
 
   if (!selectData) {
     return res.json({
@@ -75,9 +74,8 @@ async function kakaoPayApproveController(req, res) {
   });
 
   if (!!kakaoReady) {
-    fakeSuccessDB.push(JSON.parse(kakaoReady));
-    console.log("fakeSuccessDB===");
-    console.log(fakeSuccessDB);
+    const savedData = { ...JSON.parse(kakaoReady), ...selectData };
+    fakeyDB.push(savedData);
     return res.json({
       result: true,
       msg: "approve success",
@@ -95,7 +93,7 @@ async function kakaoPaySuccessController(req, res) {
     query: { tid },
   } = req;
 
-  const isReadySuccess = fakeSuccessDB.find((item) => item.tid === tid);
+  const isReadySuccess = fakeyDB.find((item) => item.tid === tid);
 
   if (!!isReadySuccess) {
     return res.json({
@@ -119,11 +117,9 @@ async function kakaoPaySelectOrder(req, res) {
 
   console.log("mobile success");
   console.log("fakeSuccessD===");
-  console.log(fakeSuccessDB);
+  console.log(fakeyDB);
 
-  const isReadySuccess = fakeSuccessDB.find(
-    (item) => item.partner_order_id === oid
-  );
+  const isReadySuccess = fakeyDB.find((item) => item.partner_order_id === oid);
 
   if (!!isReadySuccess) {
     return res.json({
