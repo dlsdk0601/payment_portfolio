@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+let readyresponse;
 const fakeyDB = [];
 
 async function kakaoPayReadyController(req, res) {
@@ -34,6 +35,7 @@ async function kakaoPayReadyController(req, res) {
 
   const fakeData = { ...JSON.parse(kakaoReady), ...body };
   fakeyDB.push(fakeData);
+  readyresponse = { ...fakeData };
   return res.json({
     result: true,
     msg: null,
@@ -62,9 +64,12 @@ async function kakaoPayApproveController(req, res) {
     uri: "https://kapi.kakao.com/v1/payment/approve",
     form: {
       cid: "TC0ONETIME",
-      tid: selectData.tid,
-      partner_order_id: selectData.partner_order_id,
-      partner_user_id: selectData.partner_user_id,
+      // tid: selectData.tid,
+      // partner_order_id: selectData.partner_order_id,
+      // partner_user_id: selectData.partner_user_id,
+      tid: readyresponse.tid,
+      partner_order_id: readyresponse.partner_order_id,
+      partner_user_id: readyresponse.partner_user_id,
       pg_token,
     },
     headers: {
@@ -76,6 +81,7 @@ async function kakaoPayApproveController(req, res) {
   if (!!kakaoReady) {
     const savedData = { ...JSON.parse(kakaoReady), ...selectData };
     fakeyDB.push(savedData);
+    readyresponse = { ...savedData };
     return res.json({
       result: true,
       msg: "approve success",
@@ -95,11 +101,13 @@ async function kakaoPaySuccessController(req, res) {
 
   const isReadySuccess = fakeyDB.find((item) => item.tid === tid);
 
-  if (!!isReadySuccess) {
+  // if (!!isReadySuccess) {
+  if (readyresponse.tid === tid) {
     return res.json({
       result: true,
       msg: null,
-      kakaoPayApproveUrl: `/kakaopay-success/${isReadySuccess.partner_order_id}`,
+      // kakaoPayApproveUrl: `/kakaopay-success/${isReadySuccess.partner_order_id}`,
+      kakaoPayApproveUrl: `/kakaopay-success/${readyresponse.partner_order_id}`,
     });
   } else {
     return res.json({
@@ -121,11 +129,12 @@ async function kakaoPaySelectOrder(req, res) {
 
   const isReadySuccess = fakeyDB.find((item) => item.partner_order_id === oid);
 
-  if (!!isReadySuccess) {
+  // if (!!isReadySuccess) {
+  if (savedData.partner_order_id === oid) {
     return res.json({
       result: true,
       msg: null,
-      orderData: isReadySuccess,
+      orderData: savedData,
     });
   } else {
     return res.json({
