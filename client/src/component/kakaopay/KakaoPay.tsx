@@ -54,13 +54,8 @@ const KakaoPay = () => {
     const timeStamp = +new Date();
     const partner_order_id = timeStamp + randomStringFunc(7); //timeStamp + randomString
 
-    const approval_url = isMobile
-      ? `${
-          process.env.REACT_APP_BASEURL || "http://localhost:5000"
-        }/kakaopay-success/${partner_order_id}`
-      : `${
-          process.env.REACT_APP_BASEURL || "http://localhost:5000"
-        }/kakaopay-token/${partner_order_id}`;
+    const approval_url = `${process.env.REACT_APP_BASEURL} || "http://localhost:5000"
+        }/kakaopay-success/${partner_order_id}`;
 
     const req = {
       cid: "TC0ONETIME", // 가맹점 코드 지금은 테스트 코드
