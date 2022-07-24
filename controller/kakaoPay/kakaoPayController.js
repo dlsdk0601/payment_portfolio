@@ -11,7 +11,7 @@ let readyresponse = {
   quantity: "",
   total_amount: "",
   tax_free_amount: 0,
-  approval_url,
+  approval_url: "",
   cancel_url: "",
   fail_url: "",
 };
