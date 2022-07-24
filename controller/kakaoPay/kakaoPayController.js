@@ -34,7 +34,7 @@ async function kakaoPayReadyController(req, res) {
   }
 
   const fakeData = { ...JSON.parse(kakaoReady), ...body };
-
+  fakeReadyDB.push(fakeData);
   return res.json({
     result: true,
     msg: null,
@@ -76,7 +76,8 @@ async function kakaoPayApproveController(req, res) {
 
   if (!!kakaoReady) {
     fakeSuccessDB.push(JSON.parse(kakaoReady));
-
+    console.log("fakeSuccessDB===");
+    console.log(fakeSuccessDB);
     return res.json({
       result: true,
       msg: "approve success",
@@ -115,6 +116,10 @@ async function kakaoPaySelectOrder(req, res) {
   const {
     query: { oid },
   } = req;
+
+  console.log("mobile success");
+  console.log("fakeSuccessD===");
+  console.log(fakeSuccessDB);
 
   const isReadySuccess = fakeSuccessDB.find(
     (item) => item.partner_order_id === oid
