@@ -1,13 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // lib
 import React, { useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ISelectKakaoPayResponse } from "../../Interface";
 import Axios from "../../server/Axios";
 
-const KakaoPayToken = () => {
+const KakaoPayTokenMB = () => {
   const { search } = useLocation();
   const { oid } = useParams();
+
+  const navigate = useNavigate();
   const pg_token = new URLSearchParams(search).get("pg_token");
 
   const kakaoPayApproveFetch = async (): Promise<any> => {
@@ -22,7 +24,7 @@ const KakaoPayToken = () => {
     );
 
     if (kakaoPayApprove.result) {
-      window.close();
+      navigate(kakaoPayApprove.kakaoPayApproveUrl);
     }
   };
 
@@ -33,4 +35,4 @@ const KakaoPayToken = () => {
   return <div>Loading....</div>;
 };
 
-export default KakaoPayToken;
+export default KakaoPayTokenMB;

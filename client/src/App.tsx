@@ -18,6 +18,7 @@ import PayFailPage from "./page/PayFailPage";
 import KakaoPayTokenPage from "./page/KakaoPayTokenPage";
 import KakaoPayFailPage from "./page/KakaoPayFailPage";
 import KakaoPaySuccessPage from "./page/KakaoPaySuccessPage";
+import KakaoPayTokenMB from "./component/kakaopay/KakaoPayTokenMB";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           />
           <Route path="/kakaopay-fail" element={<KakaoPayFailPage />} />
           <Route path="/kakaopay-token/:oid" element={<KakaoPayTokenPage />} />
+          <Route path="/kakaopayMB-token/:oid" element={<KakaoPayTokenMB />} />
           <Route path="/close-inicis" element={<CloseInicis />} />
         </Routes>
       </Wrapper>
