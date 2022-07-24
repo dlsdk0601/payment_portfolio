@@ -98,7 +98,10 @@ async function kakaoPaySuccessController(req, res) {
 
   const isReadySuccess = fakeSuccessDB.find((item) => item.tid === tid);
 
-  if (isReadySuccess) {
+  console.log("isReadySuccess===");
+  console.log(isReadySuccess);
+
+  if (!!isReadySuccess) {
     return res.json({
       result: true,
       msg: null,
