@@ -77,6 +77,9 @@ async function kakaoPayApproveController(req, res) {
     },
   });
 
+  console.log("JSON.parse(kakaoReady)====");
+  console.log(JSON.parse(kakaoReady));
+
   if (!!kakaoReady) {
     fakeSuccessDB.push(JSON.parse(kakaoReady));
     return res.json({
