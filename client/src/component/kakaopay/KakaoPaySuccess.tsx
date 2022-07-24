@@ -9,7 +9,7 @@ const KakaoPaySuccess = () => {
 
   const [tid, setTid] = useState<string>("");
   const [goodName, setGoodName] = useState<string>("");
-  const [totPrice, setTotPrice] = useState<string>("");
+  const [totPrice, setTotPrice] = useState<number>(0);
 
   const selectOrder = async () => {
     const selectAPI: IKakaoOrderSelectResponse = await Axios.get(
@@ -20,14 +20,10 @@ const KakaoPaySuccess = () => {
     console.log(selectAPI);
 
     if (selectAPI.result) {
-      const {
-        tid,
-        item_name,
-        amount: { total },
-      } = selectAPI.orderData;
+      const { tid, item_name, quantity } = selectAPI.orderData;
       setTid(tid);
       setGoodName(item_name);
-      setTotPrice(total);
+      setTotPrice(quantity * 1000);
     }
   };
 
