@@ -1,7 +1,8 @@
 import rp from "request-promise";
 import dotenv from "dotenv";
+
 dotenv.config();
-console.log(process.env.NODE_KAKAO_ADMINKEY);
+
 const fakeReadyDB = [];
 const fakeSuccessDB = [];
 
@@ -50,6 +51,9 @@ async function kakaoPayApproveController(req, res) {
 
   const selectData = fakeReadyDB.find((item) => item.partner_order_id === oid);
 
+  console.log("selectData===");
+  console.log(selectData);
+
   if (!selectData) {
     return res.json({
       result: true,
@@ -92,13 +96,13 @@ async function kakaoPaySuccessController(req, res) {
     query: { tid },
   } = req;
 
-  const isReadySuccess = fakeReadyDB.some((item) => item.tid === tid);
+  const isReadySuccess = fakeSuccessDB.find((item) => item.tid === tid);
 
   if (isReadySuccess) {
     return res.json({
       result: true,
       msg: null,
-      kakaoPayApproveUrl: `/kakaopay-success/${tid}`,
+      kakaoPayApproveUrl: `/kakaopay-success/${isReadySuccess.partner_order_id}`,
     });
   } else {
     return res.json({
@@ -113,6 +117,11 @@ async function kakaoPaySelectOrder(req, res) {
   const {
     query: { oid },
   } = req;
+
+  console.log("fakeReadyDB===");
+  console.log(fakeReadyDB);
+  console.log("fakeSuccessDB==");
+  console.log(fakeSuccessDB);
 
   const isReadySuccess = fakeSuccessDB.find(
     (item) => item.partner_order_id === oid
