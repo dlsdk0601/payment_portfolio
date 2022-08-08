@@ -17,6 +17,8 @@ async function kakaoPayReadyController(req, res) {
     buyerName,
     partner_user_id,
   } = body;
+  console.log("body==");
+  console.log(body);
 
   if (quantity * 1000 !== total_amount) {
     return res.json({ result: false, msg: "kakaoPay Ready API fail" });
@@ -34,15 +36,14 @@ async function kakaoPayReadyController(req, res) {
     },
   });
 
+  if (!kakaoReady) {
+    return res.json({ result: false, msg: "kakaoPay Ready API fail" });
+  }
   const { tid, next_redirect_mobile_url, next_redirect_pc_url } =
     JSON.parse(kakaoReady);
 
-  if (!tid) {
-    return res.json({ result: false, msg: "kakaoPay Ready API fail" });
-  }
-
   const query =
-    "INSERT INTO kakaoReay (tid, oid, item_name, totalPrice, buyerName, partner_user_id) VALUES(?, ?, ? ,?, ?, ?)";
+    "INSERT INTO kakaoPay (tid, oid, item_name, totalPrice, buyerName, partner_user_id) VALUES(?, ?, ? ,?, ?, ?)";
   const params = [
     tid,
     partner_order_id,
@@ -51,7 +52,9 @@ async function kakaoPayReadyController(req, res) {
     buyerName,
     partner_user_id,
   ];
+
   const isInsertDB = await insertDBHandle(query, params);
+  console.log(isInsertDB);
 
   if (!isInsertDB) {
     return res.json({ result: false, msg: "DataBase insert fail" });
