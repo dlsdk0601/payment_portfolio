@@ -1,6 +1,5 @@
 import rp from "request-promise";
 import dotenv from "dotenv";
-import mariaDB from "../../db/index.js";
 import insertDBHandle from "../../db/insert.js";
 import selectDBHandle from "../../db/select.js";
 
@@ -18,6 +17,7 @@ async function kakaoPayReadyController(req, res) {
     buyerName,
     partner_user_id,
   } = body;
+
   if (quantity * 1000 !== total_amount) {
     return res.json({ result: false, msg: "kakaoPay Ready API fail" });
   }

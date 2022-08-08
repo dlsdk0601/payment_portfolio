@@ -72,7 +72,7 @@ const KakaoPay = () => {
       total_amount: 1000, //결제금액
       tax_free_amount: 0, //비과세
       approval_url,
-      buyerName: "",
+      buyerName,
       cancel_url: `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
       }/paymentfail`,
