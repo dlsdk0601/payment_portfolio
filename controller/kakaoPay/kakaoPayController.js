@@ -1,28 +1,23 @@
 import rp from "request-promise";
 import dotenv from "dotenv";
 import mariaDB from "../../db/index.js";
+import insertDBHandle from "../../db/insert.js";
+import selectDBHandle from "../../db/select.js";
 
 dotenv.config();
-
-let readyresponse = {
-  cid: "",
-  partner_order_id: "",
-  partner_user_id: "",
-  item_name: "",
-  quantity: "",
-  total_amount: "",
-  tax_free_amount: 0,
-  approval_url: "",
-  cancel_url: "",
-  fail_url: "",
-};
-const fakeyDB = [];
 
 // 카카오페이 결제 준비
 async function kakaoPayReadyController(req, res) {
   const { body } = req;
 
-  const { quantity, total_amount, item_name, partner_order_id } = body;
+  const {
+    quantity,
+    total_amount,
+    item_name,
+    partner_order_id,
+    buyerName,
+    partner_user_id,
+  } = body;
   if (quantity * 1000 !== total_amount) {
     return res.json({ result: false, msg: "kakaoPay Ready API fail" });
   }
@@ -46,16 +41,22 @@ async function kakaoPayReadyController(req, res) {
     return res.json({ result: false, msg: "kakaoPay Ready API fail" });
   }
 
-  const dbres = mariaDB.query(
-    `INSERT INTO kakaoReay (tid, oid, item_name, totalPrice) VALUES(?, ?, ? ,?)`,
-    [tid, partner_order_id, item_name, total_amount]
-  );
+  const query =
+    "INSERT INTO kakaoReay (tid, oid, item_name, totalPrice, buyerName, partner_user_id) VALUES(?, ?, ? ,?, ?, ?)";
+  const params = [
+    tid,
+    partner_order_id,
+    item_name,
+    total_amount,
+    buyerName,
+    partner_user_id,
+  ];
+  const isInsertDB = await insertDBHandle(query, params);
 
-  console.log("dbres===");
-  console.log(dbres);
-  const fakeData = { ...JSON.parse(kakaoReady), ...body };
-  fakeyDB.push(fakeData);
-  readyresponse = { ...fakeData };
+  if (!isInsertDB) {
+    return res.json({ result: false, msg: "DataBase insert fail" });
+  }
+
   return res.json({
     result: true,
     msg: null,
@@ -70,7 +71,8 @@ async function kakaoPayApproveController(req, res) {
     body: { pg_token, oid },
   } = req;
 
-  const selectData = fakeyDB.find((item) => item.partner_order_id === oid);
+  const query = `SELECT tid, partner_user_id FROM kakaoPay where oid='${oid}'`;
+  const selectData = await selectDBHandle(query);
 
   if (!selectData) {
     return res.json({
@@ -84,12 +86,9 @@ async function kakaoPayApproveController(req, res) {
     uri: "https://kapi.kakao.com/v1/payment/approve",
     form: {
       cid: "TC0ONETIME",
-      // tid: selectData.tid,
-      // partner_order_id: selectData.partner_order_id,
-      // partner_user_id: selectData.partner_user_id,
-      tid: readyresponse.tid,
-      partner_order_id: readyresponse.partner_order_id,
-      partner_user_id: readyresponse.partner_user_id,
+      tid: selectData.tid,
+      partner_order_id: oid,
+      partner_user_id: selectData.partner_user_id,
       pg_token,
     },
     headers: {
@@ -99,16 +98,10 @@ async function kakaoPayApproveController(req, res) {
   });
 
   if (!!kakaoReady) {
-    console.log("dbres===");
-    console.log(dbres);
-    const savedData = { ...JSON.parse(kakaoReady), ...selectData };
-    fakeyDB.push(savedData);
-    readyresponse = { ...readyresponse, ...JSON.parse(kakaoReady) };
-
     return res.json({
       result: true,
       msg: "approve success",
-      kakaoPayApproveUrl: `/kakaopay-success/${readyresponse.partner_order_id}`,
+      kakaoPayApproveUrl: `/kakaopay-success/${oid}`,
     });
   } else {
     return res.json({
@@ -124,15 +117,14 @@ async function kakaoPaySuccessController(req, res) {
     query: { tid },
   } = req;
 
-  const isReadySuccess = fakeyDB.find((item) => item.tid === tid);
+  const query = `SELECT partner_order_id FROM kakaoPay where tid='${tid}'`;
+  const selectData = await selectDBHandle(query);
 
-  // if (!!isReadySuccess) {
-  if (readyresponse.tid === tid) {
+  if (selectData) {
     return res.json({
       result: true,
       msg: null,
-      // kakaoPayApproveUrl: `/kakaopay-success/${isReadySuccess.partner_order_id}`,
-      kakaoPayApproveUrl: `/kakaopay-success/${readyresponse.partner_order_id}`,
+      kakaoPayApproveUrl: `/kakaopay-success/${selectData.partner_order_id}`,
     });
   } else {
     return res.json({
@@ -148,18 +140,23 @@ async function kakaoPaySelectOrder(req, res) {
     query: { oid },
   } = req;
 
-  console.log("mobile success");
-  console.log("fakeSuccessD===");
-  console.log(fakeyDB);
+  const query = `SELECT tid, oid, item_name, totalPrice, buyerName, partner_user_id FROM kakaoPay where oid='${oid}'`;
+  const selectData = await selectDBHandle(query);
 
-  const isReadySuccess = fakeyDB.find((item) => item.partner_order_id === oid);
-
-  // if (!!isReadySuccess) {
-  if (readyresponse.partner_order_id === oid) {
+  if (selectData) {
+    const { tid, oid, item_name, totalPrice, buyerName, partner_user_id } =
+      selectData;
     return res.json({
       result: true,
       msg: null,
-      orderData: readyresponse,
+      orderData: {
+        tid,
+        oid,
+        item_name,
+        totalPrice,
+        buyerName,
+        partner_user_id,
+      },
     });
   } else {
     return res.json({
