@@ -97,18 +97,19 @@ async function inicisOneTimeDesktop(req, res) {
 
   if (accessResult === "0000") {
     mariaDB.query(
-      `INSERT INTO inicisReady(tid, oid, buyerName, goodName, totalPrice) VALUES(${tid}, ${MOID}, ${buyerName}, ${goodName}, ${TotPrice})`
+      `INSERT INTO inicisReady(tid, oid, buyerName, goodName, totalPrice) VALUES(?, ?, ?, ?)`,
+      [tid, MOID, buyerName, goodName, TotPrice]
     );
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentsuccess?tid=${tid}&MOID=${MOID}&buyerName=${buyerName}$goodName=${goodName}$TotPrice=${TotPrice}`
+      }/paymentsuccess?tid=${tid}&MOID=${MOID}&buyerName=${buyerName}&goodName=${goodName}&TotPrice=${TotPrice}`
     );
   } else {
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentfail?tid=${tid}&MOID=${MOID}&buyerName=${buyerName}$goodName=${goodName}$TotPrice=${TotPrice}`
+      }/paymentfail?tid=${tid}&MOID=${MOID}&buyerName=${buyerName}&goodName=${goodName}&TotPrice=${TotPrice}`
     );
   }
 }
