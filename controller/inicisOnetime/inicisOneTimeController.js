@@ -97,7 +97,7 @@ async function inicisOneTimeDesktop(req, res) {
 
   if (accessResult === "0000") {
     mariaDB.query(
-      `INSERT INTO inicisReady(tid, oid, buyerName, goodName, totalPrice) VALUES(?, ?, ?, ?)`,
+      `INSERT INTO inicisReady(tid, oid, buyerName, goodName, totalPrice) VALUES(?, ?, ?, ?, ?)`,
       [tid, MOID, buyerName, goodName, TotPrice]
     );
     return res.redirect(
