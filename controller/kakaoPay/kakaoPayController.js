@@ -1,5 +1,6 @@
 import rp from "request-promise";
 import dotenv from "dotenv";
+import mariaDB from "../../db/index.js";
 
 dotenv.config();
 
@@ -17,10 +18,11 @@ let readyresponse = {
 };
 const fakeyDB = [];
 
+// 카카오페이 결제 준비
 async function kakaoPayReadyController(req, res) {
   const { body } = req;
 
-  const { quantity, total_amount } = body;
+  const { quantity, total_amount, item_name, partner_order_id } = body;
   if (quantity * 1000 !== total_amount) {
     return res.json({ result: false, msg: "kakaoPay Ready API fail" });
   }
@@ -44,6 +46,13 @@ async function kakaoPayReadyController(req, res) {
     return res.json({ result: false, msg: "kakaoPay Ready API fail" });
   }
 
+  const dbres = mariaDB.query(
+    `INSERT INTO kakaoReay (tid, oid, item_name, totalPrice) VALUES(?, ?, ? ,?)`,
+    [tid, partner_order_id, item_name, total_amount]
+  );
+
+  console.log("dbres===");
+  console.log(dbres);
   const fakeData = { ...JSON.parse(kakaoReady), ...body };
   fakeyDB.push(fakeData);
   readyresponse = { ...fakeData };
@@ -90,9 +99,12 @@ async function kakaoPayApproveController(req, res) {
   });
 
   if (!!kakaoReady) {
+    console.log("dbres===");
+    console.log(dbres);
     const savedData = { ...JSON.parse(kakaoReady), ...selectData };
     fakeyDB.push(savedData);
     readyresponse = { ...readyresponse, ...JSON.parse(kakaoReady) };
+
     return res.json({
       result: true,
       msg: "approve success",

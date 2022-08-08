@@ -1,5 +1,5 @@
 // lib
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import Axios from "../../server/Axios";
 import randomStringFunc from "../common/RandomString";
 import { IKakaoReadyResponse, ISelectKakaoPayResponse } from "../../Interface";
@@ -13,6 +13,7 @@ const KakaoPay = () => {
 
   const item_name = "컴퓨터";
   const [quantity, setQuantity] = useState(1);
+  const [buyerName, setBuyerName] = useState("");
 
   const countHanlder = (
     e: React.FormEvent<HTMLButtonElement>,
@@ -71,6 +72,7 @@ const KakaoPay = () => {
       total_amount: 1000, //결제금액
       tax_free_amount: 0, //비과세
       approval_url,
+      buyerName: "",
       cancel_url: `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
       }/paymentfail`,
@@ -105,6 +107,16 @@ const KakaoPay = () => {
   return (
     <>
       <form onSubmit={paymentStart}>
+        <div className="input__box">
+          <label>구매자</label>
+          <input
+            type="text"
+            value={buyerName}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setBuyerName(e.target.value)
+            }
+          />
+        </div>
         <div className="input__box">
           <label>상품</label>
           <input type="text" value={item_name} />
