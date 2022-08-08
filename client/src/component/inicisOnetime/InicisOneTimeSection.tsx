@@ -373,7 +373,7 @@ export default function InicisOneTimeSection() {
             type="hidden"
             name="closeUrl"
             value={
-              window.location.href.indexOf("www") == -1
+              window.location.href.indexOf("www") === -1
                 ? `${
                     process.env.REACT_APP_CLOSEURL ||
                     "http://localhost:5000/close-inicis"

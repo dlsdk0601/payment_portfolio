@@ -1,5 +1,14 @@
 import rp from "request-promise";
 import crypto from "crypto";
+import maria from "mysql";
+
+const mariaDB = maria.createConnection({
+  host: process.env.NODE_MARIA_HOST,
+  port: process.env.NODE_MARIA_PORT,
+  user: process.env.NODE_MARIA_USERNAME,
+  password: process.env.NODE_MARIA_PASSWORD,
+  database: process.env.NODE_MARIA_DBNAME,
+});
 
 async function inicisOneTimeMobile(req, res) {
   const {
@@ -87,6 +96,9 @@ async function inicisOneTimeDesktop(req, res) {
   } = inicisAccess;
 
   if (accessResult === "0000") {
+    mariaDB.query(
+      `INSERT INTO inicisReady(tid, oid, buyerName, goodName, totalPrice) VALUES(${tid}, ${MOID}, ${buyerName}, ${goodName}, ${TotPrice})`
+    );
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
