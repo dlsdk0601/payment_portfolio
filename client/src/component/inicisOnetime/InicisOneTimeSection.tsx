@@ -312,7 +312,7 @@ export default function InicisOneTimeSection() {
               />
               <label>계좌이체</label>
             </div>
-            <input type="hidden" name="paymentMethod" value={gopaymethod} />
+            <input type="hidden" name="gopaymethod" value={gopaymethod} />
           </div>
 
           {/* mid -> 실제 테스트 환경에서는 사용자 id, 테스트할 때는 INIpayTest 사용하면 된다. */}
