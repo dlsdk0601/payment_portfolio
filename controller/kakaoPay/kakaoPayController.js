@@ -54,7 +54,6 @@ async function kakaoPayReadyController(req, res) {
   ];
 
   const isInsertDB = await insertDBHandle(query, params);
-  console.log(isInsertDB);
 
   if (!isInsertDB) {
     return res.json({ result: false, msg: "DataBase insert fail" });
@@ -75,8 +74,8 @@ async function kakaoPayApproveController(req, res) {
     body: { pg_token, oid },
   } = req;
 
-  const query = `SELECT tid, partner_user_id FROM kakaoPay where oid='${oid}'`;
-  const selectData = await selectDBHandle(query);
+  const selectQuery = `SELECT tid, partner_user_id FROM kakaoPay where oid='${oid}'`;
+  const selectData = await selectDBHandle(selectQuery);
 
   if (!selectData) {
     return res.json({
@@ -101,27 +100,23 @@ async function kakaoPayApproveController(req, res) {
     },
   });
 
-  console.log("kakaoReady===");
-  console.log(kakaoReady);
-
-  if (!!kakaoReady) {
-    const query = `UPDATE kakaoPay set isSuccess=? where tid=?`;
-    const params = [1, selectData.tid];
-
-    const updateDB = await updateDBHandle(query, params);
-    console.log("updateDB===");
-    console.log(updateDB);
-
-    return res.json({
-      result: true,
-      msg: "approve success",
-      kakaoPayApproveUrl: `/kakaopay-success/${oid}`,
-    });
-  } else {
+  if (!kakaoReady) {
     return res.json({
       result: true,
       msg: "approve fail",
       kakaoPayApproveUrl: `/kakaopay-fail`,
+    });
+  }
+
+  const updateQuery = `UPDATE kakaoPay set isSuccess=? where tid=?`;
+  const params = [1, selectData.tid];
+  const updateDB = await updateDBHandle(updateQuery, params);
+
+  if (updateDB) {
+    return res.json({
+      result: true,
+      msg: "approve success",
+      kakaoPayApproveUrl: `/kakaopay-success/${oid}`,
     });
   }
 }
@@ -132,22 +127,30 @@ async function kakaoPaySuccessController(req, res) {
     query: { tid },
   } = req;
 
-  const query = `SELECT oid FROM kakaoPay where tid='${tid}'`;
+  const query = `SELECT oid, isSuccess FROM kakaoPay where tid='${tid}'`;
   const selectData = await selectDBHandle(query);
 
-  if (selectData) {
-    return res.json({
-      result: true,
-      msg: null,
-      kakaoPayApproveUrl: `/kakaopay-success/${selectData.oid}`,
-    });
-  } else {
+  if (!selectData) {
     return res.json({
       result: true,
       msg: "there is not Tid",
       kakaoPayApproveUrl: `/kakaopay-fail`,
     });
   }
+
+  if (selectData.isSuccess !== 1) {
+    return res.json({
+      result: true,
+      msg: "pay fail",
+      kakaoPayApproveUrl: `/kakaopay-fail`,
+    });
+  }
+
+  return res.json({
+    result: true,
+    msg: null,
+    kakaoPayApproveUrl: `/kakaopay-success/${selectData.oid}`,
+  });
 }
 
 // 결제 완료 페이지에서 조회
@@ -161,7 +164,6 @@ async function kakaoPaySelectOrder(req, res) {
 
   if (selectData) {
     const { tid, oid, item_name, totalPrice, buyerName } = selectData;
-    console.log(totalPrice);
     return res.json({
       result: true,
       msg: null,
