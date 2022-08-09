@@ -8,6 +8,7 @@ const KakaoPaySuccess = () => {
   const { oid } = useParams();
 
   const [tid, setTid] = useState<string>("");
+  const [buyerName, setBuyerName] = useState("");
   const [goodName, setGoodName] = useState<string>("");
   const [totPrice, setTotPrice] = useState<number>(0);
 
@@ -20,20 +21,23 @@ const KakaoPaySuccess = () => {
     console.log(selectAPI);
 
     if (selectAPI.result) {
-      const { tid, item_name, quantity } = selectAPI.orderData;
+      const { tid, item_name, totalPrice, buyerName } = selectAPI.orderData;
       setTid(tid);
       setGoodName(item_name);
-      setTotPrice(quantity * 1000);
+      setTotPrice(totalPrice);
+      setBuyerName(buyerName);
     }
   };
 
   useEffect(() => {
     selectOrder();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tid]);
 
   return (
     <>
       <div>성공</div>
+      <p>구매자: {buyerName}</p>
       <p>구매상품: {goodName}</p>
       <p>주문번호: {oid}</p>
       <p>결제 금액: {totPrice}</p>

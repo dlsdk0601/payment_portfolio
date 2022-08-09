@@ -47,7 +47,7 @@ const KakaoPay = () => {
 
   const paymentStart = async (
     e: React.FormEvent<HTMLFormElement>
-  ): Promise<any> => {
+  ): Promise<void | undefined> => {
     e.preventDefault();
     console.log("payment start");
 
@@ -61,7 +61,7 @@ const KakaoPay = () => {
         }/kakaopayMB-token/${partner_order_id}`
       : `${
           process.env.REACT_APP_BASEURL || "http://localhost:5000"
-        }/kakaopay-success/${partner_order_id}`;
+        }/kakaopay-token/${partner_order_id}`;
 
     const req = {
       cid: "TC0ONETIME", // 가맹점 코드 지금은 테스트 코드

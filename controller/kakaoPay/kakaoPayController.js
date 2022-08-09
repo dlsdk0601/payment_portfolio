@@ -18,8 +18,6 @@ async function kakaoPayReadyController(req, res) {
     buyerName,
     partner_user_id,
   } = body;
-  console.log("body==");
-  console.log(body);
 
   if (quantity * 1000 !== total_amount) {
     return res.json({ result: false, msg: "kakaoPay Ready API fail" });
@@ -103,9 +101,12 @@ async function kakaoPayApproveController(req, res) {
     },
   });
 
+  console.log("kakaoReady===");
+  console.log(kakaoReady);
+
   if (!!kakaoReady) {
     const query = `UPDATE kakaoPay set isSuccess=? where tid=?`;
-    const params = [selectData.tid, true];
+    const params = [1, selectData.tid];
 
     const updateDB = await updateDBHandle(query, params);
     console.log("updateDB===");
@@ -125,20 +126,20 @@ async function kakaoPayApproveController(req, res) {
   }
 }
 
-// 결제 승인난 카카오페이 리디렉션
+// 결제 승인난 카카오페이 조회
 async function kakaoPaySuccessController(req, res) {
   const {
     query: { tid },
   } = req;
 
-  const query = `SELECT partner_order_id FROM kakaoPay where tid='${tid}'`;
+  const query = `SELECT oid FROM kakaoPay where tid='${tid}'`;
   const selectData = await selectDBHandle(query);
 
   if (selectData) {
     return res.json({
       result: true,
       msg: null,
-      kakaoPayApproveUrl: `/kakaopay-success/${selectData.partner_order_id}`,
+      kakaoPayApproveUrl: `/kakaopay-success/${selectData.oid}`,
     });
   } else {
     return res.json({
@@ -155,12 +156,12 @@ async function kakaoPaySelectOrder(req, res) {
     query: { oid },
   } = req;
 
-  const query = `SELECT tid, oid, item_name, totalPrice, buyerName, partner_user_id FROM kakaoPay where oid='${oid}'`;
+  const query = `SELECT tid, oid, item_name, totalPrice, buyerName, isSuccess FROM kakaoPay where oid='${oid}'`;
   const selectData = await selectDBHandle(query);
 
   if (selectData) {
-    const { tid, oid, item_name, totalPrice, buyerName, partner_user_id } =
-      selectData;
+    const { tid, oid, item_name, totalPrice, buyerName } = selectData;
+    console.log(totalPrice);
     return res.json({
       result: true,
       msg: null,
@@ -170,7 +171,6 @@ async function kakaoPaySelectOrder(req, res) {
         item_name,
         totalPrice,
         buyerName,
-        partner_user_id,
       },
     });
   } else {
