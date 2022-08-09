@@ -2,6 +2,7 @@ import rp from "request-promise";
 import dotenv from "dotenv";
 import insertDBHandle from "../../db/insert.js";
 import selectDBHandle from "../../db/select.js";
+import updateDBHandle from "../../db/update.js";
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ async function kakaoPayReadyController(req, res) {
   if (!kakaoReady) {
     return res.json({ result: false, msg: "kakaoPay Ready API fail" });
   }
+
   const { tid, next_redirect_mobile_url, next_redirect_pc_url } =
     JSON.parse(kakaoReady);
 
@@ -69,6 +71,7 @@ async function kakaoPayReadyController(req, res) {
   });
 }
 
+// 카카오페이 결제 승인
 async function kakaoPayApproveController(req, res) {
   const {
     body: { pg_token, oid },
@@ -101,6 +104,13 @@ async function kakaoPayApproveController(req, res) {
   });
 
   if (!!kakaoReady) {
+    const query = `UPDATE kakaoPay set isSuccess=? where tid=?`;
+    const params = [selectData.tid, true];
+
+    const updateDB = await updateDBHandle(query, params);
+    console.log("updateDB===");
+    console.log(updateDB);
+
     return res.json({
       result: true,
       msg: "approve success",
@@ -115,6 +125,7 @@ async function kakaoPayApproveController(req, res) {
   }
 }
 
+// 결제 승인난 카카오페이 리디렉션
 async function kakaoPaySuccessController(req, res) {
   const {
     query: { tid },
@@ -138,6 +149,7 @@ async function kakaoPaySuccessController(req, res) {
   }
 }
 
+// 결제 완료 페이지에서 조회
 async function kakaoPaySelectOrder(req, res) {
   const {
     query: { oid },
