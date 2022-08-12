@@ -10,7 +10,7 @@ const KakaoPayToken = () => {
   const { oid } = useParams();
   const pg_token = new URLSearchParams(search).get("pg_token");
 
-  const kakaoPayApproveFetch = async (): Promise<any> => {
+  const kakaoPayApproveFetch = async (): Promise<void | undefined> => {
     if (!oid || !pg_token) {
       return;
     }

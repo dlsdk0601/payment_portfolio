@@ -14,9 +14,6 @@ export default function MainSection() {
 
   const testFetch = async () => {
     const test: { result: boolean; msg: string } = await Axios.get("/test");
-
-    console.log("test===");
-    console.log(test);
     setTest(test.result);
   };
 
@@ -28,8 +25,10 @@ export default function MainSection() {
         {navi.toLowerCase().indexOf("mobile") === -1 ? "PC" : "mobile"}
         입니다
       </p>
-      <div onClick={testFetch}>click</div>
-      <p>{test ? "success" : "fail"}</p>
+      <button className="main__clcik__button" onClick={testFetch}>
+        click
+      </button>
+      <p className="main__result__text">서버통신 {test ? "success" : "fail"}</p>
     </>
   );
 }
