@@ -113,6 +113,7 @@ export default function InicisOneTimeSection() {
           name="mobileweb"
           accept-charset="euc-kr"
           ref={mobilePurchaseRef}
+          className="inicis__form"
         >
           <div className="input__box">
             <label>주문자</label>
@@ -225,10 +226,18 @@ export default function InicisOneTimeSection() {
             }
           />
           {/* 결제창을 닫기 위해서 CloseInicis라는 페이지를 새로만드로 외부 js를 호출한다.   */}
-          <button type="submit">결제 하기</button>
+          <button className="payment__button" type="submit">
+            결제 하기
+          </button>
         </form>
       ) : (
-        <form onSubmit={paymentStart} id="SendPayForm_id" name="" method="POST">
+        <form
+          onSubmit={paymentStart}
+          id="SendPayForm_id"
+          className="inicis__form"
+          name=""
+          method="POST"
+        >
           <div className="input__box">
             <label>주문자</label>
             <input
@@ -384,7 +393,9 @@ export default function InicisOneTimeSection() {
                   }`
             }
           />
-          <button type="submit">결제 하기</button>
+          <button className="payment__button" type="submit">
+            결제 하기
+          </button>
         </form>
       )}
     </>

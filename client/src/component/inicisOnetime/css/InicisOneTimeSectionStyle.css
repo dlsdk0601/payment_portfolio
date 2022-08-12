@@ -7,11 +7,6 @@
 }
 
 @media screen and (max-width: 480px) {
-  form {
-    margin-bottom: 20px;
-    padding: 30px 0;
-  }
-
   .input__box {
     width: 100%;
     margin: 0 auto 30px auto;
@@ -30,6 +25,10 @@
 
   form .btn {
     margin: 0 5px;
+  }
+
+  form .payment__button {
+    margin-bottom: 30px;
   }
 
   .checkBox {
