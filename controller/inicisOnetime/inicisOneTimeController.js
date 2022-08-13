@@ -1,8 +1,8 @@
 import rp from "request-promise";
 import crypto from "crypto";
-import mariaDB from "../../db/index.js";
 import insertDBHandle from "../../db/insert.js";
 import updateDBHandle from "../../db/update.js";
+import selectDBHandle from "../../db/select.js";
 
 async function inicisOneTimeMobile(req, res) {
   const {
@@ -155,8 +155,42 @@ async function inicisOneTimereadyController(req, res) {
   });
 }
 
+async function inicisOneTimeOrderSelect(req, res) {
+  const {
+    query: { tid },
+  } = req;
+  console.log("t==id");
+  console.log(tid);
+
+  const query = `SELECT oid, buyerName, goodName, totalPrice FROM inicisReady where tid='${tid}'`;
+  const selectedData = await selectDBHandle(query);
+
+  console.log("selectedData===");
+  console.log(selectedData);
+
+  if (!!selectedData) {
+    return res.json({
+      result: true,
+      msg: null,
+      data: {
+        oid: selectedData.oid,
+        buyerName: selectedData.buyerName,
+        goodName: selectedData.goodName,
+        totalPrice: selectedData.totalPrice,
+      },
+    });
+  } else {
+    return res.json({
+      result: false,
+      msg: "select data fail",
+      data: null,
+    });
+  }
+}
+
 export {
   inicisOneTimeDesktop,
   inicisOneTimereadyController,
   inicisOneTimeMobile,
+  inicisOneTimeOrderSelect,
 };

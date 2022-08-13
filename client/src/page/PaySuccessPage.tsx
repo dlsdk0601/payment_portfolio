@@ -31,6 +31,8 @@ export default function PaySuccessPage() {
     }
 
     const res: ISelectOrder = await Axios.get(`/inicis/select?tid=${tid}`);
+    console.log("res===");
+    console.log(res);
 
     if (!res || !res.result) {
       return;
