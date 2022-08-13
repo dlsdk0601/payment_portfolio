@@ -43,7 +43,6 @@ export default function InicisOneTimeSection() {
     e: React.FormEvent<HTMLFormElement>
   ): Promise<any> => {
     e.preventDefault();
-    console.log("payment start");
 
     if (!buyername) {
       alert("주문자를 입력하세요");

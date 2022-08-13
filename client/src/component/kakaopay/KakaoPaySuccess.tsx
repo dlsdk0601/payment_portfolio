@@ -18,9 +18,6 @@ const KakaoPaySuccess = () => {
       `kakao/select-order?oid=${oid}`
     );
 
-    console.log("selectAPI===");
-    console.log(selectAPI);
-
     if (selectAPI.result) {
       const { tid, item_name, totalPrice, buyerName } = selectAPI.orderData;
       setTid(tid);

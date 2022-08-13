@@ -1,6 +1,7 @@
 import rp from "request-promise";
 import crypto from "crypto";
 import mariaDB from "../../db/index.js";
+import insertDBHandle from "../../db/insert.js";
 
 async function inicisOneTimeMobile(req, res) {
   const {
@@ -87,17 +88,20 @@ async function inicisOneTimeDesktop(req, res) {
     TotPrice,
   } = inicisAccess;
 
-  const maria = await mariaDB.getConnection();
-  console.log("maria===");
-  console.log(maria);
-
   if (accessResult === "0000") {
-    const dbres = maria.query(
-      `INSERT INTO inicisReady (tid, oid, buyerName, goodName, totalPrice) VALUES ?`,
-      [tid, MOID, buyerName, goodName, TotPrice]
-    );
-    console.log("dbres===");
-    console.log(dbres);
+    const query =
+      "INSERT INTO inicisReady (tid, oid, buyerName, goodName, totalPrice) VALUES (? ,?, ?, ?, ?)";
+    const params = [tid, MOID, buyerName, goodName, TotPrice];
+    const isInsertDB = await insertDBHandle(query, params);
+
+    if (!isInsertDB) {
+      return res.redirect(
+        `${
+          process.env.REACT_APP_BASEURL || "http://localhost:5000"
+        }/paymentfail`
+      );
+    }
+
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
@@ -116,13 +120,14 @@ function inicisOneTimereadyController(req, res) {
   const {
     body: { goodCount, totalPrice },
   } = req;
-  // console.log(oid);
+
   if (totalPrice === 1000 * goodCount) {
     return res.json({
       result: true,
       msg: "totalPrice success",
     });
   }
+
   return res.json({
     result: false,
     msg: "totalPrice fail",

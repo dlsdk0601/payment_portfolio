@@ -49,7 +49,11 @@ const KakaoPay = () => {
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void | undefined> => {
     e.preventDefault();
-    console.log("payment start");
+
+    if (!buyerName) {
+      alert("주문자 이름을 적어주세요");
+      return;
+    }
 
     // create oid and timeStamp
     const timeStamp = +new Date();
