@@ -6,8 +6,10 @@ import selectDBHandle from "../../db/select.js";
 
 async function inicisOneTimeMobile(req, res) {
   const {
-    body: { P_STATUS, P_RMESG1, P_TID, P_AMT, P_REQ_URL, P_NOTI },
+    body: { P_STATUS, P_TID, P_REQ_URL },
   } = req;
+  console.log("req===");
+  console.log(req);
 
   if (P_STATUS !== "00") {
     return res.redirect(`${process.env.NODE_BASEURL}/paymentfail`);
@@ -25,12 +27,19 @@ async function inicisOneTimeMobile(req, res) {
     json: true,
   });
 
-  const arr = inicisAccess.split("&");
-  const isSuccess = arr.some((item) => item === "P_STATUS=00");
+  const inicisAccessPaymentData = inicisAccess.split("&");
+  const isSuccess = inicisAccessPaymentData.some(
+    (item) => item === "P_STATUS=00"
+  );
+  const orderNumber = inicisAccessPaymentData.find(
+    (item) => item.indexOf("P_OID") !== -1
+  );
+  console.log("orderNumber===");
+  console.log(orderNumber);
 
   if (isSuccess) {
-    const query = "UPDATE inicisReady set tid=? isSuccess=? where oid=?";
-    const params = [tid, 1, MOID];
+    const query = "UPDATE inicisReady set tid=?, isSuccess=? where oid=?";
+    const params = [P_TID, 1, MOID];
     const isUpdateDB = await updateDBHandle(query, params);
 
     if (!isUpdateDB) {
@@ -56,14 +65,7 @@ async function inicisOneTimeMobile(req, res) {
 
 async function inicisOneTimeDesktop(req, res) {
   const {
-    body: {
-      resultCode: accessRequestResult,
-      authToken,
-      authUrl,
-      mid,
-      charset,
-      orderNumber,
-    },
+    body: { resultCode: accessRequestResult, authToken, authUrl, mid, charset },
   } = req;
 
   if (accessRequestResult !== "0000") {
@@ -91,14 +93,7 @@ async function inicisOneTimeDesktop(req, res) {
     json: true,
   });
 
-  const {
-    resultCode: accessResult,
-    tid,
-    MOID,
-    buyerName,
-    goodName,
-    TotPrice,
-  } = inicisAccess;
+  const { resultCode: accessResult, tid, MOID } = inicisAccess;
 
   if (accessResult === "0000") {
     const query = "UPDATE inicisReady set tid=?, isSuccess=? where oid=?";
@@ -159,14 +154,9 @@ async function inicisOneTimeOrderSelect(req, res) {
   const {
     query: { tid },
   } = req;
-  console.log("t==id");
-  console.log(tid);
 
   const query = `SELECT oid, buyerName, goodName, totalPrice FROM inicisReady where tid='${tid}'`;
   const selectedData = await selectDBHandle(query);
-
-  console.log("selectedData===");
-  console.log(selectedData);
 
   if (!!selectedData) {
     return res.json({
