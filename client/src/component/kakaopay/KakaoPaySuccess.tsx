@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IKakaoOrderSelectResponse } from "../../Interface";
 import Axios from "../../server/Axios";
+import "./css/KakaoPaySuccess.css";
 
 const KakaoPaySuccess = () => {
   const { oid } = useParams();
@@ -36,12 +37,12 @@ const KakaoPaySuccess = () => {
 
   return (
     <>
-      <div>성공</div>
-      <p>구매자: {buyerName}</p>
-      <p>구매상품: {goodName}</p>
-      <p>주문번호: {oid}</p>
-      <p>결제 금액: {totPrice}</p>
-      <p>tid(거래번호): {tid}</p>
+      <div className="title">성공</div>
+      <p className="one_line">구매자: {buyerName}</p>
+      <p className="one_line">구매상품: {goodName}</p>
+      <p className="one_line">주문번호: {oid}</p>
+      <p className="one_line">결제 금액: {totPrice}</p>
+      <p className="one_line">tid(거래번호): {tid}</p>
     </>
   );
 };
