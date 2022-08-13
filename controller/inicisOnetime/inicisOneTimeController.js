@@ -131,13 +131,13 @@ async function inicisOneTimereadyController(req, res) {
   } = req;
 
   const query =
-    "INSERT INTO inicisReady (oid, buyerName, totalPrice) VALUES (?, ?, ?, ?)";
+    "INSERT INTO inicisReady (oid, buyerName, totalPrice) VALUES (?, ?, ?)";
   const params = [oid, buyername, totalPrice];
   const isInsertDB = await insertDBHandle(query, params);
 
   if (!isInsertDB) {
     return res.json({
-      result: true,
+      result: false,
       msg: "DB insertFail",
     });
   }
