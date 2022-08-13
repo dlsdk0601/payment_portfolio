@@ -29,18 +29,17 @@ async function inicisOneTimeMobile(req, res) {
   const isSuccess = arr.some((item) => item === "P_STATUS=00");
 
   if (isSuccess) {
-    const query =
-    "UPDATE inicisReady set tid=? isSuccess=? where oid=?";
-  const params = [tid, 1, MOID];
-  const isUpdateDB = await updateDBHandle(query, params);
+    const query = "UPDATE inicisReady set tid=? isSuccess=? where oid=?";
+    const params = [tid, 1, MOID];
+    const isUpdateDB = await updateDBHandle(query, params);
 
-  if(!isUpdateDB){
-    return res.redirect(
-      `${
-        process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentfail?${inicisAccess}`
-    );
-  }
+    if (!isUpdateDB) {
+      return res.redirect(
+        `${
+          process.env.REACT_APP_BASEURL || "http://localhost:5000"
+        }/paymentfail?${inicisAccess}`
+      );
+    }
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
@@ -102,8 +101,7 @@ async function inicisOneTimeDesktop(req, res) {
   } = inicisAccess;
 
   if (accessResult === "0000") {
-    const query =
-      "UPDATE inicisReady set tid=? isSuccess=? where oid=?";
+    const query = "UPDATE inicisReady set tid=?, isSuccess=? where oid=?";
     const params = [tid, 1, MOID];
     const isUpdateDB = await updateDBHandle(query, params);
 
@@ -122,24 +120,22 @@ async function inicisOneTimeDesktop(req, res) {
     );
   } else {
     return res.redirect(
-      `${
-        process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentfail?tid=${tid}&MOID=${MOID}&buyerName=${buyerName}&goodName=${goodName}&TotPrice=${TotPrice}`
+      `${process.env.REACT_APP_BASEURL || "http://localhost:5000"}/paymentfail`
     );
   }
 }
 
-function inicisOneTimereadyController(req, res) {
+async function inicisOneTimereadyController(req, res) {
   const {
     body: { goodCount, totalPrice, buyername, oid },
   } = req;
 
   const query =
-      "INSERT INTO inicisReady (oid, buyerName, goodName, totalPrice) VALUES (?, ?, ?, ?)";
-    const params = [ oid, buyername, goodName, totalPrice];
-    const isInsertDB = await insertDBHandle(query, params);
+    "INSERT INTO inicisReady (oid, buyerName, totalPrice) VALUES (?, ?, ?, ?)";
+  const params = [oid, buyername, totalPrice];
+  const isInsertDB = await insertDBHandle(query, params);
 
-  if(!isInsertDB){
+  if (!isInsertDB) {
     return res.json({
       result: true,
       msg: "DB insertFail",
