@@ -1,42 +1,69 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import Axios from "../server/Axios";
+
+interface Idata {
+  oid: string;
+  buyerName: string;
+  goodName: string;
+  totalPrice: string;
+}
+interface ISelectOrder {
+  result: boolean;
+  msg: string | null;
+  data: Idata;
+}
 
 export default function PaySuccessPage() {
   const device = navigator.userAgent;
   const isMobile = device.toLowerCase().indexOf("mobile") !== -1;
   const { search } = useLocation();
+  const tid = new URLSearchParams(search).get("tid");
 
-  const [tid, setTid] = useState("");
   const [oid, setOid] = useState("");
   const [buyerName, setBuyerName] = useState("");
   const [goodName, setGoodName] = useState("");
   const [totPrice, setTotPrice] = useState("");
 
-  useEffect(() => {
-    let serchtid;
-    let serchoid;
-    let serchbuyerName;
-    let serchgoodName;
-    let serchTotPrice;
-    if (isMobile) {
-      serchtid = new URLSearchParams(search).get("P_TID");
-      serchoid = new URLSearchParams(search).get("P_OID");
-      serchbuyerName = new URLSearchParams(search).get("P_UNAME");
-      serchgoodName = new URLSearchParams(search).get("goodName");
-      serchTotPrice = new URLSearchParams(search).get("P_AMT");
-    } else {
-      serchtid = new URLSearchParams(search).get("tid");
-      serchoid = new URLSearchParams(search).get("MOID");
-      serchbuyerName = new URLSearchParams(search).get("buyerName");
-      serchgoodName = new URLSearchParams(search).get("goodName");
-      serchTotPrice = new URLSearchParams(search).get("TotPrice");
+  const onSelectOrderFetch = async (): Promise<void | undefined> => {
+    if (!tid) {
+      return;
     }
-    setTid(serchtid || "");
-    setOid(serchoid || "");
-    setBuyerName(serchbuyerName || "");
-    setGoodName(serchgoodName || "");
-    setTotPrice(serchTotPrice || "");
-  }, []);
+
+    const res: ISelectOrder = await Axios.get(`/inicis/select?tid=${tid}`);
+
+    if (!res || !res.result) {
+      return;
+    }
+
+    const { oid, buyerName, goodName, totalPrice } = res.data;
+
+    setOid(oid);
+    setBuyerName(buyerName);
+    setGoodName(goodName);
+    setTotPrice(totalPrice);
+  };
+
+  useEffect(() => {
+    onSelectOrderFetch();
+    // let serchtid;
+    // let serchoid;
+    // let serchbuyerName;
+    // let serchgoodName;
+    // let serchTotPrice;
+    // if (isMobile) {
+    //   serchtid = new URLSearchParams(search).get("P_TID");
+    //   serchoid = new URLSearchParams(search).get("P_OID");
+    //   serchbuyerName = new URLSearchParams(search).get("P_UNAME");
+    //   serchgoodName = new URLSearchParams(search).get("goodName");
+    //   serchTotPrice = new URLSearchParams(search).get("P_AMT");
+    // }
+    // setTid(serchtid || "");
+    // setOid(serchoid || "");
+    // setBuyerName(serchbuyerName || "");
+    // setGoodName(serchgoodName || "");
+    // setTotPrice(serchTotPrice || "");
+  }, [tid]);
 
   return (
     <>

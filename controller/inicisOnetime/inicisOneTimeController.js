@@ -116,7 +116,7 @@ async function inicisOneTimeDesktop(req, res) {
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentsuccess?tid=${tid}&MOID=${MOID}&buyerName=${buyerName}&goodName=${goodName}&TotPrice=${TotPrice}`
+      }/paymentsuccess?tid=${tid}`
     );
   } else {
     return res.redirect(
