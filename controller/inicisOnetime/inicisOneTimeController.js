@@ -9,7 +9,7 @@ async function inicisOneTimeMobile(req, res) {
     body: { P_STATUS, P_TID, P_REQ_URL },
   } = req;
   console.log("req===");
-  console.log(req);
+  console.log(req.body);
 
   if (P_STATUS !== "00") {
     return res.redirect(`${process.env.NODE_BASEURL}/paymentfail`);
