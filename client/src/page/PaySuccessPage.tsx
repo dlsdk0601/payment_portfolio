@@ -15,8 +15,6 @@ interface ISelectOrder {
 }
 
 export default function PaySuccessPage() {
-  const device = navigator.userAgent;
-  const isMobile = device.toLowerCase().indexOf("mobile") !== -1;
   const { search } = useLocation();
   const tid = new URLSearchParams(search).get("tid");
 
@@ -46,23 +44,6 @@ export default function PaySuccessPage() {
 
   useEffect(() => {
     onSelectOrderFetch();
-    // let serchtid;
-    // let serchoid;
-    // let serchbuyerName;
-    // let serchgoodName;
-    // let serchTotPrice;
-    // if (isMobile) {
-    //   serchtid = new URLSearchParams(search).get("P_TID");
-    //   serchoid = new URLSearchParams(search).get("P_OID");
-    //   serchbuyerName = new URLSearchParams(search).get("P_UNAME");
-    //   serchgoodName = new URLSearchParams(search).get("goodName");
-    //   serchTotPrice = new URLSearchParams(search).get("P_AMT");
-    // }
-    // setTid(serchtid || "");
-    // setOid(serchoid || "");
-    // setBuyerName(serchbuyerName || "");
-    // setGoodName(serchgoodName || "");
-    // setTotPrice(serchTotPrice || "");
   }, [tid]);
 
   return (

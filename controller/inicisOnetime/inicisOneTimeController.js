@@ -8,8 +8,6 @@ async function inicisOneTimeMobile(req, res) {
   const {
     body: { P_STATUS, P_TID, P_REQ_URL },
   } = req;
-  console.log("req===");
-  console.log(req.body);
 
   if (P_STATUS !== "00") {
     return res.redirect(`${process.env.NODE_BASEURL}/paymentfail`);
@@ -31,34 +29,37 @@ async function inicisOneTimeMobile(req, res) {
   const isSuccess = inicisAccessPaymentData.some(
     (item) => item === "P_STATUS=00"
   );
-  const orderNumber = inicisAccessPaymentData.find(
+  const orderNumberString = inicisAccessPaymentData.find(
     (item) => item.indexOf("P_OID") !== -1
-  );
-  console.log("orderNumber===");
-  console.log(orderNumber);
+  ); // P_OID=주문번호
+
+  if (!orderNumberString) {
+    return res.redirect(
+      `${process.env.REACT_APP_BASEURL || "http://localhost:5000"}/paymentfail?`
+    );
+  }
 
   if (isSuccess) {
+    const orderNumber = orderNumberString.split("=");
     const query = "UPDATE inicisReady set tid=?, isSuccess=? where oid=?";
-    const params = [P_TID, 1, MOID];
+    const params = [P_TID, 1, orderNumber[1]];
     const isUpdateDB = await updateDBHandle(query, params);
 
     if (!isUpdateDB) {
       return res.redirect(
         `${
           process.env.REACT_APP_BASEURL || "http://localhost:5000"
-        }/paymentfail?${inicisAccess}`
+        }/paymentfail?`
       );
     }
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentsuccess?${inicisAccess}`
+      }/paymentsuccess?tid=${P_TID}`
     );
   } else {
     return res.redirect(
-      `${
-        process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentfail?${inicisAccess}`
+      `${process.env.REACT_APP_BASEURL || "http://localhost:5000"}/paymentfail`
     );
   }
 }
