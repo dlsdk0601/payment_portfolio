@@ -161,6 +161,7 @@ export default function InicisOneTimeSection() {
             <input
               type="radio"
               id="paymentMethod"
+              name="paymentMethod"
               onChange={() => setGopaymethod("CARD")}
               value="카드"
             />
@@ -168,6 +169,7 @@ export default function InicisOneTimeSection() {
             <input
               type="radio"
               id="paymentMethod"
+              name="paymentMethod"
               onChange={() => setGopaymethod("VBANK")}
               value="무통장"
             />
@@ -175,6 +177,7 @@ export default function InicisOneTimeSection() {
             <input
               type="radio"
               id="paymentMethod"
+              name="paymentMethod"
               onChange={(e) => setGopaymethod("BANK")}
               value="계좌이체"
             />

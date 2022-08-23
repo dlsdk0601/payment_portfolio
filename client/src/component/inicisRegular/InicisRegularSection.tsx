@@ -153,7 +153,7 @@ export default function InicisRegularSection() {
             <label>가격</label>
             <input type="text" name="price" value={goodCount * 1000} />
           </div>
-          <div className="input__box">
+          <div className="input__box checkBox">
             <label>카드</label>
             <input
               type="radio"
@@ -169,18 +169,18 @@ export default function InicisRegularSection() {
           <input type="hidden" name="orderid" value={oid} />
 
           {/* 인증 구분 D로 고정 */}
-          <input type="text" name="authtype" value="D" />
+          <input type="hidden" name="authtype" value="D" />
 
           {/* timestamp */}
-          <input type="text" name="timestamp" value={timeStamp} />
+          <input type="hidden" name="timestamp" value={timeStamp} />
 
           {/* 제공기간 => 어느 단위로 결제를 할지 월단위 M2, 년단위 Y2  "YYYYMMDDYYYYMMDD":시작일종료일*/}
-          <input type="text" name="timestamp" value="M2" />
+          <input type="hidden" name="timestamp" value="M2" />
 
           {/* hash데이터 전문위조변조 mid+orderid+timestamp+INILitekey를 해쉬화한 값 */}
           {/* 테스트 할때 INILitekey는 b09LVzhuTGZVaEY1WmJoQnZzdXpRdz09 넣으면 됨 */}
           <input
-            type="text"
+            type="hidden"
             name="hashdata"
             value={SHA256(
               `INIBillTst${oid}${timeStamp}b09LVzhuTGZVaEY1WmJoQnZzdXpRdz09`
@@ -263,17 +263,14 @@ export default function InicisRegularSection() {
             <input type="text" name="price" value={goodCount * 1000} />
           </div>
           <div className="input__box checkBox">
-            <div>
-              <input
-                type="radio"
-                id="paymentMethod"
-                name="paymentMethod"
-                onChange={() => setGopaymethod("Card")}
-                value="카드"
-              />
-              <label>카드</label>
-            </div>
-
+            <input
+              type="radio"
+              id="paymentMethod"
+              name="paymentMethod"
+              onChange={() => setGopaymethod("Card")}
+              value="카드"
+            />
+            <label>카드</label>
             <input type="hidden" name="gopaymethod" value={gopaymethod} />
           </div>
 
