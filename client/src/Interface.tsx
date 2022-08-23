@@ -81,3 +81,15 @@ export interface ISelectKakaoPayResponse extends IDefaultResponse {
 export interface IKakaoOrderSelectResponse extends IDefaultResponse {
   orderData: any | null;
 }
+
+interface Idata {
+  oid: string;
+  buyerName: string;
+  goodName: string;
+  totalPrice: string;
+}
+export interface ISelectOrder {
+  result: boolean;
+  msg: string | null;
+  data: Idata;
+}

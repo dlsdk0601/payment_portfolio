@@ -1,18 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { ISelectOrder } from "../Interface";
 import Axios from "../server/Axios";
-
-interface Idata {
-  oid: string;
-  buyerName: string;
-  goodName: string;
-  totalPrice: string;
-}
-interface ISelectOrder {
-  result: boolean;
-  msg: string | null;
-  data: Idata;
-}
 
 export default function PaySuccessPage() {
   const { search } = useLocation();

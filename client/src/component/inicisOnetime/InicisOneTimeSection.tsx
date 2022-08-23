@@ -160,29 +160,22 @@ export default function InicisOneTimeSection() {
             <label>카드</label>
             <input
               type="radio"
-              id="CARD"
-              onChange={(e) => setGopaymethod(e.target.id)}
+              id="paymentMethod"
+              onChange={() => setGopaymethod("CARD")}
               value="카드"
             />
             <label>무통장</label>
             <input
               type="radio"
-              id="VBANK"
-              onChange={(e) => setGopaymethod(e.target.id)}
+              id="paymentMethod"
+              onChange={() => setGopaymethod("VBANK")}
               value="무통장"
-            />
-            <label>핸드폰</label>
-            <input
-              type="radio"
-              id="MOBILE"
-              onChange={(e) => setGopaymethod(e.target.id)}
-              value="핸드폰"
             />
             <label>계좌이체</label>
             <input
               type="radio"
-              id="BANK"
-              onChange={(e) => setGopaymethod(e.target.id)}
+              id="paymentMethod"
+              onChange={(e) => setGopaymethod("BANK")}
               value="계좌이체"
             />
             <input type="hidden" name="P_INI_PAYMENT" value={gopaymethod} />
@@ -213,7 +206,7 @@ export default function InicisOneTimeSection() {
             type="hidden"
             name="P_NEXT_URL"
             value={
-              window.location.href.indexOf("www") == -1
+              window.location.href.indexOf("www") === -1
                 ? `${
                     process.env.REACT_APP_RETURNURL_MOBILE ||
                     "http://localhost:5000/api/inicis/onetime-mobile"
@@ -287,8 +280,9 @@ export default function InicisOneTimeSection() {
             <div>
               <input
                 type="radio"
-                id="Card"
-                onChange={(e) => setGopaymethod(e.target.id)}
+                id="paymentMethod"
+                name="paymentMethod"
+                onChange={() => setGopaymethod("Card")}
                 value="카드"
               />
               <label>카드</label>
@@ -296,8 +290,9 @@ export default function InicisOneTimeSection() {
             <div>
               <input
                 type="radio"
-                id="VBank"
-                onChange={(e) => setGopaymethod(e.target.id)}
+                id="paymentMethod"
+                name="paymentMethod"
+                onChange={() => setGopaymethod("VBank")}
                 value="무통장"
               />
               <label>무통장</label>
@@ -305,17 +300,9 @@ export default function InicisOneTimeSection() {
             <div>
               <input
                 type="radio"
-                id="HPP"
-                onChange={(e) => setGopaymethod(e.target.id)}
-                value="핸드폰"
-              />
-              <label>핸드폰</label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                id="DirectBank"
-                onChange={(e) => setGopaymethod(e.target.id)}
+                id="paymentMethod"
+                name="paymentMethod"
+                onChange={() => setGopaymethod("DirectBank")}
                 value="계좌이체"
               />
               <label>계좌이체</label>
@@ -365,7 +352,7 @@ export default function InicisOneTimeSection() {
             type="hidden"
             name="returnUrl"
             value={
-              window.location.href.indexOf("www") == -1
+              window.location.href.indexOf("www") === -1
                 ? `${
                     process.env.REACT_APP_RETURNURL ||
                     "http://localhost:5000/api/inicis/onetime"
