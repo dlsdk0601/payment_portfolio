@@ -1,5 +1,6 @@
 import React from "react";
+import InicisRegularSection from "../component/inicisRegular/InicisRegularSection";
 
 export default function InicisRegularPage() {
-  return <div>정기결제</div>;
+  return <InicisRegularSection />;
 }
