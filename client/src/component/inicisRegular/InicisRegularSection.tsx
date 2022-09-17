@@ -4,7 +4,8 @@ import React, { useRef, useState } from "react";
 // component
 import randomStringFunc from "../common/RandomString";
 import Axios from "../../server/Axios";
-import SHA256 from "../../server/TestSHA256";
+import SHA256 from "../../utils/SHA256";
+import { onLoadScript } from "../../utils/onLoadHandle";
 
 export default function InicisRegularSection() {
   const device = navigator.userAgent;
@@ -83,13 +84,14 @@ export default function InicisRegularSection() {
       paymentData
     );
 
-    if (!isMobile && payPriceCompared.result) {
-      const script = document.createElement("script");
-      script.src = "https:///stdpay.inicis.com/stdjs/INIStdPay.js";
-      document.head.appendChild(script);
-      script.onload = (e: any) => {
-        e.srcElement.ownerDocument.defaultView.INIStdPay.pay("SendPayForm_id");
-      };
+    // 정기 결제는 js 파일 다른걸로 해야함
+    const isLoadScript = await onLoadScript(
+      "https:///stdpay.inicis.com/stdjs/INIStdPay.js"
+    );
+
+    if (!isMobile && payPriceCompared.result && isLoadScript) {
+      // @ts-ignore
+      window.INIStdPay.pay("SendPayForm_id");
     }
 
     if (isMobile && payPriceCompared.result) {

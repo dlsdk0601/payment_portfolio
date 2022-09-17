@@ -7,7 +7,8 @@ import "./css/InicisOneTimeSectionStyle.css";
 // component
 import randomStringFunc from "../common/RandomString";
 import Axios from "../../server/Axios";
-import SHA256 from "../../server/TestSHA256";
+import SHA256 from "../../utils/SHA256";
+import { onLoadScript } from "../../utils/onLoadHandle";
 
 export default function InicisOneTimeSection() {
   const device = navigator.userAgent;
@@ -86,16 +87,17 @@ export default function InicisOneTimeSection() {
       paymentData
     );
 
-    if (!isMobile && payPriceCompared.result) {
-      const script = document.createElement("script");
-      script.src = "https:///stdpay.inicis.com/stdjs/INIStdPay.js";
-      document.head.appendChild(script);
-      script.onload = (e: any) => {
-        e.srcElement.ownerDocument.defaultView.INIStdPay.pay("SendPayForm_id");
-      };
+    const res = await onLoadScript(
+      "https:///stdpay.inicis.com/stdjs/INIStdPay.js"
+    );
+
+    if (!isMobile && payPriceCompared.result && res) {
+      // @ts-ignore
+      window.INIStdPay.pay("SendPayForm_id");
+      return;
     }
 
-    if (isMobile && payPriceCompared.result) {
+    if (isMobile && payPriceCompared.result && res) {
       mobilePurchaseRef.current.action =
         "https://mobile.inicis.com/smart/payment/";
       mobilePurchaseRef.current.target = "_self";
