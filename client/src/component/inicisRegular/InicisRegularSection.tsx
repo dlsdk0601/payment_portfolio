@@ -96,7 +96,7 @@ export default function InicisRegularSection() {
 
     if (isMobile && payPriceCompared.result) {
       mobilePurchaseRef.current.action =
-        "https://mobile.inicis.com/smart/payment/";
+        "https://inilite.inicis.com/inibill/inibill_card.jsp";
       mobilePurchaseRef.current.target = "_self";
       mobilePurchaseRef.current.submit();
     }
@@ -172,9 +172,6 @@ export default function InicisRegularSection() {
 
           {/* 인증 구분 D로 고정 */}
           <input type="hidden" name="authtype" value="D" />
-
-          {/* timestamp */}
-          <input type="hidden" name="timestamp" value={timeStamp} />
 
           {/* 제공기간 => 어느 단위로 결제를 할지 월단위 M2, 년단위 Y2  "YYYYMMDDYYYYMMDD":시작일종료일*/}
           <input type="hidden" name="timestamp" value="M2" />
@@ -302,11 +299,6 @@ export default function InicisRegularSection() {
           <input type="hidden" name="version" value="1.0" />
           {/* 가격단위 */}
           <input type="hidden" name="currency" value="WON" />
-
-          {/* 무통장입금 현금영수증 */}
-          {gopaymethod === "VBank" && (
-            <input type="hidden" name="acceptmethod" value={"va_receipt"} />
-          )}
 
           {/* 정기결제를 위한 태그 */}
           <input type="hidden" name="acceptmethod" value="BILLAUTH(Card)" />
