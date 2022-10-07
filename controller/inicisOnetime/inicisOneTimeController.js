@@ -8,6 +8,8 @@ async function inicisOneTimeMobile(req, res) {
   const {
     body: { P_STATUS, P_TID, P_REQ_URL },
   } = req;
+  console.log("step2");
+  console.log(req.body);
 
   if (P_STATUS !== "00") {
     return res.redirect(`${process.env.NODE_BASEURL}/paymentfail`);
@@ -18,12 +20,18 @@ async function inicisOneTimeMobile(req, res) {
     P_TID,
   };
 
+  console.log("step3 request");
+  console.log(reqJSON);
+
   const inicisAccess = await rp({
     method: "POST",
     uri: P_REQ_URL,
     form: reqJSON,
     json: true,
   });
+
+  console.log("step4 response");
+  console.log(inicisAccess);
 
   const inicisAccessPaymentData = inicisAccess.split("&");
   const isSuccess = inicisAccessPaymentData.some(
