@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 // component
 import Header from "./component/header/Header";
-import InicisOnTimePage from "./page/InicisOnTimePage";
+import InicisSimplePayPage from "./page/InicisSimplePayPage";
 import MainPage from "./page/MainPage";
 import InicisRegularPage from "./page/InicisRegularPage";
 import KakaoPayPage from "./page/KakaoPayPage";
@@ -27,7 +27,7 @@ function App() {
       <Wrapper>
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="/inicis-onetime" element={<InicisOnTimePage />} />
+          <Route path="/inicis-onetime" element={<InicisSimplePayPage />} />
           <Route path="/paymentsuccess" element={<PaySuccessPage />} />
           <Route path="/paymentfail" element={<PayFailPage />} />
           <Route path="/inicis-regular" element={<InicisRegularPage />} />

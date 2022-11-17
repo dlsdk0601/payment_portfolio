@@ -12,7 +12,7 @@ export default function PaySuccessPage() {
   const [goodName, setGoodName] = useState("");
   const [totPrice, setTotPrice] = useState("");
 
-  const onSelectOrderFetch = async (): Promise<void | undefined> => {
+  const onSelectOrderFetch = async () => {
     if (!oid) {
       return;
     }
