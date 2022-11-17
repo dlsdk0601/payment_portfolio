@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { ISelectOrder } from "../Interface";
-import Axios from "../server/Axios";
+import { ISelectOrder } from "../api/Interface";
+import Axios from "../api/Axios";
 
 export default function PaySuccessPage() {
   const { search } = useLocation();

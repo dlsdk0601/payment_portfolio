@@ -1,8 +1,8 @@
 // lib
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { IKakaoOrderSelectResponse } from "../../Interface";
-import Axios from "../../server/Axios";
+import { IKakaoOrderSelectResponse } from "../../api/Interface";
+import Axios from "../../api/Axios";
 import "./css/KakaoPaySuccess.css";
 
 const KakaoPaySuccess = () => {

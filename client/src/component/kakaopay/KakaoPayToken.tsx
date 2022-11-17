@@ -2,8 +2,8 @@
 // lib
 import React, { useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { ISelectKakaoPayResponse } from "../../Interface";
-import Axios from "../../server/Axios";
+import { ISelectKakaoPayResponse } from "../../api/Interface";
+import Axios from "../../api/Axios";
 
 const KakaoPayToken = () => {
   const { search } = useLocation();

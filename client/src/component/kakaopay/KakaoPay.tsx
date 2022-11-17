@@ -1,8 +1,11 @@
 // lib
 import React, { ChangeEvent, useState } from "react";
-import Axios from "../../server/Axios";
-import randomStringFunc from "../common/RandomString";
-import { IKakaoReadyResponse, ISelectKakaoPayResponse } from "../../Interface";
+import Axios from "../../api/Axios";
+import randomStringFunc from "../../utils/RandomString";
+import {
+  IKakaoReadyResponse,
+  ISelectKakaoPayResponse,
+} from "../../api/Interface";
 import { useNavigate } from "react-router-dom";
 
 const KakaoPay = () => {

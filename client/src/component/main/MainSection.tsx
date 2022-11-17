@@ -1,6 +1,6 @@
 // lib
-import Axios from "../../server/Axios";
 import React, { useState } from "react";
+import Axios from "../../api/Axios";
 
 // css
 import "./css/MainSectionStyle.css";
@@ -9,8 +9,6 @@ export default function MainSection() {
   const navi = navigator.userAgent;
 
   const [test, setTest] = useState(false);
-
-  console.log(process.env);
 
   const testFetch = async () => {
     const test: { result: boolean; msg: string } = await Axios.get("/test");

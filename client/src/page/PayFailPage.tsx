@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import Axios from "../server/Axios";
-import { ISelectResult } from "../Interface";
+import Axios from "../api/Axios";
+import { ISelectResult } from "../api/Interface";
 
 export default function PayFailPage() {
   const { search } = useLocation();
