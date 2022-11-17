@@ -88,8 +88,21 @@ interface Idata {
   goodName: string;
   totalPrice: string;
 }
+
 export interface ISelectOrder {
   result: boolean;
   msg: string | null;
   data: Idata;
+}
+
+export interface IPaymentData {
+  buyername: string;
+  buyertel: string;
+  buyeremail: string;
+  goodCount: number;
+  gopaymethod: string;
+  timeStamp: number;
+  oid: string;
+  goodName: string;
+  totalPrice: number;
 }
