@@ -95,7 +95,7 @@ export interface ISelectOrder {
   data: Idata;
 }
 
-export interface IPaymentData {
+export interface paymentRegisterReq {
   buyername: string;
   buyertel: string;
   buyeremail: string;
@@ -105,4 +105,9 @@ export interface IPaymentData {
   oid: string;
   goodName: string;
   totalPrice: number;
+}
+
+export interface paymentRegisterRes {
+  result: boolean;
+  msg: string;
 }
