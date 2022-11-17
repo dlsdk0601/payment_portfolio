@@ -6,13 +6,19 @@ import "./css/InicisOneTimeSectionStyle.css";
 
 // component
 import randomStringFunc from "../../utils/RandomString";
-import Axios from "../../api/Axios";
 import SHA256 from "../../utils/SHA256";
 import { onLoadScript } from "../../utils/onLoadHandle";
+import { api } from "../../api/api";
+import { alertText, env, inicisKey, router, url } from "../../config/config";
+import { useNavigate } from "react-router-dom";
+
+const FORMTAG_ID = "SendPayForm_id";
 
 export default function InicisSimplePaySection() {
   const device = navigator.userAgent;
   const isMobile = device.toLowerCase().includes("mobile");
+
+  const navigate = useNavigate();
 
   const mobilePurchaseRef = useRef() as React.MutableRefObject<HTMLFormElement>;
 
@@ -28,7 +34,7 @@ export default function InicisSimplePaySection() {
   const countHanlder = (
     e: React.FormEvent<HTMLButtonElement>,
     isIncrease: boolean
-  ): void => {
+  ) => {
     e.preventDefault();
     if (isIncrease) {
       setGoodCount((prev) => prev + 1);
@@ -37,7 +43,6 @@ export default function InicisSimplePaySection() {
 
     if (!isIncrease && goodCount > 0) {
       setGoodCount((prev) => prev - 1);
-      return;
     }
   };
 
@@ -45,24 +50,24 @@ export default function InicisSimplePaySection() {
     e.preventDefault();
 
     if (!buyername) {
-      alert("주문자를 입력하세요");
+      alert(alertText.noBuyername);
       return;
     }
     if (!buyertel) {
-      alert("전화번호를 입력하세요");
+      alert(alertText.noBuyertel);
       return;
     }
     if (!buyeremail) {
-      alert("이메일를 입력하세요");
+      alert(alertText.noBuyeremail);
       return;
     }
     if (!gopaymethod) {
-      alert("결제수단을 선택하세요");
+      alert(alertText.noPaymethod);
       return;
     }
 
     // create oid and timeStamp
-    const timeStamp = +new Date();
+    const timeStamp = Date.now();
     const oid = timeStamp + randomStringFunc(7); //timeStamp + randomString
 
     // state setting for Form
@@ -82,24 +87,24 @@ export default function InicisSimplePaySection() {
       totalPrice,
     };
 
-    const payPriceCompared: { result: boolean; msg: string } = await Axios.post(
-      "/inicis/ready",
-      paymentData
-    );
+    const payPriceCompared = await api.paymentRegister(paymentData);
 
-    const res = await onLoadScript(
-      "https:///stdpay.inicis.com/stdjs/INIStdPay.js"
-    );
+    const res = await onLoadScript(url.inicisJS);
+
+    if (!res) {
+      alert("결제에 실패하였습니다. 다시 시도해주세요.");
+      navigate(router.inicisFail);
+      return;
+    }
 
     if (!isMobile && payPriceCompared.result && res) {
       // @ts-ignore
-      window.INIStdPay.pay("SendPayForm_id");
+      window.INIStdPay.pay(FORMTAG_ID);
       return;
     }
 
     if (isMobile && payPriceCompared.result && res) {
-      mobilePurchaseRef.current.action =
-        "https://mobile.inicis.com/smart/payment/";
+      mobilePurchaseRef.current.action = url.inicisMobileJs;
       mobilePurchaseRef.current.target = "_self";
       mobilePurchaseRef.current.submit();
     }
@@ -109,7 +114,7 @@ export default function InicisSimplePaySection() {
     <>
       {isMobile ? (
         <form
-          onSubmit={paymentStart}
+          onSubmit={(e) => paymentStart(e)}
           method="post"
           name="mobileweb"
           accept-charset="euc-kr"
@@ -179,7 +184,7 @@ export default function InicisSimplePaySection() {
           </div>
 
           {/* mid -> 실제 테스트 환경에서는 사용자 id, 테스트할 때는 INIpayTest 사용하면 된다. */}
-          <input type="hidden" name="P_MID" value={"INIpayTest"} />
+          <input type="hidden" name="P_MID" value={inicisKey.mid} />
 
           <input type="hidden" name="P_OID" value={oid} />
 
@@ -203,15 +208,9 @@ export default function InicisSimplePaySection() {
             type="hidden"
             name="P_NEXT_URL"
             value={
-              window.location.href.indexOf("www") === -1
-                ? `${
-                    process.env.REACT_APP_RETURNURL_MOBILE ||
-                    "http://localhost:5000/api/inicis/onetime-mobile"
-                  }`
-                : `${
-                    process.env.REACT_APP_WWWRETURNURL_MOBILE ||
-                    "https://www.localhost:5000/api/inicis/onetime-mobile"
-                  }`
+              window.location.href.includes("www")
+                ? env.mobileReturnURL
+                : env.mobileReturnWWWRUL
             }
           />
           {/* 결제창을 닫기 위해서 CloseInicis라는 페이지를 새로만드로 외부 js를 호출한다.   */}
@@ -221,8 +220,8 @@ export default function InicisSimplePaySection() {
         </form>
       ) : (
         <form
-          onSubmit={paymentStart}
-          id="SendPayForm_id"
+          onSubmit={(e) => paymentStart(e)}
+          id={FORMTAG_ID}
           className="inicis__form"
           name=""
           method="POST"
@@ -299,16 +298,11 @@ export default function InicisSimplePaySection() {
           </div>
 
           {/* mid -> 실제 테스트 환경에서는 사용자 id, 테스트할 때는 INIpayTest 사용하면 된다. */}
-          <input type="hidden" name="mid" value={"INIpayTest"} />
+          <input type="hidden" name="mid" value={inicisKey.mid} />
 
           {/* 발급받은 mKey를 SHA256하면 된다. 테스트할 때는 3a9503069192f207491d4b19bd743fc249a761ed94246c8c42fed06c3cd15a33 를 사용하면 된다. */}
-          <input
-            type="hidden"
-            name="mKey"
-            value={
-              "3a9503069192f207491d4b19bd743fc249a761ed94246c8c42fed06c3cd15a33"
-            }
-          />
+          <input type="hidden" name="mKey" value={inicisKey.mid} />
+
           <input
             type="hidden"
             name="signature"
@@ -318,17 +312,13 @@ export default function InicisSimplePaySection() {
           />
 
           <input type="hidden" name="oid" value={oid} />
+
           <input type="hidden" name="timestamp" value={timeStamp} />
 
           {/* 전문 버전 - "1.0" 고정 */}
           <input type="hidden" name="version" value="1.0" />
           {/* 가격단위 */}
           <input type="hidden" name="currency" value="WON" />
-
-          {/* 무형 상품 HPP(2)  유형 상품 HPP(1) */}
-          {gopaymethod === "HPP" && (
-            <input type="hidden" name="acceptmethod" value={"HPP(1)"} />
-          )}
 
           {/* 무통장입금 현금영수증 */}
           {gopaymethod === "VBank" && (
@@ -340,15 +330,9 @@ export default function InicisSimplePaySection() {
             type="hidden"
             name="returnUrl"
             value={
-              window.location.href.indexOf("www") === -1
-                ? `${
-                    process.env.REACT_APP_RETURNURL ||
-                    "http://localhost:5000/api/inicis/onetime"
-                  }`
-                : `${
-                    process.env.REACT_APP_WWWRETURNURL ||
-                    "https://www.localhost:5000/api/inicis/onetime"
-                  }`
+              window.location.href.includes("www")
+                ? env.returnURL
+                : env.returnWWWURL
             }
           />
           {/* 결제창을 닫기 위해서 CloseInicis라는 페이지를 새로만드로 외부 js를 호출한다.   */}
@@ -356,15 +340,9 @@ export default function InicisSimplePaySection() {
             type="hidden"
             name="closeUrl"
             value={
-              window.location.href.indexOf("www") === -1
-                ? `${
-                    process.env.REACT_APP_CLOSEURL ||
-                    "http://localhost:5000/close-inicis"
-                  }`
-                : `${
-                    process.env.REACT_APP_WWWCLOSEURL ||
-                    "http://www.localhost:5000/close-inicis"
-                  }`
+              window.location.href.includes("www")
+                ? env.closeURL
+                : env.closeWWWURL
             }
           />
           <button className="payment__button" type="submit">
