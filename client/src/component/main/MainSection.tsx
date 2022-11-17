@@ -20,7 +20,7 @@ export default function MainSection() {
       <h2 className="title">기기 테스트</h2>
       <p>
         현재 접속하신 기기는
-        {navi.toLowerCase().indexOf("mobile") === -1 ? "PC" : "mobile"}
+        {navi.toLowerCase().includes("mobile") ? "PC" : "mobile"}
         입니다
       </p>
       <button className="main__clcik__button" onClick={testFetch}>
