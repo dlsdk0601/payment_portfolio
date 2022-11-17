@@ -1,6 +1,6 @@
 import React from "react";
-import InicisOneTimeSection from "../component/inicisOnetime/InicisOneTimeSection";
+import InicisSimplePaySection from "../component/inicisSimplePay/InicisSimplePaySection";
 
 export default function InicisOnTimePage() {
-  return <InicisOneTimeSection />;
+  return <InicisSimplePaySection />;
 }
