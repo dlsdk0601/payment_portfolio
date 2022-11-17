@@ -4,12 +4,10 @@ import insertDBHandle from "../../db/insert.js";
 import updateDBHandle from "../../db/update.js";
 import selectDBHandle from "../../db/select.js";
 
-async function inicisOneTimeMobile(req, res) {
+async function inicisSimplePayMobile(req, res) {
   const {
     body: { P_STATUS, P_TID, P_REQ_URL },
   } = req;
-  console.log("step2");
-  console.log(req.body);
 
   if (P_STATUS !== "00") {
     return res.redirect(`${process.env.NODE_BASEURL}/paymentfail`);
@@ -20,9 +18,6 @@ async function inicisOneTimeMobile(req, res) {
     P_TID,
   };
 
-  console.log("step3 request");
-  console.log(reqJSON);
-
   const inicisAccess = await rp({
     method: "POST",
     uri: P_REQ_URL,
@@ -30,13 +25,12 @@ async function inicisOneTimeMobile(req, res) {
     json: true,
   });
 
-  console.log("step4 response");
-  console.log(inicisAccess);
-
   const inicisAccessPaymentData = inicisAccess.split("&");
+
   const isSuccess = inicisAccessPaymentData.some(
     (item) => item === "P_STATUS=00"
   );
+
   const orderNumberString = inicisAccessPaymentData.find(
     (item) => item.indexOf("P_OID") !== -1
   ); // P_OID=주문번호
@@ -49,8 +43,8 @@ async function inicisOneTimeMobile(req, res) {
 
   if (isSuccess) {
     const orderNumber = orderNumberString.split("=");
-    const query = "UPDATE inicisReady set tid=?, isSuccess=? where oid=?";
-    const params = [P_TID, 1, orderNumber[1]];
+    const query = "UPDATE inicis set tid=?, status=? where oid=?";
+    const params = [P_TID, "P", orderNumber[1]];
     const isUpdateDB = await updateDBHandle(query, params);
 
     if (!isUpdateDB) {
@@ -63,7 +57,7 @@ async function inicisOneTimeMobile(req, res) {
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentsuccess?tid=${P_TID}`
+      }/paymentsuccess?oid=${P_TID}`
     );
   } else {
     return res.redirect(
@@ -72,7 +66,7 @@ async function inicisOneTimeMobile(req, res) {
   }
 }
 
-async function inicisOneTimeDesktop(req, res) {
+async function inicisSimplePayDesktop(req, res) {
   const {
     body: { resultCode: accessRequestResult, authToken, authUrl, mid, charset },
   } = req;
@@ -105,8 +99,8 @@ async function inicisOneTimeDesktop(req, res) {
   const { resultCode: accessResult, tid, MOID } = inicisAccess;
 
   if (accessResult === "0000") {
-    const query = "UPDATE inicisReady set tid=?, isSuccess=? where oid=?";
-    const params = [tid, 1, MOID];
+    const query = "UPDATE inicis set tid=?, status=? where oid=?";
+    const params = [tid, "P", MOID];
     const isUpdateDB = await updateDBHandle(query, params);
 
     if (!isUpdateDB) {
@@ -120,7 +114,7 @@ async function inicisOneTimeDesktop(req, res) {
     return res.redirect(
       `${
         process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentsuccess?tid=${tid}`
+      }/paymentsuccess?oid=${MOID}`
     );
   } else {
     return res.redirect(
@@ -129,14 +123,14 @@ async function inicisOneTimeDesktop(req, res) {
   }
 }
 
-async function inicisOneTimereadyController(req, res) {
+async function inicisSimplePayreadyController(req, res) {
   const {
-    body: { goodCount, totalPrice, buyername, oid },
+    body: { goodCount, totalPrice, buyername, oid, goodName },
   } = req;
 
   const query =
-    "INSERT INTO inicisReady (oid, buyerName, totalPrice) VALUES (?, ?, ?)";
-  const params = [oid, buyername, totalPrice];
+    "INSERT INTO inicis (oid, buyerName, totalPrice, goodName) VALUES (?, ?, ?, ?)";
+  const params = [oid, buyername, totalPrice, goodName];
   const isInsertDB = await insertDBHandle(query, params);
 
   if (!isInsertDB) {
@@ -159,12 +153,12 @@ async function inicisOneTimereadyController(req, res) {
   });
 }
 
-async function inicisOneTimeOrderSelect(req, res) {
+async function inicisSimplePayOrderSelect(req, res) {
   const {
-    query: { tid },
+    query: { oid },
   } = req;
 
-  const query = `SELECT oid, buyerName, goodName, totalPrice FROM inicisReady where tid='${tid}'`;
+  const query = `SELECT tid, buyerName, goodName, totalPrice FROM inicis where oid='${oid}'`;
   const selectedData = await selectDBHandle(query);
 
   if (!!selectedData) {
@@ -172,7 +166,7 @@ async function inicisOneTimeOrderSelect(req, res) {
       result: true,
       msg: null,
       data: {
-        oid: selectedData.oid,
+        tid: selectedData.tid,
         buyerName: selectedData.buyerName,
         goodName: selectedData.goodName,
         totalPrice: selectedData.totalPrice,
@@ -188,8 +182,8 @@ async function inicisOneTimeOrderSelect(req, res) {
 }
 
 export {
-  inicisOneTimeDesktop,
-  inicisOneTimereadyController,
-  inicisOneTimeMobile,
-  inicisOneTimeOrderSelect,
+  inicisSimplePayDesktop,
+  inicisSimplePayreadyController,
+  inicisSimplePayMobile,
+  inicisSimplePayOrderSelect,
 };

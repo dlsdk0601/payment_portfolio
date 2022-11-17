@@ -5,27 +5,27 @@ import Axios from "../server/Axios";
 
 export default function PaySuccessPage() {
   const { search } = useLocation();
-  const tid = new URLSearchParams(search).get("tid");
+  const oid = new URLSearchParams(search).get("oid");
 
-  const [oid, setOid] = useState("");
+  const [tid, setTid] = useState("");
   const [buyerName, setBuyerName] = useState("");
   const [goodName, setGoodName] = useState("");
   const [totPrice, setTotPrice] = useState("");
 
   const onSelectOrderFetch = async (): Promise<void | undefined> => {
-    if (!tid) {
+    if (!oid) {
       return;
     }
 
-    const res: ISelectOrder = await Axios.get(`/inicis/select?tid=${tid}`);
+    const res: ISelectOrder = await Axios.get(`/inicis/select?oid=${oid}`);
 
     if (!res || !res.result) {
       return;
     }
 
-    const { oid, buyerName, goodName, totalPrice } = res.data;
+    const { tid, buyerName, goodName, totalPrice } = res.data;
 
-    setOid(oid);
+    setTid(tid);
     setBuyerName(buyerName);
     setGoodName(goodName);
     setTotPrice(totalPrice);
@@ -33,7 +33,7 @@ export default function PaySuccessPage() {
 
   useEffect(() => {
     onSelectOrderFetch();
-  }, [tid]);
+  }, [oid]);
 
   return (
     <>

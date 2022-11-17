@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const KakaoPay = () => {
   const device = navigator.userAgent;
-  const isMobile = device.toLowerCase().indexOf("mobile") !== -1;
+  const isMobile = device.toLowerCase().includes("mobile");
 
   const navigate = useNavigate();
 
@@ -108,6 +108,7 @@ const KakaoPay = () => {
       popupClose(win, tid);
     }
   };
+
   return (
     <>
       <form onSubmit={paymentStart}>

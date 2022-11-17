@@ -1,19 +1,19 @@
 import express from "express";
 import {
-  inicisOneTimeDesktop,
-  inicisOneTimereadyController,
-  inicisOneTimeMobile,
-  inicisOneTimeOrderSelect,
-} from "../../controller/inicisOnetime/inicisOneTimeController.js";
+  inicisSimplePayDesktop,
+  inicisSimplePayreadyController,
+  inicisSimplePayMobile,
+  inicisSimplePayOrderSelect,
+} from "../../controller/inicisSimplePay/inicisSimplePayController.js";
 
-const inicisOneTime = express.Router();
+const inicisSimplePay = express.Router();
 
-inicisOneTime.post("/onetime", inicisOneTimeDesktop);
+inicisSimplePay.post("/onetime", inicisSimplePayDesktop);
 
-inicisOneTime.post("/onetime-mobile", inicisOneTimeMobile);
+inicisSimplePay.post("/onetime-mobile", inicisSimplePayMobile);
 
-inicisOneTime.post("/ready", inicisOneTimereadyController);
+inicisSimplePay.post("/ready", inicisSimplePayreadyController);
 
-inicisOneTime.get("/select", inicisOneTimeOrderSelect);
+inicisSimplePay.get("/select", inicisSimplePayOrderSelect);
 
-export default inicisOneTime;
+export default inicisSimplePay;

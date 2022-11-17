@@ -12,17 +12,18 @@ import { onLoadScript } from "../../utils/onLoadHandle";
 
 export default function InicisOneTimeSection() {
   const device = navigator.userAgent;
-  const isMobile = device.toLowerCase().indexOf("mobile") !== -1;
+  const isMobile = device.toLowerCase().includes("mobile");
 
   const mobilePurchaseRef = useRef() as React.MutableRefObject<HTMLFormElement>;
 
-  const [buyername, setBuyername] = useState("");
-  const [buyertel, setBuyertel] = useState("");
-  const [buyeremail, setBuyeremail] = useState("");
-  const [goodCount, setGoodCount] = useState(1);
-  const [gopaymethod, setGopaymethod] = useState("");
-  const [timeStamp, setTimeStamp] = useState(0);
-  const [oid, setOid] = useState("");
+  const [buyername, setBuyername] = useState<string>("");
+  const [buyertel, setBuyertel] = useState<string>("");
+  const [buyeremail, setBuyeremail] = useState<string>("");
+  const [goodCount, setGoodCount] = useState<number>(1);
+  const [gopaymethod, setGopaymethod] = useState<string>("");
+  const [goodName, setGoodName] = useState<string>("컴퓨터");
+  const [timeStamp, setTimeStamp] = useState<number>(0);
+  const [oid, setOid] = useState<string>("");
 
   const countHanlder = (
     e: React.FormEvent<HTMLButtonElement>,
@@ -40,9 +41,7 @@ export default function InicisOneTimeSection() {
     }
   };
 
-  const paymentStart = async (
-    e: React.FormEvent<HTMLFormElement>
-  ): Promise<any> => {
+  const paymentStart = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!buyername) {
@@ -79,6 +78,7 @@ export default function InicisOneTimeSection() {
       gopaymethod,
       timeStamp,
       oid,
+      goodName,
       totalPrice,
     };
 
@@ -174,14 +174,6 @@ export default function InicisOneTimeSection() {
               name="paymentMethod"
               onChange={() => setGopaymethod("VBANK")}
               value="무통장"
-            />
-            <label>계좌이체</label>
-            <input
-              type="radio"
-              id="paymentMethod"
-              name="paymentMethod"
-              onChange={(e) => setGopaymethod("BANK")}
-              value="계좌이체"
             />
             <input type="hidden" name="P_INI_PAYMENT" value={gopaymethod} />
           </div>
@@ -302,16 +294,7 @@ export default function InicisOneTimeSection() {
               />
               <label>무통장</label>
             </div>
-            <div>
-              <input
-                type="radio"
-                id="paymentMethod"
-                name="paymentMethod"
-                onChange={() => setGopaymethod("DirectBank")}
-                value="계좌이체"
-              />
-              <label>계좌이체</label>
-            </div>
+
             <input type="hidden" name="gopaymethod" value={gopaymethod} />
           </div>
 

@@ -32,12 +32,12 @@ app.use("/api", api);
 // db
 mariaDB.connect(() => console.log("db connect success:::::"));
 
-// react build listen
-app.listen(process.env.PORT || 5000, () => console.log("client success"));
-
 // react build express
 app.use(express.static(path.join(__dirname, "/client/build")));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
+
+// react build listen
+app.listen(process.env.PORT || 5000, () => console.log("client success"));

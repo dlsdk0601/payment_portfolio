@@ -30,7 +30,7 @@ const KakaoPaySuccess = () => {
   useEffect(() => {
     selectOrder();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tid]);
+  }, [oid]);
 
   return (
     <>

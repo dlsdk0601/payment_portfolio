@@ -9,7 +9,7 @@ import { onLoadScript } from "../../utils/onLoadHandle";
 
 export default function InicisRegularSection() {
   const device = navigator.userAgent;
-  const isMobile = device.toLowerCase().indexOf("mobile") !== -1;
+  const isMobile = device.toLowerCase().includes("mobile");
 
   const mobilePurchaseRef = useRef() as React.MutableRefObject<HTMLFormElement>;
 
@@ -191,7 +191,7 @@ export default function InicisRegularSection() {
             type="hidden"
             name="returnurl"
             value={
-              window.location.href.indexOf("www") === -1
+              window.location.href.includes("www")
                 ? `${
                     process.env.REACT_APP_RETURNURL_MOBILE_REGULAR ||
                     "http://localhost:5000/api/inicis/regular-mobile"
@@ -308,7 +308,7 @@ export default function InicisRegularSection() {
             type="hidden"
             name="returnUrl"
             value={
-              window.location.href.indexOf("www") === -1
+              window.location.href.includes("www")
                 ? `${
                     process.env.REACT_APP_RETURNURL_MOBILE_REGULAR ||
                     "http://localhost:5000/api/inicis/regular-mobile"
@@ -324,7 +324,7 @@ export default function InicisRegularSection() {
             type="hidden"
             name="closeUrl"
             value={
-              window.location.href.indexOf("www") === -1
+              window.location.href.includes("www")
                 ? `${
                     process.env.REACT_APP_CLOSEURL_MOBILE_REGULAR ||
                     "http://localhost:5000/close-inicis"

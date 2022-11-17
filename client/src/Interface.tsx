@@ -83,7 +83,7 @@ export interface IKakaoOrderSelectResponse extends IDefaultResponse {
 }
 
 interface Idata {
-  oid: string;
+  tid: string;
   buyerName: string;
   goodName: string;
   totalPrice: string;
