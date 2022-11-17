@@ -5,12 +5,12 @@ import React, { useRef, useState } from "react";
 import "./css/InicisOneTimeSectionStyle.css";
 
 // component
-import randomStringFunc from "../common/RandomString";
-import Axios from "../../server/Axios";
+import randomStringFunc from "../../utils/RandomString";
+import Axios from "../../api/Axios";
 import SHA256 from "../../utils/SHA256";
 import { onLoadScript } from "../../utils/onLoadHandle";
 
-export default function InicisOneTimeSection() {
+export default function InicisSimplePaySection() {
   const device = navigator.userAgent;
   const isMobile = device.toLowerCase().includes("mobile");
 
