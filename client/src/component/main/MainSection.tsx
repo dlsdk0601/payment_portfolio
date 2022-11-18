@@ -23,7 +23,10 @@ export default function MainSection() {
         {navi.toLowerCase().includes("mobile") ? "PC" : "mobile"}
         입니다
       </p>
-      <button className="main__clcik__button" onClick={testFetch}>
+      <button
+        className="main__clcik__button"
+        onClick={async () => await testFetch()}
+      >
         click
       </button>
       <p className="main__result__text">서버통신 {test ? "success" : "fail"}</p>
