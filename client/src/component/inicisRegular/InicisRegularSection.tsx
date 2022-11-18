@@ -2,10 +2,9 @@
 import React, { useRef, useState } from "react";
 
 // component
-import randomStringFunc from "../../utils/RandomString";
 import Axios from "../../api/Axios";
 import SHA256 from "../../utils/SHA256";
-import { onLoadScript } from "../../utils/onLoadHandle";
+import { onLoadScript, randomStringFunc } from "../../utils/utils";
 
 export default function InicisRegularSection() {
   const device = navigator.userAgent;

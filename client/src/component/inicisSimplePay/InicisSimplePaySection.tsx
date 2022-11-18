@@ -1,16 +1,15 @@
 // lib
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // css
 import "./css/InicisOneTimeSectionStyle.css";
 
 // component
-import randomStringFunc from "../../utils/RandomString";
 import SHA256 from "../../utils/SHA256";
-import { onLoadScript } from "../../utils/onLoadHandle";
 import { api } from "../../api/api";
+import { onLoadScript, randomStringFunc } from "../../utils/utils";
 import { alertText, env, inicisKey, router, url } from "../../config/config";
-import { useNavigate } from "react-router-dom";
 
 const FORMTAG_ID = "SendPayForm_id";
 

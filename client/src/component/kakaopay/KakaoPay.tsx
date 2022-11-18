@@ -1,12 +1,13 @@
 // lib
 import React, { ChangeEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Axios from "../../api/Axios";
-import randomStringFunc from "../../utils/RandomString";
 import {
   IKakaoReadyResponse,
   ISelectKakaoPayResponse,
 } from "../../api/Interface";
-import { useNavigate } from "react-router-dom";
+import { randomStringFunc } from "../../utils/utils";
 
 const KakaoPay = () => {
   const device = navigator.userAgent;
@@ -21,7 +22,7 @@ const KakaoPay = () => {
   const countHanlder = (
     e: React.FormEvent<HTMLButtonElement>,
     isIncrease: boolean
-  ): void => {
+  ) => {
     e.preventDefault();
     if (isIncrease) {
       setQuantity((prev) => prev + 1);
@@ -48,9 +49,7 @@ const KakaoPay = () => {
     }, 1000);
   };
 
-  const paymentStart = async (
-    e: React.FormEvent<HTMLFormElement>
-  ): Promise<void | undefined> => {
+  const paymentStart = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!buyerName) {
@@ -59,7 +58,7 @@ const KakaoPay = () => {
     }
 
     // create oid and timeStamp
-    const timeStamp = +new Date();
+    const timeStamp = Date.now();
     const partner_order_id = timeStamp + randomStringFunc(7); //timeStamp + randomString
 
     const approval_url = isMobile
