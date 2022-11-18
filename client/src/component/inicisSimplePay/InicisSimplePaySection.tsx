@@ -102,6 +102,11 @@ export default function InicisSimplePaySection() {
       return;
     }
 
+    if (!payPriceCompared.result) {
+      alert("결제에 실패하였습니다. 다시 시도해주세요.");
+      return;
+    }
+
     if (!isMobile && payPriceCompared.result) {
       // @ts-ignore
       window.INIStdPay.pay(FORMTAG_ID);
@@ -209,8 +214,8 @@ export default function InicisSimplePaySection() {
             name="P_NEXT_URL"
             value={
               window.location.href.includes("www")
-                ? env.mobileReturnURL
-                : env.mobileReturnWWWRUL
+                ? env.mobileReturnWWWRUL
+                : env.mobileReturnURL
             }
           />
           {/* 결제창을 닫기 위해서 CloseInicis라는 페이지를 새로만드로 외부 js를 호출한다.   */}
@@ -307,7 +312,7 @@ export default function InicisSimplePaySection() {
           <input type="hidden" name="mid" value={inicisKey.mid} />
 
           {/* 발급받은 mKey를 SHA256하면 된다. 테스트할 때는 3a9503069192f207491d4b19bd743fc249a761ed94246c8c42fed06c3cd15a33 를 사용하면 된다. */}
-          <input type="hidden" name="mKey" value={inicisKey.mid} />
+          <input type="hidden" name="mKey" value={inicisKey.mKey} />
 
           <input
             type="hidden"
@@ -337,8 +342,8 @@ export default function InicisSimplePaySection() {
             name="returnUrl"
             value={
               window.location.href.includes("www")
-                ? env.returnURL
-                : env.returnWWWURL
+                ? env.returnWWWURL
+                : env.returnURL
             }
           />
           {/* 결제창을 닫기 위해서 CloseInicis라는 페이지를 새로만드로 외부 js를 호출한다.   */}
@@ -347,8 +352,8 @@ export default function InicisSimplePaySection() {
             name="closeUrl"
             value={
               window.location.href.includes("www")
-                ? env.closeURL
-                : env.closeWWWURL
+                ? env.closeWWWURL
+                : env.closeURL
             }
           />
           <button className="payment__button" type="submit">
