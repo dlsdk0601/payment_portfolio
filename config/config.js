@@ -19,7 +19,7 @@ export const mobileInicisKeys = {
 
 export const dbQuery = {
   insertInicisPayment:
-    "INSERT INTO inicis (oid, buyerName, totalPrice, goodName, buyertel, buyeremail, gopaymethod) VALUES (?, ?, ?, ?, ?, ?, ?)",
+    "INSERT INTO inicis (oid, buyerName, totalPrice, goodName, buyertel, buyeremail, paymethod, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
   updateInicisPayment: "UPDATE inicis set tid=?, status=? where oid=?",
   selectIncisPayment:
     "SELECT tid, buyerName, goodName, totalPrice FROM inicis where oid=",
