@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { env } from "../config/config";
 
-const baseURL = `${env.clientUrl}/api`;
+const baseURL = `${env.serverUrl}/api`;
 
 const Axios = axios.create({
   baseURL,
