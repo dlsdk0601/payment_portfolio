@@ -27,7 +27,7 @@ function App() {
       <Wrapper>
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="/inicis-onetime" element={<InicisSimplePayPage />} />
+          <Route path="/inicis-simple" element={<InicisSimplePayPage />} />
           <Route path="/paymentsuccess" element={<PaySuccessPage />} />
           <Route path="/paymentfail" element={<PayFailPage />} />
           <Route path="/inicis-regular" element={<InicisRegularPage />} />
