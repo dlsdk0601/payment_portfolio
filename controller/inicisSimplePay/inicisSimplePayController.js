@@ -52,7 +52,7 @@ async function inicisSimplePayMobile(req, res) {
   }
 
   const orderNumber = orderNumberString.split("=");
-  const params = [P_TID, "P", orderNumber[1]];
+  const params = [P_TID, "PAID", orderNumber[1]];
   const isUpdateDB = await updateDBHandle(
     dbQuery.updateInicisPaymentMobile,
     params
@@ -70,14 +70,16 @@ async function inicisSimplePayDesktop(req, res) {
     body: { resultCode: accessRequestResult, authToken, authUrl, mid, charset },
   } = req;
 
-  if (accessRequestResult !== "0000") {
+  if (accessRequestResult !== code.successCodePc) {
     return res.redirect(url.fail);
   }
+
+  const timestamp = Date.now();
 
   const reqJSON = {
     mid,
     authToken,
-    timestamp: Date.now(),
+    timestamp,
     signature: crypto
       .createHash("sha256")
       .update(`authToken=${authToken}&timestamp=${timestamp}`)
@@ -99,7 +101,7 @@ async function inicisSimplePayDesktop(req, res) {
     return res.redirect(url.fail);
   }
 
-  const params = [tid, "P", MOID];
+  const params = [tid, "PAID", MOID];
   const isUpdateDB = await updateDBHandle(dbQuery.updateInicisPayment, params);
 
   if (!isUpdateDB) {
@@ -131,6 +133,7 @@ async function inicisSimplePayreadyController(req, res) {
     buyertel,
     buyeremail,
     gopaymethod,
+    "SIMPLE",
   ];
 
   const isInsertDB = await insertDBHandle(dbQuery.insertInicisPayment, params);
