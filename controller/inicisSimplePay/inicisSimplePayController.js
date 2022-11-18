@@ -62,7 +62,7 @@ async function inicisSimplePayMobile(req, res) {
     return res.redirect(url.fail);
   }
 
-  return res.redirect(`${url.success}${P_TID}`);
+  return res.redirect(`${url.success}${orderNumber[1]}`);
 }
 
 async function inicisSimplePayDesktop(req, res) {
