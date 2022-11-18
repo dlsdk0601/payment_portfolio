@@ -11,6 +11,13 @@ import { api } from "../../api/api";
 import { onLoadScript, randomStringFunc } from "../../utils/utils";
 import { alertText, env, inicisKey, router, url } from "../../config/config";
 
+type DIRECTION_TYPE = "PLUS" | "MINUS";
+
+const DIRECTION = {
+  PLUS: "PLUS",
+  MINUS: "MINUS",
+} as const;
+
 const FORMTAG_ID = "SendPayForm_id";
 
 export default function InicisSimplePaySection() {
@@ -32,15 +39,15 @@ export default function InicisSimplePaySection() {
 
   const countHanlder = (
     e: React.FormEvent<HTMLButtonElement>,
-    isIncrease: boolean
+    directionType: DIRECTION_TYPE
   ) => {
     e.preventDefault();
-    if (isIncrease) {
+    if (directionType === DIRECTION.PLUS) {
       setGoodCount((prev) => prev + 1);
       return;
     }
 
-    if (!isIncrease && goodCount > 0) {
+    if (directionType === DIRECTION.MINUS && goodCount > 0) {
       setGoodCount((prev) => prev - 1);
     }
   };
@@ -79,7 +86,7 @@ export default function InicisSimplePaySection() {
       buyertel,
       buyeremail,
       goodCount,
-      gopaymethod,
+      gopaymethod: gopaymethod.toUpperCase(),
       timeStamp,
       oid,
       goodName,
@@ -154,8 +161,8 @@ export default function InicisSimplePaySection() {
           </div>
           <div className="input__box">
             <label>수량</label>
-            <button onClick={(e) => countHanlder(e, true)}>+</button>
-            <button onClick={(e) => countHanlder(e, false)}>-</button>
+            <button onClick={(e) => countHanlder(e, DIRECTION.PLUS)}>+</button>
+            <button onClick={(e) => countHanlder(e, DIRECTION.MINUS)}>-</button>
             <input type="text" value={goodCount} />
           </div>
           <div className="input__box">
@@ -186,11 +193,6 @@ export default function InicisSimplePaySection() {
           <input type="hidden" name="P_MID" value={inicisKey.mid} />
 
           <input type="hidden" name="P_OID" value={oid} />
-
-          {/* 휴대폰결제 필수 [1:컨텐츠, 2:실물] */}
-          {gopaymethod === "MOBILE" && (
-            <input type="hidden" name="P_HPP_METHOD" value={"2"} />
-          )}
 
           {/* 무통장입금 현금영수증 */}
           {gopaymethod === "VBANK" && (
@@ -259,10 +261,16 @@ export default function InicisSimplePaySection() {
           </div>
           <div className="input__box">
             <label>수량</label>
-            <button className="btn" onClick={(e) => countHanlder(e, true)}>
+            <button
+              className="btn"
+              onClick={(e) => countHanlder(e, DIRECTION.PLUS)}
+            >
               +
             </button>
-            <button className="btn" onClick={(e) => countHanlder(e, false)}>
+            <button
+              className="btn"
+              onClick={(e) => countHanlder(e, DIRECTION.MINUS)}
+            >
               -
             </button>
             <input type="text" value={goodCount} />
