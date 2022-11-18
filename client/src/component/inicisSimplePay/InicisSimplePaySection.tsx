@@ -79,37 +79,36 @@ export default function InicisSimplePaySection() {
     // state setting for Form
     setTimeStamp(timeStamp);
     setOid(oid);
-    const totalPrice = goodCount * 1000;
 
     const paymentData = {
       buyername,
       buyertel,
       buyeremail,
       goodCount,
-      gopaymethod: gopaymethod.toUpperCase(),
       timeStamp,
       oid,
       goodName,
-      totalPrice,
+      gopaymethod: gopaymethod.toUpperCase(),
+      totalPrice: goodCount * 1000,
     };
 
     const payPriceCompared = await api.paymentRegister(paymentData);
 
-    const res = await onLoadScript(url.inicisJS);
+    const isOnLoad = await onLoadScript(url.inicisJS);
 
-    if (!res) {
+    if (!isOnLoad) {
       alert("결제에 실패하였습니다. 다시 시도해주세요.");
       navigate(router.inicisFail);
       return;
     }
 
-    if (!isMobile && payPriceCompared.result && res) {
+    if (!isMobile && payPriceCompared.result) {
       // @ts-ignore
       window.INIStdPay.pay(FORMTAG_ID);
       return;
     }
 
-    if (isMobile && payPriceCompared.result && res) {
+    if (isMobile && payPriceCompared.result) {
       mobilePurchaseRef.current.action = url.inicisMobileJs;
       mobilePurchaseRef.current.target = "_self";
       mobilePurchaseRef.current.submit();
