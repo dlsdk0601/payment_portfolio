@@ -21,20 +21,19 @@ export const inicisKey = {
 
 export const env = {
   clientUrl: process.env.REACT_APP_BASEURL ?? url.localClient,
+  serverUrl: process.env.REACT_APP_BASEURL ?? url.localServer,
   mobileReturnURL:
     process.env.REACT_APP_RETURNURL_MOBILE ??
-    "http://localhost:5000/api/inicis/onetime-mobile",
+    `${url.localServer}/api/inicis/onetime-mobile`,
   mobileReturnWWWRUL:
     process.env.REACT_APP_WWWRETURNURL_MOBILE ??
-    "https://www.localhost:5000/api/inicis/onetime-mobile",
+    "http://www.localhost:5000/api/inicis/onetime-mobile",
   returnURL:
-    process.env.REACT_APP_RETURNURL ??
-    "http://localhost:5000/api/inicis/onetime",
+    process.env.REACT_APP_RETURNURL ?? `${url.localServer}/api/inicis/onetime`,
   returnWWWURL:
     process.env.REACT_APP_WWWRETURNURL ??
-    "https://www.localhost:5000/api/inicis/onetime",
-  closeURL:
-    process.env.REACT_APP_CLOSEURL ?? "http://localhost:5000/close-inicis",
+    "http://www.localhost:5000/api/inicis/onetime",
+  closeURL: process.env.REACT_APP_CLOSEURL ?? `${url.localServer}/close-inicis`,
   closeWWWURL:
     process.env.REACT_APP_WWWCLOSEURL ??
     "http://www.localhost:5000/close-inicis",
