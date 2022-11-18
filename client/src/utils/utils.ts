@@ -11,3 +11,15 @@ export const onLoadScript = (src: string): Promise<boolean> => {
     };
   });
 };
+
+export const randomStringFunc = (index: number): string => {
+  const chars: string = "ABCDEFGHIJKLMNOPQRSTUVWXTZ";
+  let randomstring = "";
+
+  for (var i = 0; i < index; i++) {
+    const rnum = Math.floor(Math.random() * chars.length);
+    randomstring += chars.substring(rnum, rnum + 1);
+  }
+
+  return randomstring;
+};
