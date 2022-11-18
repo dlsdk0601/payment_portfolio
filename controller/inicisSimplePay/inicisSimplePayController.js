@@ -3,14 +3,21 @@ import crypto from "crypto";
 import insertDBHandle from "../../db/insert.js";
 import updateDBHandle from "../../db/update.js";
 import selectDBHandle from "../../db/select.js";
+import {
+  code,
+  dbQuery,
+  mobileInicisKeys,
+  responseMessage,
+  url,
+} from "../../config/config.js";
 
 async function inicisSimplePayMobile(req, res) {
   const {
     body: { P_STATUS, P_TID, P_REQ_URL },
   } = req;
 
-  if (P_STATUS !== "00") {
-    return res.redirect(`${process.env.NODE_BASEURL}/paymentfail`);
+  if (P_STATUS !== code.successCodeMobile) {
+    return res.redirect(url.fail);
   }
 
   const reqJSON = {
@@ -28,42 +35,34 @@ async function inicisSimplePayMobile(req, res) {
   const inicisAccessPaymentData = inicisAccess.split("&");
 
   const isSuccess = inicisAccessPaymentData.some(
-    (item) => item === "P_STATUS=00"
+    (item) => item === mobileInicisKeys.successStatus
   );
 
-  const orderNumberString = inicisAccessPaymentData.find(
-    (item) => item.indexOf("P_OID") !== -1
-  ); // P_OID=주문번호
+  // P_OID=주문번호
+  const orderNumberString = inicisAccessPaymentData.find((item) =>
+    item.includes(mobileInicisKeys.oid)
+  );
 
   if (!orderNumberString) {
-    return res.redirect(
-      `${process.env.REACT_APP_BASEURL || "http://localhost:5000"}/paymentfail?`
-    );
+    return res.redirect(url.fail);
   }
 
-  if (isSuccess) {
-    const orderNumber = orderNumberString.split("=");
-    const query = "UPDATE inicis set tid=?, status=? where oid=?";
-    const params = [P_TID, "P", orderNumber[1]];
-    const isUpdateDB = await updateDBHandle(query, params);
-
-    if (!isUpdateDB) {
-      return res.redirect(
-        `${
-          process.env.REACT_APP_BASEURL || "http://localhost:5000"
-        }/paymentfail?`
-      );
-    }
-    return res.redirect(
-      `${
-        process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentsuccess?oid=${P_TID}`
-    );
-  } else {
-    return res.redirect(
-      `${process.env.REACT_APP_BASEURL || "http://localhost:5000"}/paymentfail`
-    );
+  if (!isSuccess) {
+    return res.redirect(url.fail);
   }
+
+  const orderNumber = orderNumberString.split("=");
+  const params = [P_TID, "P", orderNumber[1]];
+  const isUpdateDB = await updateDBHandle(
+    dbQuery.updateInicisPaymentMobile,
+    params
+  );
+
+  if (!isUpdateDB) {
+    return res.redirect(url.fail);
+  }
+
+  return res.redirect(`${url.success}${P_TID}`);
 }
 
 async function inicisSimplePayDesktop(req, res) {
@@ -72,15 +71,13 @@ async function inicisSimplePayDesktop(req, res) {
   } = req;
 
   if (accessRequestResult !== "0000") {
-    return res.redirect(`${process.env.NODE_BASEURL}/paymentfail`);
+    return res.redirect(url.fail);
   }
-
-  const timestamp = Date.now();
 
   const reqJSON = {
     mid,
     authToken,
-    timestamp,
+    timestamp: Date.now(),
     signature: crypto
       .createHash("sha256")
       .update(`authToken=${authToken}&timestamp=${timestamp}`)
@@ -98,58 +95,63 @@ async function inicisSimplePayDesktop(req, res) {
 
   const { resultCode: accessResult, tid, MOID } = inicisAccess;
 
-  if (accessResult === "0000") {
-    const query = "UPDATE inicis set tid=?, status=? where oid=?";
-    const params = [tid, "P", MOID];
-    const isUpdateDB = await updateDBHandle(query, params);
-
-    if (!isUpdateDB) {
-      return res.redirect(
-        `${
-          process.env.REACT_APP_BASEURL || "http://localhost:5000"
-        }/paymentfail`
-      );
-    }
-
-    return res.redirect(
-      `${
-        process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentsuccess?oid=${MOID}`
-    );
-  } else {
-    return res.redirect(
-      `${process.env.REACT_APP_BASEURL || "http://localhost:5000"}/paymentfail`
-    );
+  if (accessResult !== code.successCodePc) {
+    return res.redirect(url.fail);
   }
+
+  const params = [tid, "P", MOID];
+  const isUpdateDB = await updateDBHandle(dbQuery.updateInicisPayment, params);
+
+  if (!isUpdateDB) {
+    return res.redirect(url.fail);
+  }
+
+  return res.redirect(`${url.success}${MOID}`);
 }
 
 async function inicisSimplePayreadyController(req, res) {
   const {
-    body: { goodCount, totalPrice, buyername, oid, goodName },
+    body: {
+      goodCount,
+      totalPrice,
+      buyername,
+      oid,
+      goodName,
+      buyertel,
+      buyeremail,
+      gopaymethod,
+    },
   } = req;
 
-  const query =
-    "INSERT INTO inicis (oid, buyerName, totalPrice, goodName) VALUES (?, ?, ?, ?)";
-  const params = [oid, buyername, totalPrice, goodName];
-  const isInsertDB = await insertDBHandle(query, params);
+  const params = [
+    oid,
+    buyername,
+    totalPrice,
+    goodName,
+    buyertel,
+    buyeremail,
+    gopaymethod,
+  ];
+
+  const isInsertDB = await insertDBHandle(dbQuery.insertInicisPayment, params);
 
   if (!isInsertDB) {
     return res.json({
       result: false,
-      msg: "DB insertFail",
+      msg: responseMessage.dbInsertFail,
     });
   }
 
-  if (totalPrice === 1000 * goodCount) {
+  if (totalPrice !== 1000 * goodCount) {
     return res.json({
-      result: true,
-      msg: "totalPrice success",
+      result: false,
+      msg: responseMessage.totalPriceFail,
     });
   }
 
   return res.json({
-    result: false,
-    msg: "totalPrice fail",
+    result: true,
+    msg: null,
   });
 }
 
@@ -158,27 +160,27 @@ async function inicisSimplePayOrderSelect(req, res) {
     query: { oid },
   } = req;
 
-  const query = `SELECT tid, buyerName, goodName, totalPrice FROM inicis where oid='${oid}'`;
+  const query = `${dbQuery.selectIncisPayment}'${oid}'`;
   const selectedData = await selectDBHandle(query);
 
-  if (!!selectedData) {
-    return res.json({
-      result: true,
-      msg: null,
-      data: {
-        tid: selectedData.tid,
-        buyerName: selectedData.buyerName,
-        goodName: selectedData.goodName,
-        totalPrice: selectedData.totalPrice,
-      },
-    });
-  } else {
+  if (!selectedData) {
     return res.json({
       result: false,
-      msg: "select data fail",
+      msg: responseMessage.selectDataFail,
       data: null,
     });
   }
+
+  return res.json({
+    result: true,
+    msg: null,
+    data: {
+      tid: selectedData.tid,
+      buyerName: selectedData.buyerName,
+      goodName: selectedData.goodName,
+      totalPrice: selectedData.totalPrice,
+    },
+  });
 }
 
 export {
