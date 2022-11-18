@@ -23,3 +23,7 @@ export const randomStringFunc = (index: number): string => {
 
   return randomstring;
 };
+
+export function ignoredPromise<T>(promiseFunc: () => Promise<T>): void {
+  promiseFunc().then(() => {});
+}
