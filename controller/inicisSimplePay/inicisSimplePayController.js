@@ -43,16 +43,12 @@ async function inicisSimplePayMobile(req, res) {
     item.includes(mobileInicisKeys.oid)
   );
 
-  if (!orderNumberString) {
+  if (!orderNumberString || !isSuccess) {
     return res.redirect(url.fail);
   }
 
-  if (!isSuccess) {
-    return res.redirect(url.fail);
-  }
-
-  const orderNumber = orderNumberString.split("=");
-  const params = [P_TID, "PAID", orderNumber[1]];
+  const orderNumber = orderNumberString.split("=")[1];
+  const params = [P_TID, "PAID", orderNumber];
   const isUpdateDB = await updateDBHandle(
     dbQuery.updateInicisPaymentMobile,
     params
@@ -62,7 +58,7 @@ async function inicisSimplePayMobile(req, res) {
     return res.redirect(url.fail);
   }
 
-  return res.redirect(`${url.success}${orderNumber[1]}`);
+  return res.redirect(`${url.success}${orderNumber}`);
 }
 
 async function inicisSimplePayDesktop(req, res) {
