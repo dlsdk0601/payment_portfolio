@@ -24,10 +24,21 @@ export const dbQuery = {
   selectIncisPayment:
     "SELECT tid, buyerName, goodName, totalPrice FROM inicis where oid=",
   updateInicisPaymentMobile: "UPDATE inicis set tid=?, status=? where oid=?",
+  insertInicisVBank: "INSERT INTO inicisVbank (oid) VALUES (?)",
+  updateInicisVBank:
+    "UPDATE inicisVbank set VACT_Name=?, VACT_BankCode=?,  vactBankName=?, VACT_Date=? where oid=?",
+  updateInicisVbankPaid: "UPDATE inicis set status=? where oid=?",
 };
 
 export const responseMessage = {
   dbInsertFail: "DB insertFail",
   totalPriceFail: "totalPrice fail",
   selectDataFail: "select data fail",
+};
+
+export const inicisConst = {
+  bank: "VBANK",
+  paid: "PAID",
+  simple: "SIMPLE",
+  before: "BEFORE",
 };
