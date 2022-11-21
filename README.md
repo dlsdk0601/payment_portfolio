@@ -15,6 +15,19 @@
 
 <br />
 
+### 결제 진행 시 주의 사항
+
+- 이니시스 결제가 이루어지더라도, 밤 11시에 자동으로 환불 진행 됩니다.
+
+- 무통장입금의 결제인 경우, 실제 계좌로 입금 절대 하지 마세요. 만약 입금 하셨다면, 이니시스 가맹점 관리자 (https://iniweb.inicis.com/security/login.do) 로 접속 하시고, MID: INIpayTest
+  PW: inicis~1111 로 로그인 후, 직접 환불 진행해야합니다.
+
+- 무통장입금 테스트를 원하신다면, https://iniweb.inicis.com/security/login.do에 접속 하시고, MID: INIpayTest / PW: inicis~1111 로그인 후, 입금 통보 url에 API 입력후 전송 하시면 API 통신이 이뤄집니다.
+
+- 카카오 페이의 경우 돈이 빠져나가지 않기 때문에 여러번 시도 가능합니다.
+
+- BC 카드의 경우, token의 길이가 제한에 걸리기 때문에 지양해주시길 바랍니다. (원인 파악이 아직 되지 않습니다.)
+
 ### BackEnd Issues
 
 <br />
