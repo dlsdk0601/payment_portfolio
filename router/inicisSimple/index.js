@@ -1,18 +1,18 @@
 import express from "express";
 import {
   inicisSimplePayDesktop,
-  inicisSimplePayreadyController,
+  inicisSimplePayReadyController,
   inicisSimplePayMobile,
   inicisSimplePayOrderSelect,
 } from "../../controller/inicisSimplePay/inicisSimplePayController.js";
 
 const inicisSimplePay = express.Router();
 
-inicisSimplePay.post("/onetime", inicisSimplePayDesktop);
+inicisSimplePay.post("/simple", inicisSimplePayDesktop);
 
-inicisSimplePay.post("/onetime-mobile", inicisSimplePayMobile);
+inicisSimplePay.post("/simple-mobile", inicisSimplePayMobile);
 
-inicisSimplePay.post("/ready", inicisSimplePayreadyController);
+inicisSimplePay.post("/ready", inicisSimplePayReadyController);
 
 inicisSimplePay.get("/select", inicisSimplePayOrderSelect);
 

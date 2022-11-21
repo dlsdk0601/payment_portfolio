@@ -1,5 +1,5 @@
 import express from "express";
-import inicisOneTime from "./inicisOneTime/index.js";
+import inicisOneTime from "./inicisSimple/index.js";
 import kakaoPay from "./kakaopay/index.js";
 import test from "./test/index.js";
 

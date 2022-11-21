@@ -107,7 +107,7 @@ async function inicisSimplePayDesktop(req, res) {
   return res.redirect(`${url.success}${MOID}`);
 }
 
-async function inicisSimplePayreadyController(req, res) {
+async function inicisSimplePayReadyController(req, res) {
   const {
     body: {
       goodCount,
@@ -184,7 +184,7 @@ async function inicisSimplePayOrderSelect(req, res) {
 
 export {
   inicisSimplePayDesktop,
-  inicisSimplePayreadyController,
+  inicisSimplePayReadyController,
   inicisSimplePayMobile,
   inicisSimplePayOrderSelect,
 };
