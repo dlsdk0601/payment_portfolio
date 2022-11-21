@@ -26,7 +26,7 @@ export default function InicisSimplePaySection() {
 
   const navigate = useNavigate();
 
-  const mobilePurchaseRef = useRef() as React.MutableRefObject<HTMLFormElement>;
+  const mobilePurchaseRef = useRef<HTMLFormElement>(null);
 
   const [buyername, setBuyername] = useState<string>("");
   const [buyertel, setBuyertel] = useState<string>("");
@@ -113,7 +113,7 @@ export default function InicisSimplePaySection() {
       return;
     }
 
-    if (isMobile && payPriceCompared.result) {
+    if (isMobile && payPriceCompared.result && !!mobilePurchaseRef.current) {
       mobilePurchaseRef.current.action = url.inicisMobileJs;
       mobilePurchaseRef.current.target = "_self";
       mobilePurchaseRef.current.submit();
