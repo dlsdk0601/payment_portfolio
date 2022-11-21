@@ -15,8 +15,10 @@ export const router = {
 };
 
 export const inicisKey = {
-  mid: "INIpayTest",
-  mKey: "3a9503069192f207491d4b19bd743fc249a761ed94246c8c42fed06c3cd15a33",
+  mid: process.env.REACT_APP_INICIS_MID ?? "INIpayTest",
+  mKey:
+    process.env.REACT_APP_INICIS_MKEY ??
+    "3a9503069192f207491d4b19bd743fc249a761ed94246c8c42fed06c3cd15a33",
 };
 
 export const env = {
@@ -24,15 +26,15 @@ export const env = {
   serverUrl: process.env.REACT_APP_BASEURL ?? url.localServer,
   mobileReturnURL:
     process.env.REACT_APP_RETURNURL_MOBILE ??
-    `${url.localServer}/api/inicis/onetime-mobile`,
+    `${url.localServer}/api/inicis/simple-mobile`,
   mobileReturnWWWRUL:
     process.env.REACT_APP_WWWRETURNURL_MOBILE ??
-    "http://www.localhost:5000/api/inicis/onetime-mobile",
+    "http://www.localhost:5000/api/inicis/simple-mobile",
   returnURL:
-    process.env.REACT_APP_RETURNURL ?? `${url.localServer}/api/inicis/onetime`,
+    process.env.REACT_APP_RETURNURL ?? `${url.localServer}/api/inicis/simple`,
   returnWWWURL:
     process.env.REACT_APP_WWWRETURNURL ??
-    "http://www.localhost:5000/api/inicis/onetime",
+    "http://www.localhost:5000/api/inicis/simple",
   closeURL: process.env.REACT_APP_CLOSEURL ?? `${url.localServer}/close-inicis`,
   closeWWWURL:
     process.env.REACT_APP_WWWCLOSEURL ??
