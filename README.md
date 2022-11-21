@@ -1,6 +1,23 @@
-# Inicis(이니시스 결제 연동)
+# 결제 연동
 
-### Backend issue
+> 실행
+
+1.  git clone
+
+2.  npm i
+
+3.  npm run build (client단 build)
+
+4.  npm run dev:server (server 실행)
+
+5.  http:://localhost:5000 접속
+    (이니시스의 경우, 도메인이 다를 경우 에러가 나기 때문에 client단 npm 실행 시키지말고, server단 사용 권장)
+
+<br />
+
+### BackEnd Issues
+
+<br />
 
 1. cors 오류
 
