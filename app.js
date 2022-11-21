@@ -4,7 +4,6 @@ import api from "./router/index.js";
 import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
-import maria from "mysql";
 import mariaDB from "./db/index.js";
 
 const app = express();
