@@ -6,12 +6,14 @@ import selectDBHandle from "../../db/select.js";
 import {
   code,
   dbQuery,
+  inicisConst,
   mobileInicisKeys,
   responseMessage,
   url,
 } from "../../config/config.js";
 
-async function inicisSimplePayMobile(req, res) {
+// mobile returnRUL
+const inicisSimplePayMobile = async (req, res) => {
   const {
     body: { P_STATUS, P_TID, P_REQ_URL },
   } = req;
@@ -59,9 +61,10 @@ async function inicisSimplePayMobile(req, res) {
   }
 
   return res.redirect(`${url.success}${orderNumber}`);
-}
+};
 
-async function inicisSimplePayDesktop(req, res) {
+// PC returnRUL
+const inicisSimplePayDesktop = async (req, res) => {
   const {
     body: { resultCode: accessRequestResult, authToken, authUrl, mid, charset },
   } = req;
@@ -91,23 +94,47 @@ async function inicisSimplePayDesktop(req, res) {
     json: true,
   });
 
-  const { resultCode: accessResult, tid, MOID } = inicisAccess;
+  const { resultCode: accessResult, tid, MOID, payMethod } = inicisAccess;
 
   if (accessResult !== code.successCodePc) {
     return res.redirect(url.fail);
   }
 
-  const params = [tid, "PAID", MOID];
-  const isUpdateDB = await updateDBHandle(dbQuery.updateInicisPayment, params);
+  let isUpdateDB;
+
+  if (payMethod.toUpperCase() === inicisConst.bank) {
+    const { VACT_Name, VACT_BankCode, vactBankName, VACT_Date } = inicisAccess;
+    isUpdateDB = await updateDBHandle(dbQuery.updateInicisPayment, [
+      tid,
+      inicisConst.before,
+      MOID,
+    ]);
+
+    const isUpdateVbankDB = await updateDBHandle(dbQuery.updateInicisVBank, [
+      VACT_Name,
+      VACT_BankCode,
+      vactBankName,
+      VACT_Date,
+      MOID,
+    ]);
+
+    if (!isUpdateVbankDB) {
+      return res.redirect(url.fail);
+    }
+  } else {
+    const params = [tid, inicisConst.paid, MOID];
+    isUpdateDB = await updateDBHandle(dbQuery.updateInicisPayment, params);
+  }
 
   if (!isUpdateDB) {
     return res.redirect(url.fail);
   }
 
   return res.redirect(`${url.success}${MOID}`);
-}
+};
 
-async function inicisSimplePayReadyController(req, res) {
+// 결제 등록 API controller
+const inicisSimplePayReadyController = async (req, res) => {
   const {
     body: {
       goodCount,
@@ -134,6 +161,19 @@ async function inicisSimplePayReadyController(req, res) {
 
   const isInsertDB = await insertDBHandle(dbQuery.insertInicisPayment, params);
 
+  if (gopaymethod === "VBANK") {
+    const isInsertVBank = await insertDBHandle(dbQuery.insertInicisVBank, [
+      oid,
+    ]);
+
+    if (!isInsertVBank) {
+      return res.json({
+        result: false,
+        msg: responseMessage.dbInsertFail,
+      });
+    }
+  }
+
   if (!isInsertDB) {
     return res.json({
       result: false,
@@ -152,9 +192,10 @@ async function inicisSimplePayReadyController(req, res) {
     result: true,
     msg: null,
   });
-}
+};
 
-async function inicisSimplePayOrderSelect(req, res) {
+// 주문번호로 결제 내역 조회
+const inicisSimplePayOrderSelect = async (req, res) => {
   const {
     query: { oid },
   } = req;
@@ -180,11 +221,35 @@ async function inicisSimplePayOrderSelect(req, res) {
       totalPrice: selectedData.totalPrice,
     },
   });
-}
+};
+
+const inicisSimplePayVbankDesktop = async (req, res) => {
+  const {
+    body: { no_tid, no_oid, cd_bank, amt_input },
+  } = req;
+
+  console.log(req.body);
+  // 순서대로 tid, 주문번호, 은행코드, 입금금액
+  console.log(no_tid, no_oid, cd_bank, amt_input);
+
+  const isUpdateDB = await updateDBHandle(dbQuery.updateInicisVbankPaid, [
+    inicisConst.paid,
+    no_oid,
+  ]);
+
+  if (!isUpdateDB) {
+    return res.write("FAIL");
+  }
+
+  return res.write("OK");
+};
+
+const inicisSimplePayVbankMobile = async (req, res) => {};
 
 export {
   inicisSimplePayDesktop,
   inicisSimplePayReadyController,
   inicisSimplePayMobile,
   inicisSimplePayOrderSelect,
+  inicisSimplePayVbankDesktop,
 };
