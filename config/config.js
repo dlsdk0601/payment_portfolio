@@ -26,7 +26,7 @@ export const dbQuery = {
   updateInicisPaymentMobile: "UPDATE inicis set tid=?, status=? where oid=?",
   insertInicisVBank: "INSERT INTO inicisVbank (oid) VALUES (?)",
   updateInicisVBank:
-    "UPDATE inicisVbank set VACT_Name=?, VACT_BankCode=?,  vactBankName=?, VACT_Date=? where oid=?",
+    "UPDATE inicisVbank set VACT_Name=?, VACT_BankCode=?,  vactBankName=?, VACT_Date=?, VACT_Num=? where oid=?",
   updateInicisVbankPaid: "UPDATE inicis set status=? where oid=?",
 };
 
