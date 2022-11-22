@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // css
-import "./css/InicisOneTimeSectionStyle.css";
+import "./css/InicisSimplePaySectionStyle.css";
 
 // component
 import SHA256 from "../../utils/SHA256";
@@ -28,14 +28,14 @@ export default function InicisSimplePaySection() {
 
   const mobilePurchaseRef = useRef<HTMLFormElement>(null);
 
-  const [buyername, setBuyername] = useState<string>("");
-  const [buyertel, setBuyertel] = useState<string>("");
-  const [buyeremail, setBuyeremail] = useState<string>("");
-  const [goodCount, setGoodCount] = useState<number>(1);
-  const [gopaymethod, setGopaymethod] = useState<string>("");
-  const [goodName, setGoodName] = useState<string>("컴퓨터");
-  const [timeStamp, setTimeStamp] = useState<number>(0);
-  const [oid, setOid] = useState<string>("");
+  const [buyername, setBuyername] = useState("");
+  const [buyertel, setBuyertel] = useState("");
+  const [buyeremail, setBuyeremail] = useState("");
+  const [goodCount, setGoodCount] = useState(1);
+  const [gopaymethod, setGopaymethod] = useState("");
+  const [goodName] = useState("컴퓨터");
+  const [timeStamp, setTimeStamp] = useState(0);
+  const [oid, setOid] = useState("");
 
   const countHanlder = (
     e: React.FormEvent<HTMLButtonElement>,
@@ -205,7 +205,11 @@ export default function InicisSimplePaySection() {
 
           {/* 가상계좌 입금통보 URL */}
           {gopaymethod === "VBANK" && (
-            <input type="hidden" name="P_NOTI_URL" value={""} />
+            <input
+              type="hidden"
+              name="P_NOTI_URL"
+              value={env.mobileVBankNotiUrl}
+            />
           )}
 
           {/* 결제 후 return하는 url로 결제 요청하는 도메인과 같아야 한다. 결제 성공 유무와 결제에 대한 데이터를 보낼 서버주소*/}
