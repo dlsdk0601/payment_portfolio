@@ -39,6 +39,7 @@ export const env = {
   closeWWWURL:
     process.env.REACT_APP_WWWCLOSEURL ??
     "http://www.localhost:5000/close-inicis",
+  mobileVBankNotiUrl: `${url.localServer}/api/inicis/v-bank-mobile`,
 };
 
 export const alertText = {
@@ -46,4 +47,8 @@ export const alertText = {
   noBuyertel: "전화번호를 입력하세요",
   noBuyeremail: "이메일를 입력하세요",
   noPaymethod: "결제수단을 선택하세요",
+};
+
+export const paymentMethod = {
+  bank: "VBANK",
 };
