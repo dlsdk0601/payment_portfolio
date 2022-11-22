@@ -103,7 +103,8 @@ const inicisSimplePayDesktop = async (req, res) => {
   let isUpdateDB;
 
   if (payMethod.toUpperCase() === inicisConst.bank) {
-    const { VACT_Name, VACT_BankCode, vactBankName, VACT_Date } = inicisAccess;
+    const { VACT_Name, VACT_BankCode, vactBankName, VACT_Date, VACT_Num } =
+      inicisAccess;
     isUpdateDB = await updateDBHandle(dbQuery.updateInicisPayment, [
       tid,
       inicisConst.before,
@@ -115,6 +116,7 @@ const inicisSimplePayDesktop = async (req, res) => {
       VACT_BankCode,
       vactBankName,
       VACT_Date,
+      VACT_Num,
       MOID,
     ]);
 
