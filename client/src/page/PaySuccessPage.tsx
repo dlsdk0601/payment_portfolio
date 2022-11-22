@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { ISelectOrder } from "../api/Interface";
 import Axios from "../api/Axios";
 import { paymentMethod } from "../config/config";
+import { api } from "../api/api";
 
 export default function PaySuccessPage() {
   const { search } = useLocation();
@@ -22,7 +23,7 @@ export default function PaySuccessPage() {
       return;
     }
 
-    const res: ISelectOrder = await Axios.get(`/inicis/select?oid=${oid}`);
+    const res = await api.selectPayHistory(oid);
 
     if (!res || !res.result) {
       return;
