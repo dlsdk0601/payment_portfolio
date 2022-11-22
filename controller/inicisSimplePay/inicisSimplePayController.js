@@ -230,6 +230,7 @@ const inicisSimplePayVbankDesktop = async (req, res) => {
 
   console.log(req.body);
   // 순서대로 tid, 주문번호, 은행코드, 입금금액
+  console.log("no_tid, no_oid, cd_bank, amt_input");
   console.log(no_tid, no_oid, cd_bank, amt_input);
 
   const isUpdateDB = await updateDBHandle(dbQuery.updateInicisVbankPaid, [
