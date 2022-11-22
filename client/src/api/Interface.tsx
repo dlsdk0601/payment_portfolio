@@ -87,6 +87,10 @@ interface Idata {
   buyerName: string;
   goodName: string;
   totalPrice: string;
+  paymethod: string;
+  vactBankName: string | null;
+  VACT_Date: string | null;
+  VACT_Num: string | null;
 }
 
 export interface ISelectOrder {
