@@ -3,11 +3,10 @@ import React, { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Axios from "../../api/Axios";
-import {
-  IKakaoReadyResponse,
-  ISelectKakaoPayResponse,
-} from "../../api/Interface";
+import {ISelectKakaoPayResponse,} from "../../api/Interface";
 import { randomStringFunc } from "../../utils/utils";
+import {alertText, env, kakaoPayKey} from "../../config/config";
+import {api} from "../../api/api";
 
 const KakaoPay = () => {
   const device = navigator.userAgent;
@@ -16,6 +15,7 @@ const KakaoPay = () => {
   const navigate = useNavigate();
 
   const item_name = "컴퓨터";
+  const amount = 1000;
   const [quantity, setQuantity] = useState(1);
   const [buyerName, setBuyerName] = useState("");
 
@@ -52,8 +52,8 @@ const KakaoPay = () => {
   const paymentStart = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!buyerName) {
-      alert("주문자 이름을 적어주세요");
+    if (buyerName === "") {
+      alert(alertText.noBuyername);
       return;
     }
 
@@ -62,53 +62,47 @@ const KakaoPay = () => {
     const partner_order_id = timeStamp + randomStringFunc(7); //timeStamp + randomString
 
     const approval_url = isMobile
-      ? `${
-          process.env.REACT_APP_BASEURL || "http://localhost:5000"
-        }/kakaopayMB-token/${partner_order_id}`
-      : `${
-          process.env.REACT_APP_BASEURL || "http://localhost:5000"
-        }/kakaopay-token/${partner_order_id}`;
+      ? `${env.kakaoApproveUrlMobile}${partner_order_id}`
+      : `${env.kakaoApproveUrlPc}${partner_order_id}`;
 
-    const req = {
-      cid: "TC0ONETIME", // 가맹점 코드 지금은 테스트 코드
-      partner_order_id, // 주문번호
-      partner_user_id: "partner_user_id", // 가맹점 회원 id
-      item_name: "컴퓨터", //상품명
-      quantity, //상품 수량
-      total_amount: 1000, //결제금액
-      tax_free_amount: 0, //비과세
-      approval_url,
+    const kakaoPayRequest = {
       buyerName,
-      cancel_url: `${
-        process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentfail`,
-      fail_url: `${
-        process.env.REACT_APP_BASEURL || "http://localhost:5000"
-      }/paymentfail`,
+      item_name, //상품명
+      quantity, //상품 수량
+      total_amount: amount * quantity, //결제금액
+      tax_free_amount: 0, //비과세
+      cid: kakaoPayKey.cid, // 가맹점 코드 지금은 테스트 코드
+      partner_order_id, // 주문번호
+      partner_user_id: kakaoPayKey.partner_user_id, // 가맹점 회원 id
+      approval_url,
+      cancel_url: env.kakaoCancelUrl,
+      fail_url: env.kakaoFailUrl
     };
 
-    const kakaoPayres: IKakaoReadyResponse = await Axios.post(
-      "/kakao/ready",
-      req
-    );
+    const res = await api.kakaopayRegister(kakaoPayRequest);
 
-    if (!kakaoPayres.result) {
-      alert("결제 준비 실패");
+    if (!res.result) {
+      alert(alertText.paymentFail);
       return;
     }
 
-    const { tid, next_redirect_mobile_url, next_redirect_pc_url } = kakaoPayres;
+    const { tid, next_redirect_mobile_url, next_redirect_pc_url } = res;
+
+    if(typeof window === "undefined"){
+      return;
+    }
 
     if (isMobile) {
       window.location.href = next_redirect_mobile_url;
-    } else {
-      const win = window.open(
-        next_redirect_pc_url,
-        "kakaopay",
-        "top=50px, left=200px, height=500px, width=500px"
-      );
-      popupClose(win, tid);
+      return;
     }
+
+    const win = window.open(
+      next_redirect_pc_url,
+      "kakaopay",
+      "top=50px, left=200px, height=500px, width=500px"
+    );
+    popupClose(win, tid);
   };
 
   return (
@@ -140,7 +134,7 @@ const KakaoPay = () => {
         </div>
         <div className="input__box">
           <label>가격</label>
-          <input type="text" value={quantity * 1000} />
+          <input type="text" value={quantity * amount} />
         </div>
         <button type="submit">결제 하기</button>
       </form>
