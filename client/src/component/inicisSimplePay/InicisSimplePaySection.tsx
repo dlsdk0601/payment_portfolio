@@ -52,7 +52,7 @@ export default function InicisSimplePaySection() {
     }
   };
 
-  const paymentStart = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onClickPayButton = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!buyername) {
@@ -107,13 +107,17 @@ export default function InicisSimplePaySection() {
       return;
     }
 
-    if (!isMobile && payPriceCompared.result) {
+    if(typeof window !== "undefined"){
+      return;
+    }
+
+    if (!isMobile) {
       // @ts-ignore
       window.INIStdPay.pay(FORMTAG_ID);
       return;
     }
 
-    if (isMobile && payPriceCompared.result && !!mobilePurchaseRef.current) {
+    if (isMobile && !!mobilePurchaseRef.current) {
       mobilePurchaseRef.current.action = url.inicisMobileJs;
       mobilePurchaseRef.current.target = "_self";
       mobilePurchaseRef.current.submit();
@@ -124,10 +128,9 @@ export default function InicisSimplePaySection() {
     <>
       {isMobile ? (
         <form
-          onSubmit={(e) => paymentStart(e)}
+          onSubmit={(e) => onClickPayButton(e)}
           method="post"
           name="mobileweb"
-          accept-charset="euc-kr"
           ref={mobilePurchaseRef}
           className="inicis__form"
         >
@@ -229,7 +232,7 @@ export default function InicisSimplePaySection() {
         </form>
       ) : (
         <form
-          onSubmit={(e) => paymentStart(e)}
+          onSubmit={(e) => onClickPayButton(e)}
           id={FORMTAG_ID}
           className="inicis__form"
           name=""
