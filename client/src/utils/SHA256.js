@@ -34,8 +34,7 @@ export default function SHA256(s) {
   }
 
   function core_sha256(m, l) {
-    var K = new Array(
-      0x428a2f98,
+    var K = [0x428a2f98,
       0x71374491,
       0xb5c0fbcf,
       0xe9b5dba5,
@@ -98,19 +97,16 @@ export default function SHA256(s) {
       0x90befffa,
       0xa4506ceb,
       0xbef9a3f7,
-      0xc67178f2
-    );
+      0xc67178f2];
 
-    var HASH = new Array(
-      0x6a09e667,
+    var HASH = [0x6a09e667,
       0xbb67ae85,
       0x3c6ef372,
       0xa54ff53a,
       0x510e527f,
       0x9b05688c,
       0x1f83d9ab,
-      0x5be0cd19
-    );
+      0x5be0cd19];
 
     var W = new Array(64);
     var a, b, c, d, e, f, g, h, i, j;
