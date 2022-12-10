@@ -1,4 +1,5 @@
-{
+module.exports = {
+  "root": true,
   "env": {
     "browser": true,
     "es2021": true
@@ -10,23 +11,14 @@
     "Atomic": "readonly",
     "SharedArrayBuffer": "readonly",
     "JSX": true,
-    "google": "readonly",
-    "ReactNativeWebView": "readonly",
-    "Razorpay": "readonly"
   },
-  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
+    "parser": "@babel/eslint-parser",
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "plugins": [
-    "react",
-    "jsx-a11y",
     "import",
-    "@typescript-eslint"
   ],
   "rules": {
     "indent": [
@@ -43,16 +35,10 @@
         "avoidEscape": true
       }
     ],
-    "@typescript-eslint/quotes": [
-      "error",
-      "double"
-    ],
     // '' (x) -> "" (O)
     "linebreak-style": 0,
     // endOfLine \n (o) \r\n (x), 맥을 더 많이 쓰는 듯?
     "no-unused-vars": 0,
-    // 사용안한 변수 경고 x
-    "@typescript-eslint/no-unused-vars": "warn",
     // 사용안한 변수는 경고
     "react/jsx-filename-extension": [
       1,
@@ -68,7 +54,6 @@
       "error",
       "ignorePackages",
       {
-        "js": "never",
         "jsx": "never",
         "ts": "never",
         "tsx": "never"
@@ -81,6 +66,7 @@
         "maxBOF": 1
       }
     ],
+    "camelcase": "off", // 이니시스에서 camel 케이스만 사용하지 않아서 off한다.
     "react/function-component-definition": 0,
     // 할까말까 고민했는데 const function 을 선호하는 사람도 있기 때문에 일단은 예외 해준다.
     "react/no-unescaped-entities": 0,
