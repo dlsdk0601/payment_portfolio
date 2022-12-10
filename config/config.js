@@ -1,10 +1,17 @@
 export const env = {
   baseUrl: process.env.NODE_BASEURL ?? "http://localhost:5000",
+  kakaoAdminKey: process.env.NODE_KAKAO_ADMINKEY ?? "kakao",
+  kakaoCid: process.env.NODE_KAKAO_CID ?? "TC0ONETIME",
 };
 
 export const url = {
   fail: `${env.baseUrl}/payment-fail`,
   success: `${env.baseUrl}/payment-success?oid=`,
+  kakaoReady: "https://kapi.kakao.com/v1/payment/ready",
+  kakaoApprove: "https://kapi.kakao.com/v1/payment/approve",
+  kakaoFail: "/kakaopay-fail",
+  kakaoApproveClient: "/kakaopay-success/",
+  kakaoSuccess: "/kakaopay-success/",
 };
 
 export const code = {
@@ -25,12 +32,23 @@ export const dbQuery = {
   updateInicisVbankPaid: "UPDATE inicis set status=? where oid=?",
   selectBankData:
     "SELECT vactBankName, VACT_Date, VACT_Num FROM inicisVbank where oid=",
+  insertKakaoPay: "INSERT INTO kakaoPay (tid, oid, goodName, totalPrice, buyerName, partner_user_id) VALUES(?, ?, ? ,?, ?, ?)",
+  selectKakaoPay: "SELECT tid, partner_user_id FROM kakaoPay where oid=",
+  updateKakaoPay: "UPDATE kakaoPay set status=? where tid=?",
+  selectKakaoPaySuccess: "SELECT oid, status FROM kakaoPay where tid=",
+  selectKakaoPayResult: "SELECT tid, oid, goodName, totalPrice, buyerName, status FROM kakaoPay where oid=",
 };
 
 export const responseMessage = {
   dbInsertFail: "DB insertFail",
   totalPriceFail: "totalPrice fail",
   selectDataFail: "select data fail",
+  kakaoPayTotalPriceError: "kakaoPay Ready API fail",
+  kakaoApiError: "kakaoPay Ready API fail",
+  kakaoApproveError: "apprive faile",
+  kakaoApprove: "approve success",
+  kakaoTidError: "There is not Tid",
+  kakaoPayError: "Pay fail",
 };
 
 export const inicisConst = {
@@ -40,16 +58,21 @@ export const inicisConst = {
   before: "BEFORE",
 };
 
+export const kakaoPayConst = {
+  paid: "PAID",
+  before: "BEFORE",
+};
+
 export const payment_bank_code = [
-  { id: "11", name: "농협중앙회	" },
+  { id: "11", name: "농협중앙회" },
   { id: "12", name: "단위농협" },
-  { id: "16", name: "축협중앙회	" },
+  { id: "16", name: "축협중앙회" },
   { id: "20", name: "우리은행" },
   { id: "21", name: "구)조흥은행" },
   { id: "22", name: "상업은행" },
-  { id: "23", name: "SC제일은행	" },
+  { id: "23", name: "SC제일은행" },
   { id: "24", name: "한일은행" },
-  { id: "25", name: "서울은행	" },
+  { id: "25", name: "서울은행" },
   { id: "26", name: "구)신한은행" },
   { id: "27", name: "한국씨티은행" },
   { id: "31", name: "대구은행" },
