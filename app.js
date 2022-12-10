@@ -5,6 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import mariaDB from "./db/index.js";
+import {env} from "./config/config.js";
 
 const app = express();
 
@@ -28,8 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/api", api);
 
-// db
-mariaDB.connect(() => console.log("db connect success:::::"));
+
 
 // react build express
 app.use(express.static(path.join(__dirname, "/client/build")));
@@ -38,5 +38,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 
-// react build listen
-app.listen(process.env.PORT || 5000, () => console.log("client success"));
+// react build listen and DB connect
+mariaDB.connect(() => {
+  app.listen(process.env.PORT || 5000, () => console.log("client success:::::::::" + `${env.baseUrl}`));
+});
