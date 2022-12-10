@@ -190,7 +190,7 @@ const inicisSimplePayReadyController = async (req, res) => {
 
   const isInsertDB = await insertDBHandle(dbQuery.insertInicisPayment, params);
 
-  if (gopaymethod === "VBANK") {
+  if (gopaymethod.toUpperCase() === inicisConst.bank) {
     const isInsertVBank = await insertDBHandle(dbQuery.insertInicisVBank, [
       oid,
     ]);
@@ -320,8 +320,6 @@ const inicisSimplePayVbankMobile = async (req, res) => {
   const {
     body: { P_OID },
   } = req;
-
-  console.log(req.body);
 
   const isUpdateDB = await updateDBHandle(dbQuery.updateInicisVbankPaid, [
     inicisConst.paid,
