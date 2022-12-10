@@ -107,7 +107,7 @@ export default function InicisSimplePaySection() {
       return;
     }
 
-    if(typeof window !== "undefined"){
+    if(typeof window === "undefined"){
       return;
     }
 
