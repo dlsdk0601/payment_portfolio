@@ -1,7 +1,9 @@
+
 export const env = {
   baseUrl: process.env.NODE_BASEURL ?? "http://localhost:5000",
   kakaoAdminKey: process.env.NODE_KAKAO_ADMINKEY ?? "kakao",
   kakaoCid: process.env.NODE_KAKAO_CID ?? "TC0ONETIME",
+  inicisMKey: process.env.NODE_INICIS_MKEY ?? "INIpayTest",
 };
 
 export const url = {
