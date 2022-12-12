@@ -5,7 +5,7 @@ import updateDBHandle from "../../db/update.js";
 import selectDBHandle from "../../db/select.js";
 import {
   code,
-  dbQuery,
+  dbQuery, env,
   inicisConst,
   payment_bank_code,
   responseMessage,
@@ -23,7 +23,7 @@ const inicisSimplePayMobile = async (req, res) => {
   }
 
   const reqJSON = {
-    P_MID: "INIpayTest",
+    P_MID: env.inicisMKey,
     P_TID,
   };
 
