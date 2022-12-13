@@ -58,6 +58,7 @@ export const inicisConst = {
   paid: "PAID",
   simple: "SIMPLE",
   before: "BEFORE",
+  ing: "ING",
 };
 
 export const kakaoPayConst = {
