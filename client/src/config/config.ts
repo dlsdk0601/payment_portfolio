@@ -2,6 +2,7 @@ export const apiEndPoint = {
     inicisReady: "/inicis/ready",
     selectInicisData: "/inicis/select?oid=",
     kakoPayReady: "/kakao/ready",
+    kakaoApprove: "/kakao/approve"
 };
 
 export const url = {
