@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const env = {
   baseUrl: process.env.NODE_BASEURL ?? "http://localhost:5000",
