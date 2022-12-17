@@ -1,9 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-// lib
 import React, { useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { ISelectKakaoPayResponse } from "../../api/Interface";
-import Axios from "../../api/Axios";
+import {api} from "../../api/api";
 
 const KakaoPayToken = () => {
   const { search } = useLocation();
@@ -16,12 +14,11 @@ const KakaoPayToken = () => {
     }
 
     const req = { pg_token, oid };
-    const kakaoPayApprove: ISelectKakaoPayResponse = await Axios.post(
-      "/kakao/approve",
-      req
-    );
+
+    const kakaoPayApprove = await api.kakaopayApprove(req);
 
     if (kakaoPayApprove.result) {
+      console.log("here")
       window.close();
     }
   };
