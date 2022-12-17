@@ -5,7 +5,8 @@ import {
   ISelectOrder,
   IPaymentRegisterReq,
   IPaymentRegisterRes,
-  IKakaoPaymentRequset
+  IKakaoPaymentRequset,
+  IKakaoPayApproveReq, IKakaoPayApproveRes
 } from "./Interface";
 
 export const api = {
@@ -17,5 +18,6 @@ export const api = {
 
   selectPayHistory: async (oid: string): Promise<ISelectOrder> =>
     await Axios.get(`${apiEndPoint.selectInicisData}${oid}`),
-  kakaopayRegister: async (body: IKakaoPaymentRequset): Promise<IKakaoReadyResponse> => await Axios.post(apiEndPoint.kakoPayReady, body)
+  kakaopayRegister: async (body: IKakaoPaymentRequset): Promise<IKakaoReadyResponse> => await Axios.post(apiEndPoint.kakoPayReady, body),
+  kakaopayApprove: async (body: IKakaoPayApproveReq): Promise<IKakaoPayApproveRes> => await Axios.post(apiEndPoint.kakaoApprove, body)
 };
