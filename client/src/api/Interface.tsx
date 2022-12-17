@@ -81,3 +81,14 @@ export interface IPaymentRegisterRes {
   msg: string;
 }
 
+export interface IKakaoPayApproveReq{
+  pg_token: string;
+  oid: string;
+}
+
+export interface IKakaoPayApproveRes{
+  result: boolean;
+  msg: string;
+  kakaoPayApproveUrl?: string
+}
+
