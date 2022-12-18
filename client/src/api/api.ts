@@ -19,5 +19,6 @@ export const api = {
   selectPayHistory: async (oid: string): Promise<ISelectOrder> =>
     await Axios.get(`${apiEndPoint.selectInicisData}${oid}`),
   kakaopayRegister: async (body: IKakaoPaymentRequset): Promise<IKakaoReadyResponse> => await Axios.post(apiEndPoint.kakoPayReady, body),
-  kakaopayApprove: async (body: IKakaoPayApproveReq): Promise<IKakaoPayApproveRes> => await Axios.post(apiEndPoint.kakaoApprove, body)
+  kakaopayApprove: async (body: IKakaoPayApproveReq): Promise<IKakaoPayApproveRes> => await Axios.post(apiEndPoint.kakaoApprove, body),
+  inicisSubscriptionReady: async (body: IPaymentRegisterReq): Promise<IPaymentRegisterRes> => await Axios.post(apiEndPoint.inicisSubscriptionRead , body)
 };
