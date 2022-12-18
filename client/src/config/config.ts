@@ -2,7 +2,8 @@ export const apiEndPoint = {
     inicisReady: "/inicis/ready",
     selectInicisData: "/inicis/select?oid=",
     kakoPayReady: "/kakao/ready",
-    kakaoApprove: "/kakao/approve"
+    kakaoApprove: "/kakao/approve",
+    inicisSubscriptionRead: "/subscription/ready"
 };
 
 export const url = {
@@ -10,6 +11,7 @@ export const url = {
     localClient: "http://localhost:3000",
     inicisJS: "https:///stdpay.inicis.com/stdjs/INIStdPay.js",
     inicisMobileJs: "https://mobile.inicis.com/smart/payment/",
+    inicisSubscriptionMobile: "https://inilite.inicis.com/inibill/inibill_card.jsp"
 };
 
 export const router = {
