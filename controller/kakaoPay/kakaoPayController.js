@@ -5,8 +5,6 @@ import kakaoPayService from "../../service/kakaoPay/kakaoPayService.js";
 async function kakaoPayReadyController(req, res) {
   try {
     const data = await kakaoPayService.kakaoPayReadyService(req.body);
-    console.log("data");
-    console.log(data);
     return res.json(data);
   } catch (err) {
     console.log(err);
