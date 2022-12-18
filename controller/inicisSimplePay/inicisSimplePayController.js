@@ -32,7 +32,7 @@ const inicisSimplePayDesktop = async (req, res) => {
 // 결제 등록 API controller
 const inicisSimplePayReadyController = async (req, res) => {
   try {
-    const data = await inicisSimplePayService.inicisSimplePayReadyService(req.body);
+    const data = await inicisSimplePayService.inicisSimplePayReadyService(req.body, inicisConst.simple);
     return res.json(data);
   } catch (err) {
     console.log(err);
