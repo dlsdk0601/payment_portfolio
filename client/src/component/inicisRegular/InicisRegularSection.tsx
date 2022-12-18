@@ -5,10 +5,18 @@ import React, { useRef, useState } from "react";
 import Axios from "../../api/Axios";
 import SHA256 from "../../utils/SHA256";
 import { onLoadScript, randomStringFunc } from "../../utils/utils";
+import {api} from "../../api/api";
+import {router, url} from "../../config/config";
+import {useNavigate} from "react-router-dom";
+
+const FORMTAG_ID = "SendPayForm_id";
+
 
 export default function InicisRegularSection() {
   const device = navigator.userAgent;
   const isMobile = device.toLowerCase().includes("mobile");
+
+  const navigate = useNavigate();
 
   const mobilePurchaseRef = useRef() as React.MutableRefObject<HTMLFormElement>;
 
@@ -18,6 +26,7 @@ export default function InicisRegularSection() {
   const [goodCount, setGoodCount] = useState(1);
   const [gopaymethod, setGopaymethod] = useState("");
   const [timeStamp, setTimeStamp] = useState(0);
+  const [goodName, setGoodName] = useState("컴퓨터");
   const [oid, setOid] = useState("");
 
   const countHanlder = (
@@ -74,28 +83,40 @@ export default function InicisRegularSection() {
       goodCount,
       gopaymethod,
       timeStamp,
+      goodName,
       oid,
       totalPrice,
     };
 
-    const payPriceCompared: { result: boolean; msg: string } = await Axios.post(
-      "/inicis/ready",
-      paymentData
-    );
+    const payPriceCompared = await api.inicisSubscriptionReady(paymentData);
 
     // 정기 결제는 js 파일 다른걸로 해야함
-    const isLoadScript = await onLoadScript(
-      "https:///stdpay.inicis.com/stdjs/INIStdPay.js"
-    );
+    const isLoadScript = await onLoadScript(url.inicisJS);
 
-    if (!isMobile && payPriceCompared.result && isLoadScript) {
-      // @ts-ignore
-      window.INIStdPay.pay("SendPayForm_id");
+    if(!isLoadScript){
+      alert("결제에 실패하였습니다. 다시 시도해수제요.");
+      navigate(router.inicisFail);
+      return ;
     }
 
-    if (isMobile && payPriceCompared.result) {
-      mobilePurchaseRef.current.action =
-        "https://inilite.inicis.com/inibill/inibill_card.jsp";
+    if(!payPriceCompared.result){
+      alert("결제에 실패하였습니다. 다시 시도해수제요.");
+      navigate(router.inicisFail);
+      return ;
+    }
+
+    if(typeof window === "undefined"){
+      return;
+    }
+
+    if(!isMobile){
+      // @ts-ignore
+      window.INIStdPay.pay(FORMTAG_ID);
+      return;
+    }
+
+    if (isMobile) {
+      mobilePurchaseRef.current.action = url.inicisSubscriptionMobile
       mobilePurchaseRef.current.target = "_self";
       mobilePurchaseRef.current.submit();
     }
@@ -167,7 +188,7 @@ export default function InicisRegularSection() {
           {/* mid -> 실제 테스트 환경에서는 사용자 id, 테스트할 때는 INIBillTst 사용하면 된다. */}
           <input type="hidden" name="mid" value={"INIBillTst"} />
 
-          <input type="hidden" name="orderid" value={oid} />
+          <input type="hidden" name="oid" value={oid} />
 
           {/* 인증 구분 D로 고정 */}
           <input type="hidden" name="authtype" value="D" />
@@ -175,7 +196,7 @@ export default function InicisRegularSection() {
           {/* 제공기간 => 어느 단위로 결제를 할지 월단위 M2, 년단위 Y2  "YYYYMMDDYYYYMMDD":시작일종료일*/}
           <input type="hidden" name="timestamp" value="M2" />
 
-          {/* hash데이터 전문위조변조 mid+orderid+timestamp+INILitekey를 해쉬화한 값 */}
+          {/* hash데이터 전문위조변조 mid+oid+timestamp+INILitekey를 해쉬화한 값 */}
           {/* 테스트 할때 INILitekey는 b09LVzhuTGZVaEY1WmJoQnZzdXpRdz09 넣으면 됨 */}
           <input
             type="hidden"
