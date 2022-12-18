@@ -60,6 +60,7 @@ export const inicisConst = {
   bank: "VBANK",
   paid: "PAID",
   simple: "SIMPLE",
+  subscription: "SUBSCRIPTION",
   before: "BEFORE",
   ing: "ING",
   fail: "FAIL",
