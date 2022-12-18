@@ -7,7 +7,7 @@ import updateDBHandle from "../../db/update.js";
 import selectDBHandle from "../../db/select.js";
 
 // 결제 등록 service
-const inicisSimplePayReadyService = async (body) => {
+const inicisSimplePayReadyService = async (body, type) => {
   const {
     goodCount,
     totalPrice,
@@ -27,7 +27,7 @@ const inicisSimplePayReadyService = async (body) => {
     buyertel,
     buyeremail,
     gopaymethod,
-    inicisConst.simple,
+    type,
   ];
 
   try {
