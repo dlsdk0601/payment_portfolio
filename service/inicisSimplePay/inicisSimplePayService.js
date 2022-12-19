@@ -210,11 +210,12 @@ const incisSimplePayMobileService = async (body) => {
   }
 };
 
-const inicisSimplePayOrderSelectServcie = async (oid) => {
+const inicisSimplePayOrderSelectService = async (oid) => {
   try {
     const query = `${dbQuery.selectIncisPayment}'${oid}'`;
     const selectedData = await selectDBHandle(query);
     let bankData;
+    let billing;
 
     if (!selectedData) {
       return {
@@ -229,6 +230,12 @@ const inicisSimplePayOrderSelectServcie = async (oid) => {
       bankData = await selectDBHandle(query);
     }
 
+    if (selectedData.type === inicisConst.subscription) {
+      const query = `${dbQuery.selecetInicisBilling}'${selectedData.tid}'`;
+      const selectedBilling = await selectDBHandle(query);
+      billing = selectedBilling.billing;
+    }
+
     return {
       result: true,
       msg: null,
@@ -238,6 +245,8 @@ const inicisSimplePayOrderSelectServcie = async (oid) => {
         goodName: selectedData.goodName,
         totalPrice: selectedData.totalPrice,
         paymethod: selectedData.paymethod,
+        type: selectedData.type,
+        billing: billing ?? null,
         vactBankName: bankData?.vactBankName ?? null,
         VACT_Date: bankData?.VACT_Date ?? null,
         VACT_Num: bankData?.VACT_Num ?? null,
@@ -322,7 +331,7 @@ export default {
   inicisSimplePayReadyService,
   inicisSimplePayDesktopService,
   incisSimplePayMobileService,
-  inicisSimplePayOrderSelectServcie,
+  inicisSimplePayOrderSelectService,
   inicisSimplePayVbankDesktop,
   inicisSimplePayVbankMobile,
 };
