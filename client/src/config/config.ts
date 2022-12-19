@@ -20,9 +20,12 @@ export const router = {
 
 export const inicisKey = {
     mid: process.env.REACT_APP_INICIS_MID ?? "INIpayTest",
+    billingMid: "INIBillTst",
     mKey:
         process.env.REACT_APP_INICIS_MKEY ??
         "3a9503069192f207491d4b19bd743fc249a761ed94246c8c42fed06c3cd15a33",
+    iniLiteKey: "b09LVzhuTGZVaEY1WmJoQnZzdXpRdz09",
+    subscriptionBill: "BILLAUTH(Card)"
 };
 
 export const env = {
@@ -46,8 +49,12 @@ export const env = {
     mobileVBankNotiUrl: `${url.localServer}/api/inicis/v-bank-mobile`,
     kakaoApproveUrlPc: `${process.env.REACT_APP_BASEURL ?? "http://localhost:5000"}/kakaopayMB-token/`,
     kakaoApproveUrlMobile: `${process.env.REACT_APP_BASEURL ?? "http://localhost:5000"}/kakaopay-token/`,
-    kakaoCancelUrl: `${process.env.REACT_APP_BASEURL ?? "http://localhost:5000"}/paymentfail`,
-    kakaoFailUrl: `${process.env.REACT_APP_BASEURL ?? "http://localhost:5000"}/paymentfail`,
+    kakaoCancelUrl: `${process.env.REACT_APP_BASEURL ?? "http://localhost:5000"}/payment-fail`,
+    kakaoFailUrl: `${process.env.REACT_APP_BASEURL ?? "http://localhost:5000"}/payment-fail`,
+    subscriptionMobileReturnUrl: process.env.REACT_APP_RETURNURL_MOBILE_SUNSCRIPTION ?? "http://localhost:5000/api/subscription/access-mobile",
+    subscriptionMobileWWWReturnUrl: process.env.REACT_APP_RETURNURL_WWW_MOBILE_SUBSCRIPTION ?? "http://www.localhost:5000/api/inicis/access-mobile",
+    subscriptionReturnUrl: process.env.REACT_APP_RETURNURL_SUNSCRIPTION ?? "http://localhost:5000/api/subscription/access",
+    subscriptionWWWReturnUrl: process.env.REACT_APP_RETURNURL_SUNSCRIPTION ?? "http://www.localhost:5000/api/subscription/access",
 };
 
 export const alertText = {
@@ -60,6 +67,7 @@ export const alertText = {
 
 export const paymentMethod = {
     bank: "VBANK",
+    subscription: "SUBSCRIPTION",
 };
 
 export const kakaoPayKey = {
