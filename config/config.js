@@ -42,6 +42,8 @@ export const dbQuery = {
   updateKakaoPay: "UPDATE kakaoPay set status=? where tid=?",
   selectKakaoPaySuccess: "SELECT oid, status FROM kakaoPay where tid=",
   selectKakaoPayResult: "SELECT tid, oid, goodName, totalPrice, buyerName, status FROM kakaoPay where oid=",
+  insertInicisBilling: "INSERT INTO inicisBilling (billing, tid, cardCode) VALUES (?, ?, ?)",
+  selecetInicisBilling: "SELECT billing FROM inicisBilling where tid=",
 };
 
 export const responseMessage = {
