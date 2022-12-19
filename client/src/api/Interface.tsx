@@ -56,6 +56,8 @@ interface Idata {
   vactBankName: string | null;
   VACT_Date: string | null;
   VACT_Num: string | null;
+  type: string;
+  billing: string | null
 }
 
 export interface ISelectOrder {
