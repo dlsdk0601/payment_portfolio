@@ -1,8 +1,22 @@
 import express from "express";
-import inicisSubscriptionPayContrller from "../../controller/inicisSubscriptionPay/inicisSubscriptionPayContrller.js";
+import inicisSubscriptionPayController from "../../controller/inicisSubscriptionPay/inicisSubscriptionPayController.js";
 
-const api = express.Router();
+const inicisSubscriptionRouter = express.Router();
 
-api.post("/ready", inicisSubscriptionPayContrller.inicisSubscriptionReadyController);
+inicisSubscriptionRouter.post(
+  "/ready",
+  inicisSubscriptionPayController.inicisSubscriptionReadyController,
+);
 
-export default api;
+inicisSubscriptionRouter.post(
+  "/access",
+  inicisSubscriptionPayController.inicisSubscriptionPayDesktop,
+);
+
+
+inicisSubscriptionRouter.post(
+  "/access-mobile",
+  inicisSubscriptionPayController.inicisSubscriptionPayMobile,
+);
+
+export default inicisSubscriptionRouter;
