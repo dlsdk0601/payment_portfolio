@@ -12,7 +12,7 @@ const inicisSimplePayMobile = async (req, res) => {
     return res.redirect(redirect);
   } catch (e) {
     console.log(e);
-    return res.redirect(url.faile);
+    return res.redirect(url.fail);
   }
 };
 
@@ -20,8 +20,6 @@ const inicisSimplePayMobile = async (req, res) => {
 const inicisSimplePayDesktop = async (req, res) => {
   try {
     const redirect = await inicisSimplePayService.inicisSimplePayDesktopService(req.body);
-    console.log("redirect");
-    console.log(redirect);
     return res.redirect(redirect);
   } catch (e) {
     console.log(e);
@@ -32,7 +30,9 @@ const inicisSimplePayDesktop = async (req, res) => {
 // 결제 등록 API controller
 const inicisSimplePayReadyController = async (req, res) => {
   try {
-    const data = await inicisSimplePayService.inicisSimplePayReadyService(req.body, inicisConst.simple);
+    const data = await inicisSimplePayService.inicisSimplePayReadyService(
+      req.body, inicisConst.simple,
+    );
     return res.json(data);
   } catch (err) {
     console.log(err);
@@ -43,7 +43,7 @@ const inicisSimplePayReadyController = async (req, res) => {
 const inicisSimplePayOrderSelect = async (req, res) => {
   const oid = req.query.oid;
   try {
-    const data = await inicisSimplePayService.inicisSimplePayOrderSelectServcie(oid);
+    const data = await inicisSimplePayService.inicisSimplePayOrderSelectService(oid);
     return res.json(data);
   } catch (err) {
     console.log(err);
