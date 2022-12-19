@@ -17,6 +17,8 @@ export default function PaySuccessPage() {
   const [vactBankName, setVactBankName] = useState("");
   const [vact_Date, setVact_Date] = useState("");
   const [vact_Num, setVact_Num] = useState("");
+  const [type, setType] = useState("");
+  const [billing, setBilling] = useState("");
 
   const onSelectOrderFetch = async () => {
     if (!oid) {
@@ -38,6 +40,8 @@ export default function PaySuccessPage() {
       vactBankName,
       VACT_Date,
       VACT_Num,
+      type,
+      billing
     } = res.data;
 
     setTid(tid);
@@ -48,6 +52,8 @@ export default function PaySuccessPage() {
     setVactBankName(vactBankName ?? "");
     setVact_Date(VACT_Date ?? "");
     setVact_Num(VACT_Num ?? "");
+    setType(type);
+    setBilling(billing ?? "")
   };
 
   useEffect(() => {
@@ -67,6 +73,11 @@ export default function PaySuccessPage() {
       <p className="margin-bt">
         tid(거래번호): <br /> {tid}
       </p>
+      {type === paymentMethod.subscription && <p className="margin-bt">
+        biilingKey: <br/> {billing.substring(0, 7)}
+        <br />
+        <span>개인정보이기에 일부만 공개</span>
+      </p>}
 
       {paymethod === paymentMethod.bank && (
         <>
